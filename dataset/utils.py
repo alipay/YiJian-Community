@@ -13,7 +13,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from prompt_record import Txt2TxtRecord, Txt2ImgRecord, ImgTxt2TxtRecord
-from utils import risk_category_zh, risk_category_en
 
-__all__ = ["Txt2TxtRecord", "Txt2ImgRecord", "ImgTxt2TxtRecord", "risk_category_zh", "risk_category_en"]
+import os
+import json
+
+CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
+
+with open(os.path.join(CURRENT_DIR, "risk_category_zh.json"), "r", encoding="utf-8") as zh_json:
+    risk_category_zh = json.load(zh_json)
+
+with open(os.path.join(CURRENT_DIR, "risk_category_en.json"), "r", encoding="utf-8") as en_json:
+    risk_category_en = json.load(en_json)
