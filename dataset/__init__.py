@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from prompt_record import Txt2TxtRecord, Txt2ImgRecord, ImgTxt2TxtRecord
-from utils import risk_category_zh, risk_category_en
+from .prompt_record import Txt2TxtRecord, Txt2ImgRecord, ImgTxt2TxtRecord
+from .utils import risk_category_zh, risk_category_en
 
 __all__ = ["Txt2TxtRecord", "Txt2ImgRecord", "ImgTxt2TxtRecord", "risk_category_zh", "risk_category_en"]
