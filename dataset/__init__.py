@@ -14,5 +14,6 @@
 # limitations under the License.
 
 from .utils import risk_category_zh, risk_category_en
+from .dataset import txt2txt_set, txt2img_set, img_txt2txt_set
 
-__all__ = ["risk_category_zh", "risk_category_en"]
+__all__ = ["risk_category_zh", "risk_category_en", "txt2txt_set", "txt2img_set", "img_txt2txt_set"]
