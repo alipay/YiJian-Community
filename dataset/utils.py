@@ -19,8 +19,12 @@ import json
 
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 
-with open(os.path.join(CURRENT_DIR, "risk_category_zh.json"), "r", encoding="utf-8") as zh_json:
+with open(
+    os.path.join(CURRENT_DIR, "risk_category_zh.json"), "r", encoding="utf-8"
+) as zh_json:
     risk_category_zh = json.load(zh_json)
 
-with open(os.path.join(CURRENT_DIR, "risk_category_en.json"), "r", encoding="utf-8") as en_json:
+with open(
+    os.path.join(CURRENT_DIR, "risk_category_en.json"), "r", encoding="utf-8"
+) as en_json:
     risk_category_en = json.load(en_json)
