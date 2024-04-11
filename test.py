@@ -1,9 +1,3 @@
-from dataset import Txt2TxtRecord
+from dataset import txt2txt_set, txt2img_set, img_txt2txt_set
 
-record = Txt2TxtRecord(prompt_text="this is something")
-
-print(record)
-
-record.response_text = "this is response"
-
-print(record)
+print(txt2txt_set, txt2img_set, img_txt2txt_set)
