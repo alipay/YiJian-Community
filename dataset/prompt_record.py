@@ -42,6 +42,9 @@ class Txt2TxtRecord:
         self.risk_type = risk_type
         self.lang = lang
 
+    def __str__(self) -> str:
+        return f"Txt2TxtRecord(prompt_text={self.prompt_text}, response_text={self.response_text})"
+
 
 class Txt2ImgRecord:
     """
