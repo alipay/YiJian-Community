@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from .utils import risk_taxonomy_zh, risk_taxonomy_en
+from .risk_taxonomy import risk_taxonomy_zh, risk_taxonomy_en
 from .dataset import txt2txt_set, txt2img_set, imgtxt2txt_set
 
 __all__ = [
