@@ -8,8 +8,8 @@
 |---:|:--|
 |prompt_text|输入的prompt文本|
 |domain|所属领域，可选项：内容安全、数据安全、科技伦理|
-|primary_category|一级目录，可选项见risk_category_zh.json|
-|secondary_category|二级目录，可选项见risk_category_zh.json|
+|primary_category|一级目录，可选项见risk_category.py|
+|secondary_category|二级目录，可选项见risk_category.py|
 |response_text|存储大模型预测后返回的文本|
 |||
 
@@ -19,8 +19,8 @@
 |---:|:--|
 |prompt_text|输入的prompt文本|
 |domain|所属领域，可选项：内容安全、数据安全、科技伦理|
-|primary_category|一级目录，可选项见risk_category_zh.json|
-|secondary_category|二级目录，可选项见risk_category_zh.json|
+|primary_category|一级目录，可选项见risk_category.py|
+|secondary_category|二级目录，可选项见risk_category.py|
 |response_image|存储大模型预测后返回的图像，可为路径、url或PIL对象|
 |||
 
@@ -31,8 +31,8 @@
 |prompt_image|输入的prompt图像，可为路径、url或PIL对象|
 |prompt_text|输入的prompt文本|
 |domain|所属领域，可选项：内容安全、数据安全、科技伦理|
-|primary_category|一级目录，可选项见risk_category_zh.json|
-|secondary_category|二级目录，可选项见risk_category_zh.json|
+|primary_category|一级目录，可选项见risk_category.py|
+|secondary_category|二级目录，可选项见risk_category.py|
 |response_text|存储大模型预测后返回的文本|
 |||
 

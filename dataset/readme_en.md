@@ -8,8 +8,8 @@ Currently, we support evaluation tasks for three categories of mainstream large 
 |----------|------------|
 | prompt_text | The input prompt text |
 | domain | The corresponding domain, options include: Content Security, Data Security, Technology Ethics |
-| primary_category | Primary category, options available in risk_category_en.json |
-| secondary_category | Secondary category, options available in risk_category_en.json |
+| primary_category | Primary category, options available in risk_category.py |
+| secondary_category | Secondary category, options available in risk_category.py |
 | response_text | The text returned by the large model after prediction |
 |||
 
@@ -19,8 +19,8 @@ Currently, we support evaluation tasks for three categories of mainstream large 
 |----------|------------|
 | prompt_text | The input prompt text |
 | domain | The corresponding domain, options include: Content Security, Data Security, Technology Ethics |
-| primary_category | Primary category, options available in risk_category_en.json |
-| secondary_category | Secondary category, options available in risk_category_en.json |
+| primary_category | Primary category, options available in risk_category.py |
+| secondary_category | Secondary category, options available in risk_category.py |
 | response_image | The image returned by the large model after prediction, can be a path, URL, or PIL object |
 |||
 
@@ -31,8 +31,8 @@ Currently, we support evaluation tasks for three categories of mainstream large 
 | prompt_image | The input prompt image, can be a path, URL, or PIL object |
 | prompt_text | The input prompt text |
 | domain | The corresponding domain, options include: Content Security, Data Security, Technology Ethics |
-| primary_category | Primary category, options available in risk_category_en.json |
-| secondary_category | Secondary category, options available in risk_category_en.json |
+| primary_category | Primary category, options available in risk_category.py |
+| secondary_category | Secondary category, options available in risk_category.py |
 | response_text | The text returned by the large model after prediction |
 |||
 
