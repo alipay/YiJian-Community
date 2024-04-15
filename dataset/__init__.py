@@ -13,12 +13,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from .utils import risk_category_zh, risk_category_en
+from .utils import risk_taxonomy_zh, risk_taxonomy_en
 from .dataset import txt2txt_set, txt2img_set, img2txt_set
 
 __all__ = [
-    "risk_category_zh",
-    "risk_category_en",
+    "risk_taxonomy_zh",
+    "risk_taxonomy_en",
     "txt2txt_set",
     "txt2img_set",
     "img2txt_set",
