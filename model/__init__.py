@@ -12,3 +12,9 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
+
+from .model_hub import txt2txt_models, txt2img_models, imgtxt2txt_models
+
+
+__all__ = ["txt2txt_models", "txt2img_models", "imgtxt2txt_models"]
