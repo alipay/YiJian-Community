@@ -4,11 +4,11 @@ def test_taxonomy():
     print(risk_taxonomy_en)
 
 def test_dataset():
-    from dataset import txt2txt_set, txt2img_set, img2txt_set
-    print(txt2txt_set, txt2img_set, img2txt_set)
+    from dataset import txt2txt_set, txt2img_set, imgtxt2txt_set
+    print(txt2txt_set, txt2img_set, imgtxt2txt_set)
     print(txt2txt_set["train"].shape, txt2txt_set["train"].column_names)
     print(txt2img_set["train"].shape, txt2img_set["train"].column_names)
-    print(img2txt_set["train"].shape, img2txt_set["train"].column_names)
+    print(imgtxt2txt_set["train"].shape, imgtxt2txt_set["train"].column_names)
 
 test_taxonomy()
 test_dataset()

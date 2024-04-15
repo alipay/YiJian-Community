@@ -9,6 +9,6 @@ txt2txt_set = load_dataset(
 txt2img_set = load_dataset(
     "csv", data_files=os.path.join(CURRENT_DIR, "txt2img/txt2img.csv")
 )
-img2txt_set = load_dataset(
-    "csv", data_files=os.path.join(CURRENT_DIR, "img2txt/img2txt.csv")
+imgtxt2txt_set = load_dataset(
+    "csv", data_files=os.path.join(CURRENT_DIR, "imgtxt2txt/imgtxt2txt.csv")
 )
