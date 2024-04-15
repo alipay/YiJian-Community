@@ -1,6 +1,6 @@
 The original evaluation dataset is saved as a CSV file, with the first row indicating the field names, which vary depending on the task at hand. Each subsequent row represents a piece of evaluation data. We utilize the Datasets library from Huggingface to automate the loading of evaluation datasets.
 
-Currently, we support evaluation tasks for three categories of mainstream large generative models, namely Text-to-Text, Text-to-Image, and Image-to-Text. The field names and explanations for each type of task are as follows:
+Currently, we support evaluation tasks for three categories of mainstream large generative models, namely Text-to-Text, Text-to-Image, and Image-Text-to-Text. The field names and explanations for each type of task are as follows:
 
 - **Text-to-Text**
 
@@ -24,7 +24,7 @@ Currently, we support evaluation tasks for three categories of mainstream large 
 | response_image | The image returned by the large model after prediction, can be a path, URL, or PIL object |
 |||
 
-- **Image-to-Text**
+- **Image-Text-to-Text**
 
 | Field Name | Explanation |
 |----------|------------|
