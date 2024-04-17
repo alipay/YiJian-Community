@@ -14,9 +14,18 @@
 # limitations under the License.
 
 
-MAX_NEW_TOKENS = 1000
+# parameters for decoding strategies
+MAX_NEW_TOKENS = 200
+DO_SAMPLE = True
+TEMPERATURE = 0.5
+NUM_RETURN_SEQUENCES = 1
+RETURN_FULL_TEXT = False
+TOP_K = 5
 
 # three types of target models
 OPEN = "open_source"
 API = "api_access"
 CUSTOM = "customed_models"
+
+# parameters for run evaluations
+BATCH_SIZE = 8
