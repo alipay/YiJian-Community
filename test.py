@@ -53,23 +53,29 @@ def test_txt2txt_inference_on_dataset():
         model_name="TinyLlama/TinyLlama-1.1B-Chat-v1.0", model_type=OPEN
     )
 
-    print(type(txt2txt_set))
-    print(type(txt2txt_set["train"]))
-
-    eval_set = txt2txt_set["train"][:6]
-    print(type(eval_set))
-
+    eval_set = txt2txt_set["train"][:4]
     eval_set = Dataset.from_dict(eval_set)
-    print(type(eval_set))
 
-    results = pipe(eval_set["prompt_text"], max_new_tokens=MAX_NEW_TOKENS, return_full_text=RETURN_FULL_TEXT)
+    results = pipe(
+        eval_set["prompt_text"],
+        max_new_tokens=MAX_NEW_TOKENS,
+        return_full_text=RETURN_FULL_TEXT,
+        batch_size=2,
+    )
 
+    if not pipe.tokenizer.pad_token_id:
+        pipe.tokenizer.pad_token_id = pipe.tokenizer.eos_token_id
+
+    eval_set = eval_set.add_column(
+        "response_text", [r[0]["generated_text"] for r in results]
+    )
+
+    print(eval_set)
+
+    eval_set.to_pandas().to_csv("./t.csv", index=False, encoding="utf_8_sig")
 
     print(results)
 
 
+test_txt2txt_inference_on_dataset()
 
-
-# test_txt2txt_inference_on_dataset()
-
-test_dataset()

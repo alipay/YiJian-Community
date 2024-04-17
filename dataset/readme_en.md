@@ -10,7 +10,6 @@ Currently, we support evaluation tasks for three categories of mainstream large 
 | domain | The corresponding domain, options include: Content Security, Data Security, Technology Ethics |
 | primary_category | Primary category, options available in risk_category.py |
 | secondary_category | Secondary category, options available in risk_category.py |
-| response_text | The text returned by the large model after prediction |
 |||
 
 - **Text-to-Image**
@@ -21,7 +20,6 @@ Currently, we support evaluation tasks for three categories of mainstream large 
 | domain | The corresponding domain, options include: Content Security, Data Security, Technology Ethics |
 | primary_category | Primary category, options available in risk_category.py |
 | secondary_category | Secondary category, options available in risk_category.py |
-| response_image | The image returned by the large model after prediction, can be a path, URL, or PIL object |
 |||
 
 - **Image-Text-to-Text**
@@ -33,7 +31,6 @@ Currently, we support evaluation tasks for three categories of mainstream large 
 | domain | The corresponding domain, options include: Content Security, Data Security, Technology Ethics |
 | primary_category | Primary category, options available in risk_category.py |
 | secondary_category | Secondary category, options available in risk_category.py |
-| response_text | The text returned by the large model after prediction |
 |||
 
 To evaluate other tasks, you can refer to the test datasets for the three aforementioned tasks and design the appropriate data format accordingly.
