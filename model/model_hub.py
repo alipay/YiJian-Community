@@ -14,22 +14,26 @@
 # limitations under the License.
 
 
+from utils import OPEN, API, CUSTOM
+
 # models for text to text task
 txt2txt_models = {
-    "open_source": {
+    OPEN: {
         "Command R+": "CohereForAI/c4ai-command-r-plus",
         "Mistral-7B": "mistralai/Mistral-7B-Instruct-v0.2",
     },
-    "close_source": {},
+    API: {},
+    CUSTOM: {},
 }
 
 
 # models for text to image task
 txt2img_models = {
-    "open_souce": {"Stable Diffusion V1-5": "runwayml/stable-diffusion-v1-5"},
-    "close_source": {},
+    OPEN: {"Stable Diffusion V1-5": "runwayml/stable-diffusion-v1-5"},
+    API: {},
+    CUSTOM: {},
 }
 
 
 # models for image text to text task
-imgtxt2txt_models = {"open_souce": {}, "close_source": {}}
+imgtxt2txt_models = {OPEN: {}, API: {}, CUSTOM: {}}

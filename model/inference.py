@@ -16,21 +16,53 @@
 
 from transformers import pipeline
 from diffusers import DiffusionPipeline
+from utils import MAX_NEW_TOKENS, OPEN, API, CUSTOM
 
 
 # text to text inference
-def txt2txt_inference(model_name, model_type="open_source"):
-    if model_type == "open_source":
-        return pipeline("text-generation", model=model_name, max_length=)
+def txt2txt_inference(model_name, model_type=OPEN):
+    if model_type == OPEN:
+        return pipeline(
+            "text-generation",
+            model=model_name,
+            max_new_tokens=MAX_NEW_TOKENS,
+            device_map="auto",
+        )
+    if model_type == API:
+        return
+    if model_type == CUSTOM:
+        return
+    raise ValueError(
+        f"Unsupported model type: {model_type}! Model type can only be {OPEN}, {API} or {CUSTOM}."
+    )
 
 
 # text to image inference
-def txt2img_inference(model_name, model_type="open_source"):
+def txt2img_inference(model_name, model_type=OPEN):
     if model_type == "open_source":
         return DiffusionPipeline.from_pretrained(model_name)
+    if model_type == API:
+        return
+    if model_type == CUSTOM:
+        return
+    raise ValueError(
+        f"Unsupported model type: {model_type}! Model type can only be {OPEN}, {API} or {CUSTOM}."
+    )
 
 
 # image text to text inference
-def imgtxt2txt_inference(model_name, model_type="open_source"):
+def imgtxt2txt_inference(model_name, model_type=OPEN):
     if model_type == "open_source":
-        return pipeline("image-to-text", model=model_name)
+        return pipeline(
+            "image-to-text",
+            model=model_name,
+            max_new_tokens=MAX_NEW_TOKENS,
+            device_map="auto",
+        )
+    if model_type == API:
+        return
+    if model_type == CUSTOM:
+        return
+    raise ValueError(
+        f"Unsupported model type: {model_type}! Model type can only be {OPEN}, {API} or {CUSTOM}."
+    )

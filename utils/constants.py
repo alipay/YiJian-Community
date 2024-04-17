@@ -14,4 +14,9 @@
 # limitations under the License.
 
 
-MAX_LENGTH = 20000
+MAX_NEW_TOKENS = 1000
+
+# three types of target models
+OPEN = "open_source"
+API = "api_access"
+CUSTOM = "customed_models"
