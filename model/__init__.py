@@ -15,6 +15,14 @@
 
 
 from .model_hub import txt2txt_models, txt2img_models, imgtxt2txt_models
+from .inference import txt2txt_inference, txt2img_inference, imgtxt2txt_inference
 
 
-__all__ = ["txt2txt_models", "txt2img_models", "imgtxt2txt_models"]
+__all__ = [
+    "txt2txt_models",
+    "txt2img_models",
+    "imgtxt2txt_models",
+    "txt2txt_inference",
+    "txt2img_inference",
+    "imgtxt2txt_inference",
+]

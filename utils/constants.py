@@ -14,22 +14,4 @@
 # limitations under the License.
 
 
-# models for text to text task
-txt2txt_models = {
-    "open_source": {
-        "Command R+": "CohereForAI/c4ai-command-r-plus",
-        "Mistral-7B": "mistralai/Mistral-7B-Instruct-v0.2",
-    },
-    "close_source": {},
-}
-
-
-# models for text to image task
-txt2img_models = {
-    "open_souce": {"Stable Diffusion V1-5": "runwayml/stable-diffusion-v1-5"},
-    "close_source": {},
-}
-
-
-# models for image text to text task
-imgtxt2txt_models = {"open_souce": {}, "close_source": {}}
+MAX_LENGTH = 20000
