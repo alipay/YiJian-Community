@@ -14,11 +14,11 @@
 # limitations under the License.
 
 
-import os
-from datasets import load_dataset
+import pytest
+from dataset import txt2txt_set, txt2img_set, imgtxt2txt_set
+from datasets import DatasetDict
 
-CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 
-txt2img_set = load_dataset(
-    "csv", data_files=os.path.join(CURRENT_DIR, "txt2img.csv")
-)
+@pytest.mark.parametrize("dataset", [txt2txt_set, txt2img_set, imgtxt2txt_set])
+def test_dataset_valid(dataset):
+    assert dataset is not None and isinstance(dataset, DatasetDict)
