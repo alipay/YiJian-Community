@@ -100,4 +100,8 @@ def test_txt2txt_inference_on_dataset():
 
 from dataset import imgtxt2txt_set
 
+<<<<<<< HEAD
 print(imgtxt2txt_set)
+=======
+print("some")
+>>>>>>> 50ee4e4272f2c2b397479b3b62444b14c50019a0
