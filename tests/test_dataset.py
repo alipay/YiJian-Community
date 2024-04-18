@@ -16,9 +16,9 @@
 
 import pytest
 from dataset import txt2txt_set, txt2img_set, imgtxt2txt_set
-from datasets import DatasetDict
+from datasets import Dataset
 
 
 @pytest.mark.parametrize("dataset", [txt2txt_set, txt2img_set, imgtxt2txt_set])
 def test_dataset_valid(dataset):
-    assert dataset is not None and isinstance(dataset, DatasetDict)
+    assert dataset is not None and isinstance(dataset, Dataset)
