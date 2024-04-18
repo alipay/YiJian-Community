@@ -79,3 +79,4 @@ def test_txt2txt_inference_on_dataset():
 
 test_txt2txt_inference_on_dataset()
 
+print("some")
