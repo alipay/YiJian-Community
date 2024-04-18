@@ -14,55 +14,55 @@
 # limitations under the License.
 
 
-from transformers import pipeline
-from diffusers import DiffusionPipeline
-from utils import OPEN, API, CUSTOM
+from .model import txt2txt_model, txt2img_model, imgtxt2txt_model
+from utils import HF, API, CUSTOM, MAX_NEW_TOKENS, RETURN_FULL_TEXT, BATCH_SIZE
 
 
 # text to text inference
+class Txt2TxtInfer:
 
-
-def txt2txt_inference(model_name, model_type=OPEN):
-    if model_type == OPEN:
-        return pipeline(
-            "text-generation",
-            model=model_name,
-            device_map="auto",
+    def __init__(self, model_name, model_type=HF):
+        self.model_name = model_name
+        self.model_type = model_type
+        self.model = txt2txt_model(
+            model_name=self.model_name, model_type=self.model_type
         )
-    if model_type == API:
-        return
-    if model_type == CUSTOM:
-        return
-    raise ValueError(
-        f"Unsupported model type: {model_type}! It should be {OPEN}, {API} or {CUSTOM}."
-    )
+
+    def inference(self, prompt_text):
+        if self.model_type == HF:
+            return self.model(
+                prompt_text,
+                max_new_tokens=MAX_NEW_TOKENS,
+                return_full_text=RETURN_FULL_TEXT,
+            )[0]["generated_text"]
+        if self.model_type == API:
+            return
+        if self.model_type == CUSTOM:
+            return
+
+    def infer_dataset(self, dataset):
+        if self.model_type == HF:
+            response_texts = self.model(
+                dataset["prompt_text"],
+                max_new_tokens=MAX_NEW_TOKENS,
+                return_full_text=RETURN_FULL_TEXT,
+                batch_size=BATCH_SIZE,
+            )
+
+            if not self.model.tokenizer.pad_token_id:
+                self.model.tokenizer.pad_token_id = self.model.tokenizer.eos_token_id
+
+            return dataset.add_column(
+                "response_text", [r[0]["generated_text"] for r in response_texts]
+            )
+
+        if self.model_type == API:
+            return
+        if self.model_type == CUSTOM:
+            return
 
 
 # text to image inference
-def txt2img_inference(model_name, model_type=OPEN):
-    if model_type == "open_source":
-        return DiffusionPipeline.from_pretrained(model_name, device_map="auto")
-    if model_type == API:
-        return
-    if model_type == CUSTOM:
-        return
-    raise ValueError(
-        f"Unsupported model type: {model_type}! It should be {OPEN}, {API} or {CUSTOM}."
-    )
 
 
 # image text to text inference
-def imgtxt2txt_inference(model_name, model_type=OPEN):
-    if model_type == "open_source":
-        return pipeline(
-            "image-to-text",
-            model=model_name,
-            device_map="auto",
-        )
-    if model_type == API:
-        return
-    if model_type == CUSTOM:
-        return
-    raise ValueError(
-        f"Unsupported model type: {model_type}! It should be {OPEN}, {API} or {CUSTOM}."
-    )

@@ -14,15 +14,9 @@
 # limitations under the License.
 
 
-from .model_hub import txt2txt_models, txt2img_models, imgtxt2txt_models
-from .inference import txt2txt_inference, txt2img_inference, imgtxt2txt_inference
+from .inference import Txt2TxtInfer
 
 
 __all__ = [
-    "txt2txt_models",
-    "txt2img_models",
-    "imgtxt2txt_models",
-    "txt2txt_inference",
-    "txt2img_inference",
-    "imgtxt2txt_inference",
+    "Txt2TxtInfer",
 ]
