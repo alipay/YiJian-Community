@@ -49,9 +49,6 @@ class Txt2TxtInfer:
                 batch_size=BATCH_SIZE,
             )
 
-            if not self.model.tokenizer.pad_token_id:
-                self.model.tokenizer.pad_token_id = self.model.tokenizer.eos_token_id
-
             return dataset.add_column(
                 "response_text", [r[0]["generated_text"] for r in response_texts]
             )
