@@ -14,9 +14,7 @@
 # limitations under the License.
 
 
-from .inference import Txt2TxtInfer
+from .inference import Txt2TxtInfer, Txt2ImgInfer
 
 
-__all__ = [
-    "Txt2TxtInfer",
-]
+__all__ = ["Txt2TxtInfer", "Txt2ImgInfer"]

@@ -87,6 +87,46 @@ class Txt2TxtInfer(Infer):
 
 
 # text to image inference
+class Txt2ImgInfer(Infer):
+
+    def __init__(self, model_name, model_type=HF):
+        super().__init__(model_name, model_type)
+        self.model = txt2img_model(
+            model_name=self.model_name, model_type=self.model_type
+        )
+
+    def infer_sample(self, prompt_text):
+        if self.model_type == HF:
+            ans = self.model(prompt_text)
+            print(type(ans), ans)
+            print(type(ans.images), ans.images)
+            print(type(ans.images[0]), ans.images[0])
+            # return self.model(prompt_text).images[0]
+        if self.model_type == API:
+            pass
+        if self.model_type == CUSTOM:
+            pass
+
+    def infer_dataset(self, dataset, batch_size=BATCH_SIZE):
+        if self.model_type == HF:
+            pass
+        if self.model_type == API:
+            pass
+        if self.model_type == CUSTOM:
+            pass
 
 
 # image text to text inference
+class ImgTxt2TxtInfer(Infer):
+
+    def __init__(self, model_name, model_type=HF):
+        super().__init__(model_name, model_type)
+        self.model = imgtxt2txt_model(
+            model_name=self.model_name, model_type=self.model_type
+        )
+
+    def infer_sample(self, prompt_image, prompt_text):
+        pass
+
+    def infer_dataset(self, dataset, batch_size=BATCH_SIZE):
+        pass
