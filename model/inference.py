@@ -14,21 +14,48 @@
 # limitations under the License.
 
 
+from abc import ABC, abstractmethod
 from .model import txt2txt_model, txt2img_model, imgtxt2txt_model
 from utils import HF, API, CUSTOM, MAX_NEW_TOKENS, RETURN_FULL_TEXT, BATCH_SIZE
 
 
-# text to text inference
-class Txt2TxtInfer:
+# Base class for inference
+class Infer(ABC):
 
     def __init__(self, model_name, model_type=HF):
         self.model_name = model_name
         self.model_type = model_type
+
+    @abstractmethod
+    def infer_sample(self, sample):
+        """inference on one sample
+
+        Args:
+            sample (_type_): one input sample, usually a string
+        """
+        pass
+
+    @abstractmethod
+    def infer_dataset(self, dataset, batch_size=BATCH_SIZE):
+        """inference on one datasets.Dataset
+
+        Args:
+            dataset (datasets.Dataset): evaluation dataset
+            batch_size (int, optional): as the name suggests. Defaults to BATCH_SIZE.
+        """
+        pass
+
+
+# text to text inference
+class Txt2TxtInfer(Infer):
+
+    def __init__(self, model_name, model_type=HF):
+        super().__init__(model_name, model_type)
         self.model = txt2txt_model(
             model_name=self.model_name, model_type=self.model_type
         )
 
-    def inference(self, prompt_text):
+    def infer_sample(self, prompt_text):
         if self.model_type == HF:
             return self.model(
                 prompt_text,
@@ -40,13 +67,13 @@ class Txt2TxtInfer:
         if self.model_type == CUSTOM:
             return
 
-    def infer_dataset(self, dataset):
+    def infer_dataset(self, dataset, batch_size=BATCH_SIZE):
         if self.model_type == HF:
             response_texts = self.model(
                 dataset["prompt_text"],
                 max_new_tokens=MAX_NEW_TOKENS,
                 return_full_text=RETURN_FULL_TEXT,
-                batch_size=BATCH_SIZE,
+                batch_size=batch_size,
             )
 
             return dataset.add_column(
