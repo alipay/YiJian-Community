@@ -94,7 +94,7 @@ class Txt2ImgInfer(Infer):
 
     def infer_dataset(self, dataset: Dataset, **kwargs) -> Dataset:
         if self.model_type == HF:
-            response_images = self.model(dataset["prompt_text"], **kwargs)
+            response_images = self.model(dataset["prompt_text"], **kwargs).images
             return response_images
         if self.model_type == API:
             pass
