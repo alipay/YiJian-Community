@@ -69,7 +69,6 @@ class Txt2TxtInfer(Infer):
             return dataset.add_column(
                 "response_text", [r[0]["generated_text"] for r in response_texts]
             )
-
         if self.model_type == API:
             return
         if self.model_type == CUSTOM:
@@ -79,25 +78,25 @@ class Txt2TxtInfer(Infer):
 # text to image inference
 class Txt2ImgInfer(Infer):
 
-    def __init__(self, model_name, model_type=HF):
+    def __init__(self, model_name: str, model_type: str = HF, **kwargs):
         super().__init__(model_name, model_type)
         self.model = txt2img_model(
-            model_name=self.model_name, model_type=self.model_type
+            model_name=self.model_name, model_type=self.model_type, **kwargs
         )
 
-    def infer_sample(self, prompt_text):
+    def infer_sample(self, prompt_text: str, **kwargs):
         if self.model_type == HF:
-            ans = self.model(prompt_text)
+            ans = self.model(prompt_text, **kwargs)
             print(type(ans), ans)
             print(type(ans.images), ans.images)
             print(type(ans.images[0]), ans.images[0])
-            # return self.model(prompt_text).images[0]
+            return self.model(prompt_text).images[0]
         if self.model_type == API:
             pass
         if self.model_type == CUSTOM:
             pass
 
-    def infer_dataset(self, dataset, batch_size=BATCH_SIZE):
+    def infer_dataset(self, dataset: Dataset, **kwargs) -> Dataset:
         if self.model_type == HF:
             pass
         if self.model_type == API:
