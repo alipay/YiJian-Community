@@ -20,9 +20,9 @@ from utils import HF, API, CUSTOM
 
 
 # load text to text model
-def txt2txt_model(model_name, model_type=HF):
+def txt2txt_model(model_name, model_type=HF, **kwargs):
     if model_type == HF:
-        return pipeline("text-generation", model=model_name, device_map="auto")
+        return pipeline("text-generation", model=model_name, **kwargs)
     if model_type == API:
         return
     if model_type == CUSTOM:
@@ -33,9 +33,9 @@ def txt2txt_model(model_name, model_type=HF):
 
 
 # load text to image model
-def txt2img_model(model_name, model_type=HF):
+def txt2img_model(model_name, model_type=HF, **kwargs):
     if model_type == HF:
-        return DiffusionPipeline.from_pretrained(model_name, device_map="auto")
+        return DiffusionPipeline.from_pretrained(model_name, **kwargs)
     if model_type == API:
         return
     if model_type == CUSTOM:
@@ -46,9 +46,9 @@ def txt2img_model(model_name, model_type=HF):
 
 
 # load image & text to text model
-def imgtxt2txt_model(model_name, model_type=HF):
+def imgtxt2txt_model(model_name, model_type=HF, **kwargs):
     if model_type == HF:
-        return pipeline("image-to-text", model=model_name, device_map="auto")
+        return pipeline("image-to-text", model=model_name, **kwargs)
     if model_type == API:
         return
     if model_type == CUSTOM:
