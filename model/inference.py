@@ -86,11 +86,7 @@ class Txt2ImgInfer(Infer):
 
     def infer_sample(self, prompt_text: str, **kwargs):
         if self.model_type == HF:
-            ans = self.model(prompt_text, **kwargs)
-            print(type(ans), ans)
-            print(type(ans.images), ans.images)
-            print(type(ans.images[0]), ans.images[0])
-            return self.model(prompt_text).images[0]
+            return self.model(prompt_text, **kwargs).images[0]
         if self.model_type == API:
             pass
         if self.model_type == CUSTOM:
