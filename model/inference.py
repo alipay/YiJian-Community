@@ -54,13 +54,9 @@ class Txt2TxtInfer(Infer):
             model_name=self.model_name, model_type=self.model_type, **kwargs
         )
 
-    def infer_sample(self, prompt_text):
+    def infer_sample(self, prompt_text: str, **kwargs) -> str:
         if self.model_type == HF:
-            return self.model(
-                prompt_text,
-                max_new_tokens=MAX_NEW_TOKENS,
-                return_full_text=RETURN_FULL_TEXT,
-            )[0]["generated_text"]
+            return self.model(prompt_text, kwargs=kwargs)[0]["generated_text"]
         if self.model_type == API:
             return
         if self.model_type == CUSTOM:
