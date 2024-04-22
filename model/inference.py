@@ -22,12 +22,12 @@ from utils import HF, API, CUSTOM, MAX_NEW_TOKENS, RETURN_FULL_TEXT, BATCH_SIZE
 # Base class for inference
 class Infer(ABC):
 
-    def __init__(self, model_name, model_type=HF, **kwargs):
+    def __init__(self, model_name, model_type=HF):
         self.model_name = model_name
         self.model_type = model_type
 
     @abstractmethod
-    def infer_sample(self, sample, **kwargs):
+    def infer_sample(self, sample):
         """inference on one sample
 
         Args:
@@ -36,7 +36,7 @@ class Infer(ABC):
         pass
 
     @abstractmethod
-    def infer_dataset(self, dataset, **kwargs):
+    def infer_dataset(self, dataset):
         """inference on one datasets.Dataset
 
         Args:
@@ -49,7 +49,7 @@ class Infer(ABC):
 class Txt2TxtInfer(Infer):
 
     def __init__(self, model_name: str, model_type: str = HF, **kwargs):
-        super().__init__(model_name, model_type, **kwargs)
+        super().__init__(model_name, model_type)
         self.model = txt2txt_model(
             model_name=self.model_name, model_type=self.model_type, **kwargs
         )
