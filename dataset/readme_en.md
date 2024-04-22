@@ -10,7 +10,9 @@ Currently, we support evaluation tasks for three categories of mainstream large 
 | domain | The corresponding domain, options include: Content Security, Data Security, Technology Ethics |
 | primary_category | Primary category, options available in risk_category.py |
 | secondary_category | Secondary category, options available in risk_category.py |
-|||
+| attack_technique | (Optional) The attack technique used to generate the prompt_text |
+| attack_type | (Optional) L1, L2, L3, or L4 |
+| language | (Optional) Language of the prompt_text ||||
 
 - **Text-to-Image**
 
@@ -20,7 +22,9 @@ Currently, we support evaluation tasks for three categories of mainstream large 
 | domain | The corresponding domain, options include: Content Security, Data Security, Technology Ethics |
 | primary_category | Primary category, options available in risk_category.py |
 | secondary_category | Secondary category, options available in risk_category.py |
-|||
+| attack_technique | (Optional) The attack technique used to generate the prompt_text |
+| attack_type | (Optional) L1, L2, L3, or L4 |
+| language | (Optional) Language of the prompt_text ||||
 
 - **Image-Text-to-Text**
 
@@ -31,6 +35,9 @@ Currently, we support evaluation tasks for three categories of mainstream large 
 | domain | The corresponding domain, options include: Content Security, Data Security, Technology Ethics |
 | primary_category | Primary category, options available in risk_category.py |
 | secondary_category | Secondary category, options available in risk_category.py |
+| attack_technique | (Optional) The attack technique used to generate the prompt_text and prompt_image |
+| attack_type | (Optional) L1, L2, L3, or L4 |
+| language | (Optional) Language of the prompt_text |
 |||
 
 To evaluate other tasks, you can refer to the test datasets for the three aforementioned tasks and design the appropriate data format accordingly.

@@ -10,6 +10,9 @@
 |domain|所属领域，可选项：内容安全、数据安全、科技伦理|
 |primary_category|一级目录，可选项见risk_category.py|
 |secondary_category|二级目录，可选项见risk_category.py|
+|attack_technique|（可选）生成prompt_text所用的攻击手法|
+|attack_type|（可选）L1，L2，L3或L4|
+|language|（可选）promp_text所属语言|
 |||
 
 - **文生图**
@@ -20,6 +23,9 @@
 |domain|所属领域，可选项：内容安全、数据安全、科技伦理|
 |primary_category|一级目录，可选项见risk_category.py|
 |secondary_category|二级目录，可选项见risk_category.py|
+|attack_technique|（可选）生成prompt_text所用的攻击手法|
+|attack_type|（可选）L1，L2，L3或L4|
+|language|（可选）promp_text所属语言|
 |||
 
 - **图文生文**
@@ -31,6 +37,9 @@
 |domain|所属领域，可选项：内容安全、数据安全、科技伦理|
 |primary_category|一级目录，可选项见risk_category.py|
 |secondary_category|二级目录，可选项见risk_category.py|
+|attack_technique|（可选）生成prompt_text和prompt_image所用的攻击手法|
+|attack_type|（可选）L1，L2，L3或L4|
+|language|（可选）promp_text所属语言|
 |||
 
 若要测评其他的任务，可参考上述三种任务的测试数据集，设计相应的数据格式。
