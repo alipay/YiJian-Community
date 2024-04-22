@@ -15,6 +15,7 @@
 
 
 from abc import ABC, abstractmethod
+from datasets import Dataset
 from .model import txt2txt_model, txt2img_model, imgtxt2txt_model
 from utils import HF, API, CUSTOM, MAX_NEW_TOKENS, RETURN_FULL_TEXT, BATCH_SIZE
 
@@ -62,15 +63,9 @@ class Txt2TxtInfer(Infer):
         if self.model_type == CUSTOM:
             return
 
-    def infer_dataset(self, dataset, batch_size=BATCH_SIZE):
+    def infer_dataset(self, dataset: Dataset, **kwargs) -> Dataset:
         if self.model_type == HF:
-            response_texts = self.model(
-                dataset["prompt_text"],
-                max_new_tokens=MAX_NEW_TOKENS,
-                return_full_text=RETURN_FULL_TEXT,
-                batch_size=batch_size,
-            )
-
+            response_texts = self.model(dataset["prompt_text"], **kwargs)
             return dataset.add_column(
                 "response_text", [r[0]["generated_text"] for r in response_texts]
             )
