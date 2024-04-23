@@ -120,6 +120,7 @@ class Txt2ImgInfer(Infer):
                     ).images
                 )
                 i += 1
+            print(len(response_images), type(response_images), type(response_images[0]))
             return dataset.add_column("response_image", response_images)
         elif self.model_type == API:
             pass
@@ -130,7 +131,7 @@ class Txt2ImgInfer(Infer):
 # image text to text inference
 class ImgTxt2TxtInfer(Infer):
 
-    def __init__(self, model_name, model_type=HF):
+    def __init__(self, model_name, model_type=HF, **kwargs):
         super().__init__(model_name, model_type)
 
         if model_type == HF:
