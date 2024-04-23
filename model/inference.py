@@ -16,7 +16,9 @@
 
 import os
 import torch
+import hashlib
 from abc import ABC, abstractmethod
+from PIL import Image
 from datasets import Dataset
 from .model import txt2txt_model, txt2img_model, imgtxt2txt_model
 from utils import HF, API, CUSTOM, BATCH_SIZE
@@ -86,6 +88,17 @@ class Txt2TxtInfer(Infer):
             pass
 
 
+def save_images_and_return_path(
+    dir_name: str, model_name: str, prompt_text: str, image: Image.Image
+) -> str:
+    dir_path = os.path.join(os.getcwd(), dir_name)
+    os.makedirs(dir_path, exist_ok=True)
+    md5 = hashlib.md5((model_name + prompt_text).encode()).hexdigest()
+    save_path = os.path.join(dir_path, md5 + ".jpg")
+    image.save(save_path)
+    return save_path
+
+
 # text to image inference
 class Txt2ImgInfer(Infer):
 
@@ -113,14 +126,22 @@ class Txt2ImgInfer(Infer):
             dataset_len = len(dataset)
             i = 0
             while i * batch_size < dataset_len:
+                prompt_texts = dataset["prompt_text"][
+                    i * batch_size : (i + 1) * batch_size
+                ]
+                images = self.model(
+                    prompt_texts,
+                    **kwargs,
+                ).images
                 response_images.extend(
-                    self.model(
-                        dataset["prompt_text"][i * batch_size : (i + 1) * batch_size],
-                        **kwargs,
-                    ).images
+                    [
+                        save_images_and_return_path(
+                            "txt2img", self.model_name, prompt_text, image
+                        )
+                        for image, prompt_text in zip(images, prompt_texts)
+                    ]
                 )
                 i += 1
-            print(len(response_images), type(response_images), type(response_images[0]))
             return dataset.add_column("response_image", response_images)
         elif self.model_type == API:
             pass
