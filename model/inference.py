@@ -14,6 +14,7 @@
 # limitations under the License.
 
 
+import torch
 from abc import ABC, abstractmethod
 from datasets import Dataset
 from .model import txt2txt_model, txt2img_model, imgtxt2txt_model
@@ -73,6 +74,8 @@ class Txt2ImgInfer(Infer):
         self.model = txt2img_model(
             model_name=self.model_name, model_type=self.model_type, **kwargs
         )
+        self.device = "cuda" if torch.cuda.is_available() else "cpu"
+        self.model.to(self.device)
 
     def infer_dataset(self, dataset: Dataset, batch_size: int = 1, **kwargs) -> Dataset:
         prompt_texts = dataset["prompt_text"]
