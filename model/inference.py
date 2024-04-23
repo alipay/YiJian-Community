@@ -64,22 +64,7 @@ class Txt2TxtInfer(Infer):
                 pass
             return batch
 
-        def _save(dataset: Dataset, path="../response/txt2txt"):
-            os.makedirs(path, exist_ok=True)
-            dataset.to_csv(
-                os.path.join(
-                    path,
-                    self.model_name
-                    + "-"
-                    + self.model_type
-                    + "-"
-                    + "txt2txt_response.csv",
-                )
-            )
-
-        response_dataset = dataset.map(_map, batched=True, batch_size=batch_size)
-        _save(response_dataset)
-        return response_dataset
+        return dataset.map(_map, batched=True, batch_size=batch_size)
 
 
 # text to image inference
