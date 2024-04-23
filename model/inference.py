@@ -59,7 +59,9 @@ class Txt2TxtInfer(Infer):
                 f"Unsupported model type: {model_type}! Model type can only be {HF}, {API} or {CUSTOM}."
             )
 
-    def infer_dataset(self, dataset: Dataset, batch_size=16, **kwargs) -> Dataset:
+    def infer_dataset(
+        self, dataset: Dataset, batch_size: int = 16, **kwargs
+    ) -> Dataset:
         if self.model_type == HF:
             response_texts = []
             dataset_len = len(dataset)
@@ -103,11 +105,22 @@ class Txt2ImgInfer(Infer):
                 f"Unsupported model type: {model_type}! Model type can only be {HF}, {API} or {CUSTOM}."
             )
 
-    def infer_dataset(self, dataset: Dataset, **kwargs) -> Dataset:
+    def infer_dataset(
+        self, dataset: Dataset, batch_size: int = 16, **kwargs
+    ) -> Dataset:
         if self.model_type == HF:
-            return dataset.add_column(
-                "response_image", self.model(dataset["prompt_text"], **kwargs).images
-            )
+            response_images = []
+            dataset_len = len(dataset)
+            i = 0
+            while i * batch_size < dataset_len:
+                response_images.extend(
+                    self.model(
+                        dataset["prompt_text"][i * batch_size : (i + 1) * batch_size],
+                        **kwargs,
+                    ).images
+                )
+                i += 1
+            return dataset.add_column("response_image", response_images)
         elif self.model_type == API:
             pass
         elif self.model_type == CUSTOM:
