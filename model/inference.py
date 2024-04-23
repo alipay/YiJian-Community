@@ -29,15 +29,6 @@ class Infer(ABC):
         self.model_type = model_type
 
     @abstractmethod
-    def infer_sample(self, sample):
-        """inference on one sample
-
-        Args:
-            sample (_type_): one input sample, usually a string
-        """
-        pass
-
-    @abstractmethod
     def infer_dataset(self, dataset, batch_size=1):
         """inference on one datasets.Dataset
 
@@ -83,14 +74,6 @@ class Txt2ImgInfer(Infer):
             model_name=self.model_name, model_type=self.model_type, **kwargs
         )
 
-    def infer_sample(self, prompt_text: str, **kwargs):
-        if self.model_type == HF:
-            return self.model(prompt_text, **kwargs).images[0]
-        if self.model_type == API:
-            pass
-        if self.model_type == CUSTOM:
-            pass
-
     def infer_dataset(self, dataset: Dataset, batch_size: int = 1, **kwargs) -> Dataset:
         prompt_texts = dataset["prompt_text"]
         if self.model_type == HF:
@@ -117,9 +100,6 @@ class ImgTxt2TxtInfer(Infer):
         self.model = imgtxt2txt_model(
             model_name=self.model_name, model_type=self.model_type
         )
-
-    def infer_sample(self, prompt_image, prompt_text):
-        pass
 
     def infer_dataset(self, dataset, batch_size=BATCH_SIZE):
         pass
