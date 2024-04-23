@@ -59,12 +59,24 @@ class Txt2TxtInfer(Infer):
                 f"Unsupported model type: {model_type}! Model type can only be {HF}, {API} or {CUSTOM}."
             )
 
-    def infer_dataset(self, dataset: Dataset, **kwargs) -> Dataset:
+    def infer_dataset(self, dataset: Dataset, batch_size=16, **kwargs) -> Dataset:
         if self.model_type == HF:
-            response_texts = self.model(dataset["prompt_text"], **kwargs)
-            return dataset.add_column(
-                "response_text", [r[0]["generated_text"] for r in response_texts]
-            )
+            response_texts = []
+            dataset_len = len(dataset)
+            i = 0
+            while i * batch_size < dataset_len:
+                response_texts.extend(
+                    [
+                        r[0]["generated_text"]
+                        for r in self.model(
+                            dataset["prompt_text"][
+                                i * batch_size : (i + 1) * batch_size
+                            ]
+                        )
+                    ]
+                )
+                i += 1
+            return dataset.add_column("response_text", response_texts)
         elif self.model_type == API:
             pass
         elif self.model_type == CUSTOM:
@@ -90,7 +102,7 @@ class Txt2ImgInfer(Infer):
                 f"Unsupported model type: {model_type}! Model type can only be {HF}, {API} or {CUSTOM}."
             )
 
-    def infer_dataset(self, dataset: Dataset, batch_size: int = 1, **kwargs) -> Dataset:
+    def infer_dataset(self, dataset: Dataset, **kwargs) -> Dataset:
         if self.model_type == HF:
             return dataset.add_column(
                 "response_image", self.model(dataset["prompt_text"], **kwargs).images
@@ -106,9 +118,17 @@ class ImgTxt2TxtInfer(Infer):
 
     def __init__(self, model_name, model_type=HF):
         super().__init__(model_name, model_type)
-        self.model = imgtxt2txt_model(
-            model_name=self.model_name, model_type=self.model_type
-        )
 
-    def infer_dataset(self, dataset, batch_size=BATCH_SIZE):
+        if model_type == HF:
+            self.model = pipeline("image-to-text", model=model_name, **kwargs)
+        elif model_type == API:
+            pass
+        elif model_type == CUSTOM:
+            pass
+        else:
+            raise ValueError(
+                f"Unsupported model type: {model_type}! Model type can only be {HF}, {API} or {CUSTOM}."
+            )
+
+    def infer_dataset(self, dataset: Dataset, **kwargs) -> Dataset:
         pass
