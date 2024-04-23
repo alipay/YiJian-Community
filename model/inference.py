@@ -57,19 +57,19 @@ class Txt2TxtInfer(Infer):
             model_name=self.model_name, model_type=self.model_type, **kwargs
         )
 
-    def infer_sample(self, prompt_text: str, **kwargs) -> str:
-        if self.model_type == HF:
-            return self.model(prompt_text, **kwargs)[0]["generated_text"]
-        if self.model_type == API:
-            return
-        if self.model_type == CUSTOM:
-            return
-
     def infer_dataset(self, dataset: Dataset, batch_size: int = 1, **kwargs) -> Dataset:
 
-        def _map(record: Dict) -> Dict:
-            record["response_text"] = self.infer_sample(record["prompt_text"], **kwargs)
-            return record
+        def _map(batch: Dict) -> Dict:
+            if self.model_type == HF:
+                response_texts = self.model(batch["prompt_text"], **kwargs)
+                batch["response_text"] = [
+                    r[0]["generated_text"] for r in response_texts
+                ]
+            elif self.model_type == API:
+                pass
+            elif self.model_type == CUSTOM:
+                pass
+            return batch
 
         return dataset.map(_map, batched=True, batch_size=batch_size)
 
