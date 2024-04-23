@@ -22,6 +22,7 @@ from .model import txt2txt_model, txt2img_model, imgtxt2txt_model
 from utils import HF, API, CUSTOM, BATCH_SIZE
 from typing import Dict, Union
 from transformers import pipeline
+from diffusers import DiffusionPipeline
 
 
 # Base class for inference
@@ -50,9 +51,9 @@ class Txt2TxtInfer(Infer):
         if model_type == HF:
             self.model = pipeline("text-generation", model=model_name, **kwargs)
         elif model_type == API:
-            return
+            pass
         elif model_type == CUSTOM:
-            return
+            pass
         else:
             raise ValueError(
                 f"Unsupported model type: {model_type}! Model type can only be {HF}, {API} or {CUSTOM}."
@@ -75,26 +76,29 @@ class Txt2ImgInfer(Infer):
 
     def __init__(self, model_name: str, model_type: str = HF, **kwargs):
         super().__init__(model_name, model_type)
-        self.model = txt2img_model(
-            model_name=self.model_name, model_type=self.model_type, **kwargs
-        )
-        self.device = "cuda" if torch.cuda.is_available() else "cpu"
-        self.model.to(self.device)
+
+        if model_type == HF:
+            self.model = DiffusionPipeline.from_pretrained(model_name, **kwargs)
+            self.device = "cuda" if torch.cuda.is_available() else "cpu"
+            self.model.to(self.device)
+        elif model_type == API:
+            pass
+        elif model_type == CUSTOM:
+            pass
+        else:
+            raise ValueError(
+                f"Unsupported model type: {model_type}! Model type can only be {HF}, {API} or {CUSTOM}."
+            )
 
     def infer_dataset(self, dataset: Dataset, batch_size: int = 1, **kwargs) -> Dataset:
-
-        def _map(batch: Dict) -> Dict:
-            if self.model_type == HF:
-                batch["response_image"] = self.model(
-                    batch["prompt_text"], **kwargs
-                ).images
-            elif self.model_type == API:
-                pass
-            elif self.model_type == CUSTOM:
-                pass
-            return batch
-
-        return dataset.map(_map, batched=True, batch_size=batch_size)
+        if self.model_type == HF:
+            return dataset.add_column(
+                "response_image", self.model(dataset["prompt_text"], **kwargs).images
+            )
+        elif self.model_type == API:
+            pass
+        elif self.model_type == CUSTOM:
+            pass
 
 
 # image text to text inference
