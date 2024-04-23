@@ -80,16 +80,16 @@ class Txt2ImgInfer(Infer):
 
     def infer_dataset(self, dataset: Dataset, batch_size: int = 1, **kwargs) -> Dataset:
 
-        def _save_response_images(image):
-            pass
-
         def _map(batch: Dict) -> Dict:
             if self.model_type == HF:
-                pass
+                batch["response_image"] = self.model(
+                    batch["prompt_text"], **kwargs
+                ).images
             elif self.model_type == API:
                 pass
             elif self.model_type == CUSTOM:
                 pass
+            return batch
 
         return dataset.map(_map, batched=True, batch_size=batch_size)
 
