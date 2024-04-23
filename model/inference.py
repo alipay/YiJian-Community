@@ -14,6 +14,7 @@
 # limitations under the License.
 
 
+import os
 import torch
 from abc import ABC, abstractmethod
 from datasets import Dataset
@@ -63,7 +64,22 @@ class Txt2TxtInfer(Infer):
                 pass
             return batch
 
-        return dataset.map(_map, batched=True, batch_size=batch_size)
+        def _save(dataset: Dataset, path="../response/txt2txt"):
+            os.makedirs(path, exist_ok=True)
+            dataset.to_csv(
+                os.path.join(
+                    path,
+                    self.model_name
+                    + "-"
+                    + self.model_type
+                    + "-"
+                    + "txt2txt_response.csv",
+                )
+            )
+
+        response_dataset = dataset.map(_map, batched=True, batch_size=batch_size)
+        _save(response_dataset)
+        return response_dataset
 
 
 # text to image inference
@@ -78,21 +94,19 @@ class Txt2ImgInfer(Infer):
         self.model.to(self.device)
 
     def infer_dataset(self, dataset: Dataset, batch_size: int = 1, **kwargs) -> Dataset:
-        prompt_texts = dataset["prompt_text"]
-        if self.model_type == HF:
-            response_images = []
-            data_num = dataset.shape[0]
-            i = 0
-            while i * batch_size < data_num:
-                start = i * batch_size
-                end = (i + 1) * batch_size
-                response_images.extend(self.model())
-            response_images = self.model(dataset["prompt_text"], **kwargs).images
-            return response_images
-        if self.model_type == API:
+
+        def _save_response_images(image):
             pass
-        if self.model_type == CUSTOM:
-            pass
+
+        def _map(batch: Dict) -> Dict:
+            if self.model_type == HF:
+                pass
+            elif self.model_type == API:
+                pass
+            elif self.model_type == CUSTOM:
+                pass
+
+        return dataset.map(_map, batched=True, batch_size=batch_size)
 
 
 # image text to text inference
