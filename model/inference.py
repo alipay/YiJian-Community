@@ -71,7 +71,8 @@ class Txt2TxtInfer(Infer):
                         for r in self.model(
                             dataset["prompt_text"][
                                 i * batch_size : (i + 1) * batch_size
-                            ]
+                            ],
+                            **kwargs,
                         )
                     ]
                 )
