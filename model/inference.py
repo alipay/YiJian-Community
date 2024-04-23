@@ -49,13 +49,14 @@ class Txt2TxtInfer(Infer):
 
         if model_type == HF:
             self.model = pipeline("text-generation", model=model_name, **kwargs)
-        if model_type == API:
+        elif model_type == API:
             return
-        if model_type == CUSTOM:
+        elif model_type == CUSTOM:
             return
-        raise ValueError(
-            f"Unsupported model type: {model_type}! Model type can only be {HF}, {API} or {CUSTOM}."
-        )
+        else:
+            raise ValueError(
+                f"Unsupported model type: {model_type}! Model type can only be {HF}, {API} or {CUSTOM}."
+            )
 
     def infer_dataset(self, dataset: Dataset, **kwargs) -> Dataset:
         if self.model_type == HF:
