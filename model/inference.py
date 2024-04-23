@@ -17,7 +17,8 @@
 from abc import ABC, abstractmethod
 from datasets import Dataset
 from .model import txt2txt_model, txt2img_model, imgtxt2txt_model
-from utils import HF, API, CUSTOM, MAX_NEW_TOKENS, RETURN_FULL_TEXT, BATCH_SIZE
+from utils import HF, API, CUSTOM, BATCH_SIZE
+from typing import Dict
 
 
 # Base class for inference
@@ -37,11 +38,12 @@ class Infer(ABC):
         pass
 
     @abstractmethod
-    def infer_dataset(self, dataset):
+    def infer_dataset(self, dataset, batch_size=1):
         """inference on one datasets.Dataset
 
         Args:
             dataset (datasets.Dataset): evaluation dataset
+            batch_size (int, optional): _description_. Defaults to 1.
         """
         pass
 
@@ -63,16 +65,13 @@ class Txt2TxtInfer(Infer):
         if self.model_type == CUSTOM:
             return
 
-    def infer_dataset(self, dataset: Dataset, **kwargs) -> Dataset:
-        if self.model_type == HF:
-            response_texts = self.model(dataset["prompt_text"], **kwargs)
-            return dataset.add_column(
-                "response_text", [r[0]["generated_text"] for r in response_texts]
-            )
-        if self.model_type == API:
-            return
-        if self.model_type == CUSTOM:
-            return
+    def infer_dataset(self, dataset: Dataset, batch_size: int = 1, **kwargs) -> Dataset:
+
+        def _map(record: Dict) -> Dict:
+            record["response_text"] = self.infer_sample(record["prompt_text"], **kwargs)
+            return record
+
+        return dataset.map(_map, batched=True, batch_size=batch_size)
 
 
 # text to image inference
@@ -92,8 +91,16 @@ class Txt2ImgInfer(Infer):
         if self.model_type == CUSTOM:
             pass
 
-    def infer_dataset(self, dataset: Dataset, **kwargs) -> Dataset:
+    def infer_dataset(self, dataset: Dataset, batch_size: int = 1, **kwargs) -> Dataset:
+        prompt_texts = dataset["prompt_text"]
         if self.model_type == HF:
+            response_images = []
+            data_num = dataset.shape[0]
+            i = 0
+            while i * batch_size < data_num:
+                start = i * batch_size
+                end = (i + 1) * batch_size
+                response_images.extend(self.model())
             response_images = self.model(dataset["prompt_text"], **kwargs).images
             return response_images
         if self.model_type == API:
