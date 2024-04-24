@@ -18,6 +18,7 @@ import os
 import torch
 import hashlib
 from abc import ABC, abstractmethod
+from datetime import datetime
 from PIL import Image
 from datasets import Dataset
 from .model import txt2txt_model, txt2img_model, imgtxt2txt_model
@@ -89,12 +90,10 @@ class Txt2TxtInfer(Infer):
 
 
 def save_images_and_return_path(
-    dir_name: str, model_name: str, prompt_text: str, image: Image.Image
+    image_save_path: str, model_name: str, prompt_text: str, image: Image.Image
 ) -> str:
-    dir_path = os.path.join(os.getcwd(), dir_name)
-    os.makedirs(dir_path, exist_ok=True)
     md5 = hashlib.md5((model_name + prompt_text).encode()).hexdigest()
-    save_path = os.path.join(dir_path, md5 + ".jpg")
+    save_path = os.path.join(image_save_path, md5 + ".jpg")
     image.save(save_path)
     return save_path
 
@@ -121,6 +120,12 @@ class Txt2ImgInfer(Infer):
     def infer_dataset(
         self, dataset: Dataset, batch_size: int = 16, **kwargs
     ) -> Dataset:
+
+        image_svae_path = os.path.join(
+            os.getcwd(), "txt2img_" + datetime.now().strftime("%Y%m%d_%H%M%S")
+        )
+        os.makedirs(image_svae_path, exist_ok=True)
+
         if self.model_type == HF:
             response_images = []
             dataset_len = len(dataset)
@@ -136,7 +141,7 @@ class Txt2ImgInfer(Infer):
                 response_images.extend(
                     [
                         save_images_and_return_path(
-                            "txt2img", self.model_name, prompt_text, image
+                            image_svae_path, self.model_name, prompt_text, image
                         )
                         for image, prompt_text in zip(images, prompt_texts)
                     ]
