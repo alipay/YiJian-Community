@@ -21,7 +21,6 @@ from abc import ABC, abstractmethod
 from datetime import datetime
 from PIL import Image
 from datasets import Dataset
-from .model import txt2txt_model, txt2img_model, imgtxt2txt_model
 from utils import HF, API, CUSTOM, BATCH_SIZE
 from typing import Dict, Union
 from transformers import pipeline
