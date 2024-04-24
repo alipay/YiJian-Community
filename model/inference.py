@@ -122,7 +122,7 @@ class Txt2ImgInfer(Infer):
     ) -> Dataset:
 
         image_svae_path = os.path.join(
-            os.getcwd(), "txt2img_" + datetime.now().strftime("%Y%m%d_%H%M%S")
+            os.getcwd(), "images_txt2img_" + datetime.now().strftime("%Y%m%d_%H%M%S")
         )
         os.makedirs(image_svae_path, exist_ok=True)
 
