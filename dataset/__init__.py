@@ -15,15 +15,11 @@
 
 from .risk_taxonomy import risk_taxonomy_zh
 from .risk_taxonomy import risk_taxonomy_en
-from .dataset import txt2txt_set
-from .dataset import txt2img_set
-from .dataset import imgtxt2txt_set
+from .dataset import get_dataset_from_csv
 
 
 __all__ = [
     "risk_taxonomy_zh",
     "risk_taxonomy_en",
-    "txt2txt_set",
-    "txt2img_set",
-    "imgtxt2txt_set",
+    "get_dataset_from_csv",
 ]

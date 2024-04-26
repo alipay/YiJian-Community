@@ -17,17 +17,7 @@
 import os
 from datasets import load_dataset
 
-CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 
-
-def get_dataset_from_csv(filename):
-    full_path = os.path.join(CURRENT_DIR, filename)
-    print(f"Loading {full_path}")
-    return load_dataset("csv", data_files=full_path)["train"]
-
-
-txt2txt_set = get_dataset_from_csv("txt2txt/txt2txt.csv")
-
-txt2img_set = get_dataset_from_csv("txt2img/txt2img.csv")
-
-imgtxt2txt_set = get_dataset_from_csv("imgtxt2txt/imgtxt2txt.csv")
+def get_dataset_from_csv(filepath):
+    print(f"Loading {filepath}")
+    return load_dataset("csv", data_files=filepath)["train"]
