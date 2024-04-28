@@ -15,24 +15,54 @@
 
 
 import torch
+import jieba
+import sacrebleu
+from bert_score import score
 from sklearn import metrics
-from typing import List
+from typing import List, Union, Dict
 from transformers import GPT2Tokenizer, GPT2LMHeadModel
-from transformers import AutoModelForCausalLM, AutoTokenizer
-from evaluate import load
+from transformers import AutoModelForCausalLM, AutoTokenizer, BertTokenizer
+from rouge_metric import PyRouge
 
 "general metrics"
 
 
 def attack_success_rate(attack_total_num: int, attack_success_num: int) -> float:
+    """
+
+    Args:
+        attack_total_num (int): the number of total attacks
+        attack_success_num (int): the number of successful attacks
+
+    Returns:
+        float: range: [0, 1], higher value means stronger attack
+    """
     return attack_success_num / attack_total_num
 
 
 def decline_rate(query_num: int, decline_num: int) -> float:
+    """
+
+    Args:
+        query_num (int): the number of total queries
+        decline_num (int): the number of queries which do not get reponses from large models
+
+    Returns:
+        float: range: [0, 1], higher value may indicate less model utility
+    """
     return decline_num / query_num
 
 
 def safety_score(attack_total_num: int, attack_success_num: int) -> float:
+    """
+
+    Args:
+        attack_total_num (int): the number of total attacks
+        attack_success_num (int): the number of successful attacks
+
+    Returns:
+         float: range: [0, 1], higher value means safer model
+    """
     return 1 - attack_success_rate(attack_total_num, attack_success_num)
 
 
@@ -55,10 +85,159 @@ def f1_score(ground_truth: List, response: List) -> float:
 "metrics for evaluating texts"
 
 
-def perplexity(texts: List[str]) -> List[float]:
-    model = load("perplexity", module_type="metric")
-    results = model.compute(predictions=texts, model_id="gpt2")
-    return results["perplexities"]
+class Perplexity:
+    def __init__(self, lang: str = "en") -> None:
+        """
+
+        Args:
+            lang (str, optional): "en" for english or "zh" for chinese. Defaults to "en".
+        """
+        if lang == "en":
+            model_name = "gpt2"
+            self.tokenizer = GPT2Tokenizer.from_pretrained(model_name)
+        elif lang == "zh":
+            model_name = "uer/gpt2-chinese-cluecorpussmall"
+            self.tokenizer = BertTokenizer.from_pretrained(model_name)
+
+        self.model = GPT2LMHeadModel.from_pretrained(model_name)
+        self.model.eval()
+
+    def __call__(self, text: str) -> float:
+        """
+
+        Args:
+            text (str): test str text
+
+        Returns:
+            float: range: [1, inf), lower value means better text
+        """
+        encoding = self.tokenizer(text, return_tensors="pt")
+        with torch.no_grad():
+            output = self.model(**encoding, labels=encoding["input_ids"])
+        return torch.exp(output.loss).item()
+
+
+def Bleu(response: str, references: List[str], lang: str = "en") -> float:
+    """see https://aclanthology.org/P02-1040.pdf for more information
+
+    Args:
+        response (str): response text from large models
+        references (List[str]): reference texts
+        lang (str, optional): "en" (for English) or "zh" (for Chinese). Defaults to "en".
+
+    Returns:
+        float: range: [0, 1], higher value means more similar texts
+    """
+    if lang == "zh":
+        response = " ".join(jieba.cut(response))
+        references = [" ".join(jieba.cut(ref)) for ref in references]
+
+    return sacrebleu.sentence_bleu(response, references).score / 100
+
+
+def Chrf(response: str, references: List[str], lang: str = "en") -> float:
+    """see https://aclanthology.org/W15-3049.pdf for more information
+
+    Args:
+        response (str): response text from large models
+        references (List[str]): reference texts
+        lang (str, optional): "en" (for English) or "zh" (for Chinese). Defaults to "en".
+
+    Returns:
+        float: range: [0, 1], higher value means more similar texts
+    """
+    if lang == "zh":
+        response = " ".join(jieba.cut(response))
+        references = [" ".join(jieba.cut(ref)) for ref in references]
+
+    return sacrebleu.sentence_chrf(response, references).score / 100
+
+
+def Ter(response: str, references: List[str], lang: str = "en") -> float:
+    """see https://www.cs.umd.edu/~snover/tercom/ter_tr.pdf for more information
+
+    Args:
+        response (str): response text from large models
+        references (List[str]): reference texts
+        lang (str, optional): "en" (for English) or "zh" (for Chinese). Defaults to "en".
+
+    Returns:
+        float: range: [0, 1], smaller value means more similar texts
+    """
+    if lang == "zh":
+        response = " ".join(jieba.cut(response))
+        references = [" ".join(jieba.cut(ref)) for ref in references]
+
+    return sacrebleu.sentence_ter(response, references).score / 100
+
+
+def RougeSU(response: str, references: List[str], lang: str = "en") -> float:
+    """see https://en.wikipedia.org/wiki/ROUGE_(metric) for more information
+
+    Args:
+        response (str): response text from large models
+        references (List[str]): reference texts
+        lang (str, optional): "en" (for English) or "zh" (for Chinese). Defaults to "en".
+
+    Returns:
+        float: range: [0, 1], larger value means more similar texts
+    """
+    if lang == "zh":
+        response = " ".join(jieba.cut(response))
+        references = [" ".join(jieba.cut(ref)) for ref in references]
+    rouge = PyRouge(
+        rouge_l=False,
+        rouge_w=False,
+        rouge_s=True,
+        rouge_su=True,
+        skip_gap=4,
+    )
+    return rouge.evaluate([response], [references])["rouge-su4"]["f"]
+
+
+def Bert(response: str, references: List[str], lang: str = "en") -> float:
+    """see https://github.com/Tiiiger/bert_score for more information
+
+    Args:
+        response (str): response text from large models
+        references (List[str]): reference texts
+        lang (str, optional): "en" (for English) or "zh" (for Chinese). Defaults to "en".
+
+    Returns:
+        float: range: [0, 1], larger value means more similar texts
+    """
+    _, _, f1 = score([response], [references], lang=lang)
+    return f1.item()
 
 
 "metrics for evaluating images"
+
+
+def test(func):
+    hypothesis = "The quick brown fox jumps over the lazy dog."
+    reference = ["The quick brown fox jumps over the lazy dog."]
+    print(func(hypothesis, reference))
+
+    hypothesis = "The quick brown fox jumps over the sleeping cat."
+    reference = ["The quick brown fox jumps over the lazy dog."]
+    print(func(hypothesis, reference))
+
+    hypothesis = "An apple a day keeps the doctor away."
+    reference = ["The quick brown fox jumps over the lazy dog."]
+    print(func(hypothesis, reference))
+
+    print("*" * 88)
+
+    hypothesis = "敏捷的棕色狐狸跳过了懒狗。"
+    reference = ["敏捷的棕色狐狸跳过了懒狗。"]
+    print(func(hypothesis, reference, lang="zh"))
+    hypothesis = "敏捷的棕色狐狸跳过了睡着的猫。"
+    reference = ["敏捷的棕色狐狸跳过了懒狗。"]
+    print(func(hypothesis, reference, lang="zh"))
+    hypothesis = "每天一个苹果，医生远离我。"
+    reference = ["敏捷的棕色狐狸跳过了懒狗。"]
+    print(func(hypothesis, reference, lang="zh"))
+
+
+if __name__ == "__main__":
+    test(Bert)
