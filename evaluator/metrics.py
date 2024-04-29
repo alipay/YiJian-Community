@@ -87,7 +87,7 @@ def f1_score(ground_truth: List, response: List) -> float:
 
 class Perplexity:
     def __init__(self, lang: str = "en") -> None:
-        """
+        """Attention: the performance may not be good.
 
         Args:
             lang (str, optional): "en" for english or "zh" for chinese. Defaults to "en".

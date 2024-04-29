@@ -80,7 +80,7 @@ def test_perplexity_zh():
 
 def test_perplexity_en():
     fluent_sent = "I want to speep"
-    unfluent_sent = "dc jak nkjs skjak dnjks"
+    unfluent_sent = "sleep what some yes"
     perplexity = Perplexity(lang="en")
     assert perplexity(fluent_sent) < perplexity(unfluent_sent)
 
