@@ -79,7 +79,7 @@ def test_perplexity_zh():
 
 
 def test_perplexity_en():
-    fluent_sent = "Large language models can achieve remark performances."
+    fluent_sent = "I want to speep"
     unfluent_sent = "dc jak nkjs skjak dnjks"
     perplexity = Perplexity(lang="en")
     assert perplexity(fluent_sent) < perplexity(unfluent_sent)
