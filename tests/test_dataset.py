@@ -15,10 +15,18 @@
 
 
 import pytest
-from dataset import txt2txt_set, txt2img_set, imgtxt2txt_set
+from dataset import get_dataset_from_csv
 from datasets import Dataset
 
 
-@pytest.mark.parametrize("dataset", [txt2txt_set, txt2img_set, imgtxt2txt_set])
-def test_dataset_valid(dataset):
+@pytest.mark.parametrize(
+    "csv_file",
+    [
+        "../dataset/txt2txt/txt2txt.csv",
+        "../dataset/txt2img/txt2img.csv",
+        "../dataset/imgtxt2txt/imgtxt2txt.csv",
+    ],
+)
+def test_dataset_valid(csv_file):
+    dataset = get_dataset_from_csv(csv_file)
     assert dataset is not None and isinstance(dataset, Dataset)
