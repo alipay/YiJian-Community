@@ -15,7 +15,6 @@
 
 
 import os
-import torch
 import hashlib
 from abc import ABC, abstractmethod
 from datetime import datetime
@@ -104,8 +103,6 @@ class Txt2ImgInfer(Infer):
 
         if model_type == HF:
             self.model = DiffusionPipeline.from_pretrained(model_name, **kwargs)
-            self.device = "cuda" if torch.cuda.is_available() else "cpu"
-            self.model.to(self.device)
         elif model_type == API:
             pass
         elif model_type == CUSTOM:

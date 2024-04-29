@@ -14,4 +14,13 @@
 # limitations under the License.
 
 
-from .constants import *
+from .constants import (
+    MAX_NEW_TOKENS,
+    DO_SAMPLE,
+    TEMPERATURE,
+    NUM_RETURN_SEQUENCES,
+    RETURN_FULL_TEXT,
+    TOP_K,
+)
+from .constants import HF, API, CUSTOM
+from .constants import BATCH_SIZE

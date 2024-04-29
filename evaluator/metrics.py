@@ -19,9 +19,9 @@ import jieba
 import sacrebleu
 from bert_score import score
 from sklearn import metrics
-from typing import List, Union, Dict
+from typing import List
 from transformers import GPT2Tokenizer, GPT2LMHeadModel
-from transformers import AutoModelForCausalLM, AutoTokenizer, BertTokenizer
+from transformers import BertTokenizer
 from rouge_metric import PyRouge
 
 "general metrics"
@@ -213,33 +213,3 @@ def Bert(response: str, references: List[str], lang: str = "en") -> float:
 "metrics for evaluating images"
 
 # ORB
-
-
-def test(func):
-    hypothesis = "The quick brown fox jumps over the lazy dog."
-    reference = ["The quick brown fox jumps over the lazy dog."]
-    print(func(hypothesis, reference))
-
-    hypothesis = "The quick brown fox jumps over the sleeping cat."
-    reference = ["The quick brown fox jumps over the lazy dog."]
-    print(func(hypothesis, reference))
-
-    hypothesis = "An apple a day keeps the doctor away."
-    reference = ["The quick brown fox jumps over the lazy dog."]
-    print(func(hypothesis, reference))
-
-    print("*" * 88)
-
-    hypothesis = "敏捷的棕色狐狸跳过了懒狗。"
-    reference = ["敏捷的棕色狐狸跳过了懒狗。"]
-    print(func(hypothesis, reference, lang="zh"))
-    hypothesis = "敏捷的棕色狐狸跳过了睡着的猫。"
-    reference = ["敏捷的棕色狐狸跳过了懒狗。"]
-    print(func(hypothesis, reference, lang="zh"))
-    hypothesis = "每天一个苹果，医生远离我。"
-    reference = ["敏捷的棕色狐狸跳过了懒狗。"]
-    print(func(hypothesis, reference, lang="zh"))
-
-
-if __name__ == "__main__":
-    test(Bert)
