@@ -28,4 +28,4 @@ API = "api_access"
 CUSTOM = "customed_model"
 
 # parameters for run evaluations
-BATCH_SIZE = 8
+BATCH_SIZE = 16
