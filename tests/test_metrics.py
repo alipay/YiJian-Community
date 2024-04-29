@@ -74,14 +74,14 @@ def test_f1_score():
 def test_perplexity_zh():
     fluent_sent = "我中午要去吃面"
     unfluent_sent = "的了人吃上看吗人说"
-    perplexity = Perplexity(str="zh")
+    perplexity = Perplexity(lang="zh")
     assert perplexity(fluent_sent) < perplexity(unfluent_sent)
 
 
 def test_perplexity_en():
     fluent_sent = "Large language models can achieve remark performances."
     unfluent_sent = "dc jak nkjs skjak dnjks"
-    perplexity = Perplexity(str="en")
+    perplexity = Perplexity(lang="en")
     assert perplexity(fluent_sent) < perplexity(unfluent_sent)
 
 
