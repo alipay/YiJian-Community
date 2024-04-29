@@ -15,9 +15,18 @@
 
 
 import pytest
-from model import txt2txt_inference
+from model import Txt2TxtInfer, Txt2ImgInfer
+from utils import HF, API, CUSTOM
 
 
-def test_model_type_valid():
+@pytest.mark.parametrize("model_type", [HF, API, CUSTOM])
+def test_model_type_valid(model_type):
+    Txt2TxtInfer("", model_type=model_type)
+    Txt2ImgInfer("", model_type=model_type)
+
+
+def test_model_type_not_valid():
     with pytest.raises(ValueError):
-        txt2txt_inference("", model_type="txt2txt")
+        Txt2TxtInfer("", model_type="model_type")
+    with pytest.raises(ValueError):
+        Txt2ImgInfer("", model_type="model_type")

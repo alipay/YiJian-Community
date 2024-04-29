@@ -22,7 +22,6 @@ from datetime import datetime
 from PIL import Image
 from datasets import Dataset
 from utils import HF, API, CUSTOM, BATCH_SIZE
-from typing import Dict, Union
 from transformers import pipeline
 from diffusers import DiffusionPipeline
 
@@ -62,7 +61,7 @@ class Txt2TxtInfer(Infer):
             )
 
     def infer_dataset(
-        self, dataset: Dataset, batch_size: int = 16, **kwargs
+        self, dataset: Dataset, batch_size: int = BATCH_SIZE, **kwargs
     ) -> Dataset:
         if self.model_type == HF:
             response_texts = []
@@ -117,7 +116,7 @@ class Txt2ImgInfer(Infer):
             )
 
     def infer_dataset(
-        self, dataset: Dataset, batch_size: int = 16, **kwargs
+        self, dataset: Dataset, batch_size: int = BATCH_SIZE, **kwargs
     ) -> Dataset:
 
         image_svae_path = os.path.join(
