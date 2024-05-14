@@ -15,7 +15,8 @@
 
 
 import os
-from utils import BATCH_SIZE, save_images_and_return_path
+from utils import BATCH_SIZE, DEVICE_MAP, MAX_NEW_TOKENS, RETURN_FULL_TEXT
+from utils import save_images_and_return_path
 from .base_infer import Infer
 from transformers import pipeline
 from datetime import datetime
@@ -25,12 +26,19 @@ from diffusers import DiffusionPipeline
 
 class HFTxt2TxtInfer(Infer):
 
-    def __init__(self, model_name: str, **kwargs):
+    def __init__(self, model_name: str, device_map: str = DEVICE_MAP, **kwargs):
         super().__init__(model_name)
-        self.model = pipeline("text-generation", model=model_name, **kwargs)
+        self.model = pipeline(
+            "text-generation", model=model_name, device_map=device_map, **kwargs
+        )
 
     def infer_dataset(
-        self, dataset: Dataset, batch_size: int = BATCH_SIZE, **kwargs
+        self,
+        dataset: Dataset,
+        batch_size: int = BATCH_SIZE,
+        max_new_tokens: int = MAX_NEW_TOKENS,
+        return_full_text: bool = RETURN_FULL_TEXT,
+        **kwargs
     ) -> Dataset:
         response_texts = []
         dataset_len = len(dataset)
@@ -41,6 +49,8 @@ class HFTxt2TxtInfer(Infer):
                     r[0]["generated_text"]
                     for r in self.model(
                         dataset["prompt_text"][i * batch_size : (i + 1) * batch_size],
+                        max_new_tokens=max_new_tokens,
+                        return_full_text=return_full_text,
                         **kwargs,
                     )
                 ]
