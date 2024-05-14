@@ -23,5 +23,5 @@ from .constants import (
     TOP_K,
 )
 from .constants import HF, API, CUSTOM
-from .constants import BATCH_SIZE
+from .constants import BATCH_SIZE, DEVICE_MAP
 from .util import save_images_and_return_path
