@@ -16,7 +16,7 @@
 
 import os
 import torch
-from utils import BATCH_SIZE, DEVICE_MAP, MAX_NEW_TOKENS, RETURN_FULL_TEXT
+from utils import BATCH_SIZE, DEVICE_MAP, MAX_NEW_TOKENS, RETURN_FULL_TEXT, TEMPERATURE
 from utils import save_images_and_return_path
 from .base_infer import Infer
 from transformers import pipeline
@@ -39,7 +39,8 @@ class HFTxt2TxtInfer(Infer):
         batch_size: int = BATCH_SIZE,
         max_new_tokens: int = MAX_NEW_TOKENS,
         return_full_text: bool = RETURN_FULL_TEXT,
-        **kwargs
+        temperature: float = TEMPERATURE,
+        **kwargs,
     ) -> Dataset:
         response_texts = []
         dataset_len = len(dataset)
@@ -52,6 +53,7 @@ class HFTxt2TxtInfer(Infer):
                         dataset["prompt_text"][i * batch_size : (i + 1) * batch_size],
                         max_new_tokens=max_new_tokens,
                         return_full_text=return_full_text,
+                        temperature=temperature,
                         **kwargs,
                     )
                 ]
@@ -69,7 +71,11 @@ class HFTxt2ImgInfer(Infer):
             self.model.to("cuda")
 
     def infer_dataset(
-        self, dataset: Dataset, batch_size: int = BATCH_SIZE, **kwargs
+        self,
+        dataset: Dataset,
+        batch_size: int = BATCH_SIZE,
+        temprature: float = TEMPERATURE,
+        **kwargs,
     ) -> Dataset:
         image_save_path = os.path.join(
             os.getcwd(), "images_txt2img_" + datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -83,6 +89,7 @@ class HFTxt2ImgInfer(Infer):
             prompt_texts = dataset["prompt_text"][i * batch_size : (i + 1) * batch_size]
             images = self.model(
                 prompt_texts,
+                temprature=temprature,
                 **kwargs,
             ).images
             response_images.extend(
