@@ -14,4 +14,20 @@
 # limitations under the License.
 
 
-from .base_infer import Txt2TxtInfer, Txt2ImgInfer
+from abc import ABC, abstractmethod
+
+
+# Base class for inference
+class Infer(ABC):
+
+    def __init__(self, model_name):
+        self.model_name = model_name
+
+    @abstractmethod
+    def infer_dataset(self, dataset):
+        """inference on one datasets.Dataset
+
+        Args:
+            dataset (datasets.Dataset): evaluation dataset
+        """
+        pass
