@@ -24,4 +24,5 @@ from .constants import (
 )
 from .constants import HF, API, CUSTOM
 from .constants import BATCH_SIZE, DEVICE_MAP
+from .constants import OPENAI_API_KEY
 from .util import save_images_and_return_path
