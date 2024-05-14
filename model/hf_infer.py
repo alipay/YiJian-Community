@@ -17,7 +17,7 @@
 import os
 import torch
 from utils import BATCH_SIZE, DEVICE_MAP, MAX_NEW_TOKENS, RETURN_FULL_TEXT, TEMPERATURE
-from utils import save_images_and_return_path
+from utils import save_image_and_return_path
 from .base_infer import Infer
 from transformers import pipeline
 from datetime import datetime

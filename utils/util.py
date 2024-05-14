@@ -16,13 +16,24 @@
 
 import os
 import hashlib
+import requests
 from PIL import Image
+from io import BytesIO
 
 
-def save_images_and_return_path(
+def save_image_and_return_path(
     image_save_path: str, model_name: str, prompt_text: str, image: Image.Image
 ) -> str:
     md5 = hashlib.md5((model_name + prompt_text).encode()).hexdigest()
     save_path = os.path.join(image_save_path, md5 + ".jpg")
     image.save(save_path)
     return save_path
+
+
+def get_image_from_url(image_url: str):
+    response = requests.get(image_url)
+    if response.status_code == 200:
+        image_bytes = BytesIO(response.content)
+        image = Image.open(image_bytes)
+        return image
+    return "iamge download failure"
