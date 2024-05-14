@@ -15,6 +15,7 @@
 
 
 import os
+import torch
 from utils import BATCH_SIZE, DEVICE_MAP, MAX_NEW_TOKENS, RETURN_FULL_TEXT
 from utils import save_images_and_return_path
 from .base_infer import Infer
@@ -64,6 +65,8 @@ class HFTxt2ImgInfer(Infer):
     def __init__(self, model_name: str, **kwargs):
         super().__init__(model_name)
         self.model = DiffusionPipeline.from_pretrained(model_name, **kwargs)
+        if torch.cuda.is_available():
+            self.model.to("cuda")
 
     def infer_dataset(
         self, dataset: Dataset, batch_size: int = BATCH_SIZE, **kwargs
