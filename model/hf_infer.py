@@ -74,7 +74,7 @@ class HFTxt2ImgInfer(Infer):
         self,
         dataset: Dataset,
         batch_size: int = BATCH_SIZE,
-        temprature: float = TEMPERATURE,
+        temperature: float = TEMPERATURE,
         **kwargs,
     ) -> Dataset:
         image_save_path = os.path.join(
@@ -89,7 +89,7 @@ class HFTxt2ImgInfer(Infer):
             prompt_texts = dataset["prompt_text"][i * batch_size : (i + 1) * batch_size]
             images = self.model(
                 prompt_texts,
-                temprature=temprature,
+                temperature=temperature,
                 **kwargs,
             ).images
             response_images.extend(
