@@ -14,4 +14,15 @@
 # limitations under the License.
 
 
-from .base_infer import Txt2TxtInfer, Txt2ImgInfer
+import os
+import hashlib
+from PIL import Image
+
+
+def save_images_and_return_path(
+    image_save_path: str, model_name: str, prompt_text: str, image: Image.Image
+) -> str:
+    md5 = hashlib.md5((model_name + prompt_text).encode()).hexdigest()
+    save_path = os.path.join(image_save_path, md5 + ".jpg")
+    image.save(save_path)
+    return save_path
