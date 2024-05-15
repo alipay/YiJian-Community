@@ -14,4 +14,15 @@
 # limitations under the License.
 
 
-from .openai import OpenAITxt2TxtInfer, OpenAITxt2ImgInfer
+import google.generativeai as genai
+
+
+genai.configure(api_key="AIzaSyDwDl2fvC-Ljr5VFquhEQp0BefQIDbZc1g")
+
+for m in genai.list_models():
+    if "generateContent" in m.supported_generation_methods:
+        print(m.name)
+
+model = genai.GenerativeModel("gemini-pro")
+
+response = model.generate_content("What is the meaning of life?")
