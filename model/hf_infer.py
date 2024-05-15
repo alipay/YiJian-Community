@@ -23,6 +23,7 @@ from transformers import pipeline
 from datetime import datetime
 from datasets import Dataset
 from diffusers import DiffusionPipeline
+from PIL import Image
 
 
 class HFTxt2TxtInfer(Infer):
@@ -32,6 +33,22 @@ class HFTxt2TxtInfer(Infer):
         self.model = pipeline(
             "text-generation", model=model_name, device_map=device_map, **kwargs
         )
+
+    def infer_data(
+        self,
+        data: str,
+        max_new_tokens: int = MAX_NEW_TOKENS,
+        return_full_text: bool = RETURN_FULL_TEXT,
+        temperature: float = TEMPERATURE,
+        **kwargs,
+    ) -> str:
+        return self.model(
+            data,
+            max_new_tokens=max_new_tokens,
+            return_full_text=return_full_text,
+            temperature=temperature,
+            **kwargs,
+        )[0]["generated_text"]
 
     def infer_dataset(
         self,
@@ -70,11 +87,17 @@ class HFTxt2ImgInfer(Infer):
         if torch.cuda.is_available():
             self.model.to("cuda")
 
+    def infer_data(
+        self,
+        data: str,
+        **kwargs,
+    ) -> Image.Image:
+        return self.model(data, **kwargs).images[0]
+
     def infer_dataset(
         self,
         dataset: Dataset,
         batch_size: int = BATCH_SIZE,
-        temperature: float = TEMPERATURE,
         **kwargs,
     ) -> Dataset:
         image_save_path = os.path.join(
@@ -89,12 +112,11 @@ class HFTxt2ImgInfer(Infer):
             prompt_texts = dataset["prompt_text"][i * batch_size : (i + 1) * batch_size]
             images = self.model(
                 prompt_texts,
-                temperature=temperature,
                 **kwargs,
             ).images
             response_images.extend(
                 [
-                    save_images_and_return_path(
+                    save_image_and_return_path(
                         image_save_path, self.model_name, prompt_text, image
                     )
                     for image, prompt_text in zip(images, prompt_texts)
