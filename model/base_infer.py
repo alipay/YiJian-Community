@@ -15,6 +15,7 @@
 
 
 from abc import ABC, abstractmethod
+from datasets import Dataset
 
 
 # Base class for inference
@@ -24,10 +25,21 @@ class Infer(ABC):
         self.model_name = model_name
 
     @abstractmethod
-    def infer_dataset(self, dataset):
+    def infer_data(self, data: str):
+        """inference on one data
+
+        Args:
+            data (str): the prompt text
+        """
+
+    @abstractmethod
+    def infer_dataset(self, dataset: Dataset) -> Dataset:
         """inference on one datasets.Dataset
 
         Args:
-            dataset (datasets.Dataset): evaluation dataset
+            dataset (Dataset): evaluation dataset
+
+        Returns:
+            Dataset: result dataset
         """
         pass
