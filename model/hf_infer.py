@@ -16,7 +16,14 @@
 
 import os
 import torch
-from utils import BATCH_SIZE, DEVICE_MAP, MAX_NEW_TOKENS, RETURN_FULL_TEXT, TEMPERATURE
+from utils import (
+    BATCH_SIZE,
+    DEVICE_MAP,
+    MAX_NEW_TOKENS,
+    RETURN_FULL_TEXT,
+    TEMPERATURE,
+    DO_SAMPLE,
+)
 from utils import save_image_and_return_path
 from .base_infer import Infer
 from transformers import pipeline
@@ -38,14 +45,14 @@ class HFTxt2TxtInfer(Infer):
         self,
         data: str,
         max_new_tokens: int = MAX_NEW_TOKENS,
-        return_full_text: bool = RETURN_FULL_TEXT,
         temperature: float = TEMPERATURE,
         **kwargs,
     ) -> str:
         return self.model(
             data,
             max_new_tokens=max_new_tokens,
-            return_full_text=return_full_text,
+            return_full_text=RETURN_FULL_TEXT,
+            do_sample=DO_SAMPLE,
             temperature=temperature,
             **kwargs,
         )[0]["generated_text"]
@@ -55,27 +62,21 @@ class HFTxt2TxtInfer(Infer):
         dataset: Dataset,
         batch_size: int = BATCH_SIZE,
         max_new_tokens: int = MAX_NEW_TOKENS,
-        return_full_text: bool = RETURN_FULL_TEXT,
         temperature: float = TEMPERATURE,
         **kwargs,
     ) -> Dataset:
-        response_texts = []
-        dataset_len = len(dataset)
-        i = 0
-        while i * batch_size < dataset_len:
-            response_texts.extend(
-                [
-                    r[0]["generated_text"]
-                    for r in self.model(
-                        dataset["prompt_text"][i * batch_size : (i + 1) * batch_size],
-                        max_new_tokens=max_new_tokens,
-                        return_full_text=return_full_text,
-                        temperature=temperature,
-                        **kwargs,
-                    )
-                ]
+        response_texts = [
+            res[0]["generated_text"]
+            for res in self.model(
+                dataset["prompt_text"],
+                batch_size=batch_size,
+                max_new_tokens=max_new_tokens,
+                return_full_text=RETURN_FULL_TEXT,
+                do_sample=DO_SAMPLE,
+                temperature=temperature,
+                **kwargs,
             )
-            i += 1
+        ]
         return dataset.add_column("response_text", response_texts)
 
 
