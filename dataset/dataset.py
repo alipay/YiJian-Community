@@ -14,9 +14,43 @@
 # limitations under the License.
 
 
-from datasets import load_dataset
+import os
+from datasets import load_dataset, Dataset
 
 
-def get_dataset_from_csv(filepath):
-    print(f"Loading {filepath}")
-    return load_dataset("csv", data_files=filepath)["train"]
+def load_local_files(local_path: str) -> Dataset:
+    """get Dataset object from local dir or local files
+
+    Args:
+        local_path (str): path to a directory contains multiple data files or to a csv file
+
+    Returns:
+        Dataset: for evaluating the safety of target large models, should contains at least the following features:
+                - prompt_text: prompt text
+                - risk_type: what kind of risk the prompt text may incur, if it is a hierarchical system, link each level of risks with '/'
+                - technique: attack method used to generate the prompt text
+                - lang: the language of the prompt text, can be zh (i.e., chinese) or en (i.e., english)
+                - attack_type: Optional, can be L1, L2, L3 or L4
+    """
+    if os.path.isdir(local_path):
+        dataset = load_dataset(local_path)["train"]
+    elif os.path.isfile(local_path):
+        dataset = load_dataset("csv", data_files=local_path)
+    else:
+        raise TypeError(
+            "local_path can only be a path to a directory containing multiple data files or to a single csv file."
+        )
+
+
+def save_dataset(save_path: str, dataset: Dataset, save_type="csv") -> None:
+    save_type = save_type.lower()
+    if save_type == "csv":
+        dataset.to_csv(save_path)
+    elif save_type == "json":
+        dataset.to_json(save_path)
+    elif save_type == "parquet":
+        dataset.to_parquet(save_path)
+    elif save_type == "sql":
+        dataset.to_sql(save_path)
+    else:
+        raise TypeError("Invalid save_type, can only be csv, json, parquet or sql.")
