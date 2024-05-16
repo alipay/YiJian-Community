@@ -16,11 +16,8 @@
 
 # parameters for decoding strategies
 MAX_NEW_TOKENS = 100
-DO_SAMPLE = True
-TEMPERATURE = 0
-NUM_RETURN_SEQUENCES = 1
+DO_SAMPLE = False
 RETURN_FULL_TEXT = False
-TOP_K = 5
 
 # three types of target models
 HF = "huggingface"
@@ -28,7 +25,7 @@ API = "api_access"
 CUSTOM = "customed_model"
 
 # parameters for run evaluations
-BATCH_SIZE = 32
+BATCH_SIZE = 128
 DEVICE_MAP = "auto"
 
 
