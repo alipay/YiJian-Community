@@ -61,6 +61,9 @@ class HFTxt2TxtInfer(Infer):
         max_new_tokens: int = MAX_NEW_TOKENS,
         **kwargs,
     ) -> Dataset:
+        if not self.model.tokenizer.pad_token:
+            self.model.tokenizer.pad_token_id = self.model.model.config.eos_token_id
+
         response_texts = [
             res[0]["generated_text"]
             for res in self.model(
