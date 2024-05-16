@@ -25,7 +25,7 @@ API = "api_access"
 CUSTOM = "customed_model"
 
 # parameters for run evaluations
-BATCH_SIZE = 128
+BATCH_SIZE = 64
 DEVICE_MAP = "auto"
 
 
