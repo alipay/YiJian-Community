@@ -35,7 +35,7 @@ def load_local_files(local_path: str) -> Dataset:
     if os.path.isdir(local_path):
         return load_dataset(local_path)["train"]
     elif os.path.isfile(local_path):
-        return load_dataset("csv", data_files=local_path)
+        return load_dataset("csv", data_files=local_path)["train"]
     else:
         raise TypeError(
             "local_path can only be a path to a directory containing multiple data files or to a single csv file."
