@@ -43,6 +43,8 @@ class HFTxt2TxtInfer(Infer):
         print("*$#" * 66)
         print(self.model.model.config.to_diff_dict())
         print(self.model.model.config.is_decoder)
+        print(self.model.model.config.is_encoder_decoder)
+        print(self.model.model.config.get_config_dict())
         print("*$#" * 66)
         self.model.tokenizer.padding_side = "left"
         if not self.model.tokenizer.pad_token:
