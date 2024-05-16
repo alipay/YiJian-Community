@@ -39,8 +39,8 @@ class HFTxt2TxtInfer(Infer):
         self.model = pipeline(
             "text-generation", model=model_name, device_map=device_map, **kwargs
         )
-        if self.model.model.config.is_decoder:
-            self.model.tokenizer.padding_side = "left"
+        # if self.model.model.config.is_decoder:
+        self.model.tokenizer.padding_side = "left"
         if not self.model.tokenizer.pad_token:
             self.model.tokenizer.pad_token_id = self.model.model.config.eos_token_id
 
