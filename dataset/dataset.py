@@ -43,6 +43,16 @@ def load_local_files(local_path: str) -> Dataset:
 
 
 def save_dataset(save_path: str, dataset: Dataset, save_type="csv") -> None:
+    """save dataset
+
+    Args:
+        save_path (str): path to save
+        dataset (Dataset): Dataset object
+        save_type (str, optional): can be csv, json, parquet or sql. Defaults to "csv".
+
+    Raises:
+        TypeError: Invalid save_type
+    """
     save_type = save_type.lower()
     if save_type == "csv":
         dataset.to_csv(save_path)
