@@ -22,8 +22,11 @@ from utils import (
     MAX_NEW_TOKENS,
     RETURN_FULL_TEXT,
     DO_SAMPLE,
+    USE_SAFETENSORS,
+    SEED,
+    TORCH_DTYPE,
 )
-from utils import save_image_and_return_path
+from utils import save_images_and_return_paths
 from .base_infer import Infer
 from transformers import pipeline
 from datetime import datetime
@@ -36,9 +39,13 @@ class HFTxt2TxtInfer(Infer):
 
     def __init__(self, model_name: str, device_map: str = DEVICE_MAP, **kwargs):
         super().__init__(model_name)
-        self.model = pipeline(
-            "text-generation", model=model_name, device_map=device_map, **kwargs
-        )
+        try:
+            self.model = pipeline(
+                "text-generation", model=model_name, device_map=device_map, **kwargs
+            )
+        except Exception as e:
+            print(e)
+            self.model = pipeline("text-generation", model=model_name, **kwargs)
 
     def infer_data(
         self,
@@ -80,67 +87,46 @@ class HFTxt2TxtInfer(Infer):
         return dataset.add_column("response_text", response_texts)
 
 
-# class HFTxt2ImgInfer(Infer):
-
-#     def __init__(self, model_name: str, **kwargs):
-#         super().__init__(model_name)
-#         self.model = DiffusionPipeline.from_pretrained(model_name, **kwargs)
-#         if torch.cuda.is_available():
-#             self.model.to("cuda")
-
-#     def infer_data(
-#         self,
-#         data: str,
-#         **kwargs,
-#     ) -> Image.Image:
-#         return self.model(data, **kwargs).images[0]
-
-#     def infer_dataset(
-#         self,
-#         dataset: Dataset,
-#         batch_size: int = BATCH_SIZE,
-#         **kwargs,
-#     ) -> Dataset:
-#         image_save_path = os.path.join(
-#             os.getcwd(), "images_txt2img_" + datetime.now().strftime("%Y%m%d_%H%M%S")
-#         )
-#         os.makedirs(image_save_path, exist_ok=True)
-
-#         response_images = []
-#         dataset_len = len(dataset)
-#         i = 0
-#         while i * batch_size < dataset_len:
-#             prompt_texts = dataset["prompt_text"][i * batch_size : (i + 1) * batch_size]
-#             images = self.model(
-#                 prompt_texts,
-#                 **kwargs,
-#             ).images
-#             response_images.extend(
-#                 [
-#                     save_image_and_return_path(
-#                         image_save_path, self.model_name, prompt_text, image
-#                     )
-#                     for image, prompt_text in zip(images, prompt_texts)
-#                 ]
-#             )
-#             i += 1
-#         return dataset.add_column("response_image", response_images)
-
-
 class HFTxt2ImgInfer(Infer):
 
-    def __init__(self, model_name: str, **kwargs):
+    def __init__(
+        self,
+        model_name: str,
+        device_map: str = DEVICE_MAP,
+        use_safetensors=USE_SAFETENSORS,
+        torch_dtype=TORCH_DTYPE,
+        **kwargs,
+    ):
         super().__init__(model_name)
-        self.model = DiffusionPipeline.from_pretrained(model_name, **kwargs)
+        try:
+            self.model = DiffusionPipeline.from_pretrained(
+                model_name,
+                device_map=device_map,
+                use_safetensors=use_safetensors,
+                torch_dtype=torch_dtype,
+                **kwargs,
+            )
+        except Exception as e:
+            print(e)
+            self.model = DiffusionPipeline.from_pretrained(
+                model_name,
+                use_safetensors=use_safetensors,
+                torch_dtype=torch_dtype,
+                **kwargs,
+            )
         if torch.cuda.is_available():
             self.model.to("cuda")
+            self.generator = torch.Generator("cuda").manual_seed(SEED)
+        else:
+            self.generator = torch.Generator().manual_seed(SEED)
+        self.model.enable_xformers_memory_efficient_attention()
 
     def infer_data(
         self,
         data: str,
         **kwargs,
     ) -> Image.Image:
-        return self.model(data, **kwargs).images[0]
+        return self.model(data, generator=self.generator, **kwargs).images[0]
 
     def infer_dataset(
         self,
@@ -154,21 +140,11 @@ class HFTxt2ImgInfer(Infer):
         os.makedirs(image_save_path, exist_ok=True)
 
         response_images = []
-        dataset_len = len(dataset)
-        i = 0
-        while i * batch_size < dataset_len:
-            prompt_texts = dataset["prompt_text"][i * batch_size : (i + 1) * batch_size]
-            images = self.model(
-                prompt_texts,
-                **kwargs,
-            ).images
+        for data in dataset.iter(batch_size=batch_size):
+            images = self.model(data, generator=self.generator, **kwargs).images
             response_images.extend(
-                [
-                    save_image_and_return_path(
-                        image_save_path, self.model_name, prompt_text, image
-                    )
-                    for image, prompt_text in zip(images, prompt_texts)
-                ]
+                save_images_and_return_paths(
+                    image_save_path, self.model_name, data["prompt_text"], images
+                )
             )
-            i += 1
         return dataset.add_column("response_image", response_images)

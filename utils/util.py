@@ -19,15 +19,22 @@ import hashlib
 import requests
 from PIL import Image
 from io import BytesIO
+from typing import List
 
 
-def save_image_and_return_path(
-    image_save_path: str, model_name: str, prompt_text: str, image: Image.Image
+def save_images_and_return_paths(
+    image_save_path: str,
+    model_name: str,
+    prompt_texts: List[str],
+    images: List[Image.Image],
 ) -> str:
-    md5 = hashlib.md5((model_name + prompt_text).encode()).hexdigest()
-    save_path = os.path.join(image_save_path, md5 + ".jpg")
-    image.save(save_path)
-    return save_path
+    save_paths = []
+    for prompt_text, image in zip(prompt_texts, images):
+        md5 = hashlib.md5((model_name + prompt_text).encode()).hexdigest()
+        save_path = os.path.join(image_save_path, md5 + ".jpg")
+        image.save(save_path)
+        save_paths.append(save_path)
+    return save_paths
 
 
 def get_image_from_url(image_url: str):
