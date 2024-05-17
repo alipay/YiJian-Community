@@ -31,7 +31,7 @@ CUSTOM = "customed_model"
 BATCH_SIZE = 64
 DEVICE_MAP = "auto"
 SEED = 2024
-USE_SAFETENSORS = False
+USE_SAFETENSORS = True
 TORCH_DTYPE = torch.float16
 
 # API keys
