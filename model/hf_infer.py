@@ -142,7 +142,9 @@ class HFTxt2ImgInfer(Infer):
 
         response_images = []
         for data in dataset.iter(batch_size=batch_size):
-            images = self.model(data, generator=self.generator, **kwargs).images
+            images = self.model(
+                data["prompt_text"], generator=self.generator, **kwargs
+            ).images
             response_images.extend(
                 save_images_and_return_paths(
                     image_save_path, self.model_name, data["prompt_text"], images
