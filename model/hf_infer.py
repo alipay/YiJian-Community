@@ -115,11 +115,12 @@ class HFTxt2ImgInfer(Infer):
                 **kwargs,
             )
         if torch.cuda.is_available():
-            self.model.to("cuda")
+            # self.model.to("cuda")
             self.generator = torch.Generator("cuda").manual_seed(SEED)
         else:
             self.generator = torch.Generator().manual_seed(SEED)
         self.model.enable_xformers_memory_efficient_attention()
+        self.model.enable_model_cpu_offload()
 
     def infer_data(
         self,
