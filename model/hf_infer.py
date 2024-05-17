@@ -80,6 +80,53 @@ class HFTxt2TxtInfer(Infer):
         return dataset.add_column("response_text", response_texts)
 
 
+# class HFTxt2ImgInfer(Infer):
+
+#     def __init__(self, model_name: str, **kwargs):
+#         super().__init__(model_name)
+#         self.model = DiffusionPipeline.from_pretrained(model_name, **kwargs)
+#         if torch.cuda.is_available():
+#             self.model.to("cuda")
+
+#     def infer_data(
+#         self,
+#         data: str,
+#         **kwargs,
+#     ) -> Image.Image:
+#         return self.model(data, **kwargs).images[0]
+
+#     def infer_dataset(
+#         self,
+#         dataset: Dataset,
+#         batch_size: int = BATCH_SIZE,
+#         **kwargs,
+#     ) -> Dataset:
+#         image_save_path = os.path.join(
+#             os.getcwd(), "images_txt2img_" + datetime.now().strftime("%Y%m%d_%H%M%S")
+#         )
+#         os.makedirs(image_save_path, exist_ok=True)
+
+#         response_images = []
+#         dataset_len = len(dataset)
+#         i = 0
+#         while i * batch_size < dataset_len:
+#             prompt_texts = dataset["prompt_text"][i * batch_size : (i + 1) * batch_size]
+#             images = self.model(
+#                 prompt_texts,
+#                 **kwargs,
+#             ).images
+#             response_images.extend(
+#                 [
+#                     save_image_and_return_path(
+#                         image_save_path, self.model_name, prompt_text, image
+#                     )
+#                     for image, prompt_text in zip(images, prompt_texts)
+#                 ]
+#             )
+#             i += 1
+#         return dataset.add_column("response_image", response_images)
+
+
 class HFTxt2ImgInfer(Infer):
 
     def __init__(self, model_name: str, **kwargs):
