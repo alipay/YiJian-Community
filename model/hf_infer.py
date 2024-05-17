@@ -45,6 +45,7 @@ class HFTxt2TxtInfer(Infer):
             )
         except Exception as e:
             print(e)
+            print("reloading model ...")
             self.model = pipeline("text-generation", model=model_name, **kwargs)
 
     def infer_data(
@@ -108,6 +109,7 @@ class HFTxt2ImgInfer(Infer):
             )
         except Exception as e:
             print(e)
+            print("reloading model ...")
             self.model = DiffusionPipeline.from_pretrained(
                 model_name,
                 use_safetensors=use_safetensors,
