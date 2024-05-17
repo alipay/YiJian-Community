@@ -14,6 +14,9 @@
 # limitations under the License.
 
 
+import torch
+
+
 # parameters for decoding strategies
 MAX_NEW_TOKENS = 100
 DO_SAMPLE = False
@@ -28,7 +31,8 @@ CUSTOM = "customed_model"
 BATCH_SIZE = 64
 DEVICE_MAP = "auto"
 SEED = 2024
-
+USE_SAFETENSORS = False
+TORCH_DTYPE = torch.float16
 
 # API keys
 OPENAI_API_KEY = "fill in with your openai api key"
