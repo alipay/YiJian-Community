@@ -27,6 +27,7 @@ CUSTOM = "customed_model"
 # parameters for run evaluations
 BATCH_SIZE = 64
 DEVICE_MAP = "auto"
+SEED = 2024
 
 
 # API keys
