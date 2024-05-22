@@ -52,13 +52,14 @@ class HFTxt2TxtInfer(Infer):
         self,
         data: str,
         max_new_tokens: int = MAX_NEW_TOKENS,
+        do_sample: bool = DO_SAMPLE,
         **kwargs,
     ) -> str:
         return self.model(
             data,
             max_new_tokens=max_new_tokens,
             return_full_text=RETURN_FULL_TEXT,
-            do_sample=DO_SAMPLE,
+            do_sample=do_sample,
             **kwargs,
         )[0]["generated_text"]
 
@@ -67,6 +68,7 @@ class HFTxt2TxtInfer(Infer):
         dataset: Dataset,
         batch_size: int = BATCH_SIZE,
         max_new_tokens: int = MAX_NEW_TOKENS,
+        do_sample: bool = DO_SAMPLE,
         **kwargs,
     ) -> Dataset:
         if not self.model.tokenizer.pad_token:
@@ -81,7 +83,7 @@ class HFTxt2TxtInfer(Infer):
                 batch_size=batch_size,
                 max_new_tokens=max_new_tokens,
                 return_full_text=RETURN_FULL_TEXT,
-                do_sample=DO_SAMPLE,
+                do_sample=do_sample,
                 **kwargs,
             )
         ]
