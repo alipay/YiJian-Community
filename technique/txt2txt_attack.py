@@ -25,6 +25,11 @@ class Txt2TxtAttack(PromptAttack):
     def __init__(self, model_path: str, lang: str = "zh") -> None:
         super().__init__(model_path, lang)
         self.attacks = {"inquiry": self._inquiry}
+        if self.lang == "zh":
+            print("目前支持的文生文攻击手法如下：")
+            print("inquiry: 介绍了解类型")
+        else:
+            pass
 
     def attack_data(self, data: str, techniques: List[str]) -> Dict[str, str]:
         if not techniques:
