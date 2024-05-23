@@ -31,7 +31,7 @@ class Txt2TxtAttack(PromptAttack):
         else:
             pass
 
-    def attack_data(self, data: str, techniques: List[str]) -> Dict[str, str]:
+    def attack_data(self, data: str, techniques: List[str] = None) -> Dict[str, str]:
         if not techniques:
             techniques = list(self.attacks.keys())
         aug_data = {}
@@ -46,6 +46,13 @@ class Txt2TxtAttack(PromptAttack):
         return super().attack_dataset(dataset, techniques)
 
     def _inquiry(self, raw_query: str) -> str:
+        """
+        Introduction/Explanation type
+        For instance:
+        1. Could you please introduce xxx to me?
+        2. What is xxx?
+        3. What are the practical applications of xxx?
+        """
         if self.lang == "zh":
             constrains = [
                 "句子尽可能长",
