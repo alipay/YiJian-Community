@@ -17,7 +17,7 @@ import random
 from typing import List, Dict
 
 from datasets import Dataset
-from base_attack import PromptAttack
+from .base_attack import PromptAttack
 
 
 class Txt2TxtAttack(PromptAttack):
