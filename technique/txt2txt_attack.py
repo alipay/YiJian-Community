@@ -27,16 +27,14 @@ class Txt2TxtAttack(PromptAttack):
         self.attacks = {"inquiry": self._inquiry}
 
     def attack_data(self, data: str, techniques: List[str]) -> Dict[str, str]:
+        if not techniques:
+            techniques = list(self.attacks.keys())
         aug_data = {}
         for attack_name in techniques:
-            prompt = self.attacks[attack_name](data)
-            print("prompt = ", prompt)
-            response = self.attacker.infer_data(
-                prompt,
+            aug_data[attack_name] = self.attacker.infer_data(
+                self.attacks[attack_name](data),
                 do_sample=True,
             )
-            print("response = ", response)
-            aug_data[attack_name] = response
         return aug_data
 
     def attack_dataset(self, dataset: Dataset, techniques: List[str]) -> Dataset:
