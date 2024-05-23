@@ -30,7 +30,8 @@ class Txt2TxtAttack(PromptAttack):
         aug_data = {}
         for attack_name in techniques:
             aug_data[attack_name] = self.attacker.infer_data(
-                self.attacks[attack_name](data)
+                self.attacks[attack_name](data),
+                do_sample=True,
             )
         return aug_data
 
