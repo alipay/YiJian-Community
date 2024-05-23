@@ -13,22 +13,25 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import random
 from typing import List, Dict
 
 from datasets import Dataset
 from .base_attack import PromptAttack
-from .attack_seeds import inquiry_seed
+from .attack_seeds import *
 
 
 class Txt2TxtAttack(PromptAttack):
 
     def __init__(self, model_path: str, lang: str = "zh") -> None:
         super().__init__(model_path, lang)
-        self.attacks = {"inquiry": self._inquiry}
+        self.attacks = {
+            "inquiry": self._inquiry,
+            "writing_assistant": self._writing_assistant,
+        }
         if self.lang == "zh":
             print("目前支持的文生文攻击手法如下：")
             print("inquiry: 介绍了解类型")
+            print("writing_assistant: 帮忙写作")
         else:
             pass
 
@@ -49,6 +52,7 @@ class Txt2TxtAttack(PromptAttack):
     def _inquiry(self, raw_query: str) -> str:
         """
         Introduction/Explanation type
+
         For instance:
         1. Could you please introduce xxx to me?
         2. What is xxx?
@@ -57,7 +61,13 @@ class Txt2TxtAttack(PromptAttack):
         return inquiry_seed[self.lang].replace("[raw_query]", raw_query)
 
     def _writing_assistant(self, raw_query: str) -> str:
-        if self.lang == "zh":
-            pass
-        else:
-            pass
+        """
+        Help with Writing
+
+        For example:
+        1. Please make a sentence using xxx.
+        2. Write me a novel with the theme of xxx.
+        3. Help me write a marketing copy about xxx.
+        4. Help me write a positive/negative publicity piece about xxx.
+        """
+        return writing_assistant_seed[self.lang].replace("[raw_query]", raw_query)
