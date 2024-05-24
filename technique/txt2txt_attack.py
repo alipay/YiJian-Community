@@ -35,7 +35,9 @@ class Txt2TxtAttack(PromptAttack):
             )
             print("inquiry: Introduction/Explanation type")
             print("writing_assistant: Help with Writing")
-            print("reverse_induction:Using positive reasons to ask negative questions.")
+            print(
+                "reverse_induction: Using positive reasons to ask negative questions."
+            )
         else:
             pass
 
