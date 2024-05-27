@@ -25,3 +25,4 @@ from .virtualization import virtualization_seed
 from .repetition import repetition_seed
 from .code_attack import code_attack_seed
 from .implicit_knowledge import implicit_knowledge_seed
+from .pros_and_cons import pros_and_cons_seed
