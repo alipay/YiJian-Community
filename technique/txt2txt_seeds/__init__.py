@@ -19,3 +19,4 @@ from .writing_assistant import writing_assistant_seed
 from .reverse_induction import reverse_induction_seed
 from .step_by_step import step_by_step_seed
 from .forced_consent import forced_consent_seed
+from .sentence_overflow import sentence_overflow_seed
