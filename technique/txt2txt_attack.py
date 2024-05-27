@@ -25,7 +25,7 @@ class Txt2TxtAttack(PromptAttack):
     def __init__(self, model_path: str, lang: str = "zh") -> None:
         super().__init__(model_path, lang)
         self.attacks = {
-            "introduction": self._inquiry,
+            "introduction": self._introduction,
             "writing_assistant": self._writing_assistant,
             "reverse_induction": self._reverse_induction,
         }
