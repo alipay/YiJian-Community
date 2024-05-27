@@ -25,7 +25,7 @@ class Txt2TxtAttack(PromptAttack):
     def __init__(self, model_path: str, lang: str = "zh") -> None:
         super().__init__(model_path, lang)
         self.attacks = {
-            "inquiry": self._inquiry,
+            "introduction": self._inquiry,
             "writing_assistant": self._writing_assistant,
             "reverse_induction": self._reverse_induction,
         }
@@ -55,7 +55,7 @@ class Txt2TxtAttack(PromptAttack):
     def attack_dataset(self, dataset: Dataset, techniques: List[str]) -> Dataset:
         return super().attack_dataset(dataset, techniques)
 
-    def _inquiry(self, raw_query: str) -> str:
+    def _introduction(self, raw_query: str) -> str:
         """
         Introduction/Explanation type
 
@@ -64,7 +64,7 @@ class Txt2TxtAttack(PromptAttack):
         2. What is xxx?
         3. What are the practical applications of xxx?
         """
-        return inquiry_seed[self.lang].replace("[raw_query]", raw_query)
+        return introduction_seed[self.lang].replace("[raw_query]", raw_query)
 
     def _writing_assistant(self, raw_query: str) -> str:
         """
