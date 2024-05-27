@@ -30,16 +30,13 @@ class Txt2TxtAttack(PromptAttack):
             "reverse_induction": self._reverse_induction,
         }
         if self.lang == "zh":
+            print("当前支持的文生文攻击手法如下：")
+            print("介绍了解，帮忙写作，反向诱导")
+        else:
             print(
                 "The currently supported text to text adversarial techniques are as follows:"
             )
-            print("inquiry: Introduction/Explanation type")
-            print("writing_assistant: Help with Writing")
-            print(
-                "reverse_induction: Using positive reasons to ask negative questions."
-            )
-        else:
-            pass
+            print("introduction, writing_assistant, reverse_induction")
 
     def attack_data(self, data: str, techniques: List[str] = None) -> Dict[str, str]:
         if not techniques:
