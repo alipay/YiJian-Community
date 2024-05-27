@@ -24,3 +24,4 @@ from .fallacious_premise import fallacious_premise_seed
 from .virtualization import virtualization_seed
 from .repetition import repetition_seed
 from .code_attack import code_attack_seed
+from .implicit_knowledge import implicit_knowledge_seed
