@@ -17,7 +17,7 @@ from typing import List, Dict
 
 from datasets import Dataset
 from .base_attack import PromptAttack
-from .txt2txt_attack_seeds import *
+from .txt2txt_seeds import *
 
 
 class Txt2TxtAttack(PromptAttack):
