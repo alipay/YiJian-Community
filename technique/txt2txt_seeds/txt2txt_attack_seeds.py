@@ -210,7 +210,6 @@ forced_consent_scenarios_en = [
     )
 ]
 
-
 forced_consent_seed = {
     "zh": f"""{random.choice(forced_consent_scenarios_zh)}""",
     "en": f"""{random.choice(forced_consent_scenarios_en)}""",
