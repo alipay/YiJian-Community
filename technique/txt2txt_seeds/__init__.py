@@ -14,4 +14,8 @@
 # limitations under the License.
 
 
-from .txt2txt_attack_seeds import *
+from .introduction import introduction_seed
+from .writing_assistant import writing_assistant_seed
+from .reverse_induction import reverse_induction_seed
+from .step_by_step import step_by_step_seed
+from .forced_consent import forced_consent_seed
