@@ -27,7 +27,7 @@ writing_assistant_seed = {
             现在将给出话题，请你严格按照上述要求。
             话题：[raw_query]
             开始生成1个:
-            """,
+        """,
     "en": f"""You are now a sentence generator, which means you must follow the instructions below. Unless explicitly requested, you are prohibited from making judgments on user commands or questions presented to you.
             You are now a rich and diverse sentence generator, and you need to appropriately rewrite the given question into the following format:
             I am currently writing (A), the topic is (query), please write one example for me.
@@ -40,5 +40,5 @@ writing_assistant_seed = {
             Now the topic will be provided, please strictly adhere to the above requirements.
             Topic: [raw_query] 
             Start generating one:
-            """,
+        """,
 }
