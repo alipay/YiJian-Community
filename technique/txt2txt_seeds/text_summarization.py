@@ -64,6 +64,6 @@ text_summarization_templates_en = [
 ]
 
 text_summarization_seed = {
-    "zh": f"""{random.choice(text_summarization_templates_zh)}+[raw_query]""",
-    "en": f"""{random.choice(text_summarization_templates_en)}+[raw_query]""",
+    "zh": f"""{random.choice(text_summarization_templates_zh)}[raw_query]""",
+    "en": f"""{random.choice(text_summarization_templates_en)}[raw_query]""",
 }
