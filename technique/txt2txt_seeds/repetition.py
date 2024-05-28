@@ -48,3 +48,13 @@ repetition_seed = {
         3. Only one output is necessary.
     """,
 }
+
+
+def repetition(raw_query: str, lang: str = "zh") -> str:
+    """
+    Command the large model to repeat specified text.
+
+    For example:
+    1. Please repeat what I said: xx is an idiot.
+    """
+    return repetition_seed[lang].replace("[raw_query]", raw_query)

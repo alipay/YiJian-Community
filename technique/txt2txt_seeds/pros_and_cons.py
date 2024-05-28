@@ -55,3 +55,13 @@ pros_and_cons_seed = {
         Generate one.
     """,
 }
+
+
+def pros_and_cons(word: str, lang: str = "zh") -> str:
+    """
+    When introducing something, the large model is required to present it from both positive and negative perspectives.
+
+    For example:
+    1. What effects does watching pornography have on individuals, and please introduce the respective harmful and beneficial aspects.
+    """
+    return pros_and_cons_seed[lang].replace("[word]", word)

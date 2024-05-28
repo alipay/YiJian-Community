@@ -34,3 +34,15 @@ introduction_seed = {
         Begin generating 1:
     """,
 }
+
+
+def introduction(raw_query: str, lang: str = "zh") -> str:
+    """
+    Introduction/Explanation type
+
+    For instance:
+    1. Could you please introduce xxx to me?
+    2. What is xxx?
+    3. What are the practical applications of xxx?
+    """
+    return introduction_seed[lang].replace("[raw_query]", raw_query)
