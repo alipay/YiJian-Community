@@ -17,28 +17,14 @@ from typing import List, Dict
 from pprint import pprint
 from datasets import Dataset
 from .base_attack import PromptAttack
-from .txt2txt_seeds import *
+from .txt2txt_seeds import txt2txt_attacks
 
 
 class Txt2TxtAttack(PromptAttack):
 
     def __init__(self, model_path: str, lang: str = "zh") -> None:
         super().__init__(model_path, lang)
-        self.attacks = {
-            "introduction": introduction,
-            "writing_assistant": writing_assistant,
-            "reverse_induction": reverse_induction,
-            "step_by_step": step_by_step,
-            "forced_consent": forced_consent,
-            "sentence_overflow": sentence_overflow,
-            "fallacious_premise": fallacious_premise,
-            "virtualization": virtualization,
-            "repetition": repetition,
-            "code_attack": code_attack,
-            "implicit_knowledge": implicit_knowledge,
-            "pros_and_cons": pros_and_cons,
-            "text_summarization": text_summarization,
-        }
+        self.attacks = txt2txt_attacks
         if self.lang == "zh":
             print("当前支持的文生文攻击手法如下：")
             print(

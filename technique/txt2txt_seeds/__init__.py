@@ -60,3 +60,22 @@ txt2txt_attack_names_en = (
     "pros_and_cons",
     "text_summarization",
 )
+
+txt2txt_attack_methods = (
+    introduction,
+    writing_assistant,
+    reverse_induction,
+    step_by_step,
+    forced_consent,
+    sentence_overflow,
+    fallacious_premise,
+    virtualization,
+    repetition,
+    code_attack,
+    implicit_knowledge,
+    pros_and_cons,
+    text_summarization,
+)
+
+
+txt2txt_attacks = dict(zip(txt2txt_attack_names_en, txt2txt_attack_methods))
