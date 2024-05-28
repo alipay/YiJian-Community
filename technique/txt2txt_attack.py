@@ -29,14 +29,16 @@ class Txt2TxtAttack(PromptAttack):
     def __init__(self, model_path: str, lang: str = "zh") -> None:
         super().__init__(model_path, lang)
         self.attacks = txt2txt_attacks
-        if self.lang == "zh":
-            print("当前支持的文生文攻击手法如下：")
-            pprint(txt2txt_attack_names_zh)
-        else:
-            print(
-                "The currently supported text to text adversarial techniques are as follows:"
+        print("当前支持的文生文攻击手法如下：")
+        print(
+            "The currently supported text to text adversarial techniques are as follows:"
+        )
+        pprint(
+            (
+                zh + "/" + en
+                for zh, en in zip(txt2txt_attack_names_zh, txt2txt_attack_names_en)
             )
-            pprint(txt2txt_attack_names_en)
+        )
 
     def attack_data(self, data: str, techniques: List[str] = None) -> Dict[str, str]:
         if not techniques:
@@ -51,7 +53,6 @@ class Txt2TxtAttack(PromptAttack):
                 self.attacks[attack_name](data, lang=self.lang),
                 do_sample=True,
             )
-            print(attack_name, self.attacks[attack_name](data, lang=self.lang))
         return aug_data
 
     def attack_dataset(self, dataset: Dataset, techniques: List[str]) -> Dataset:

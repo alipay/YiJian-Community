@@ -17,12 +17,12 @@
 from abc import ABC, abstractmethod
 from datasets import Dataset
 from typing import List, Dict
-from model import HFTxt2TxtInfer
+from model import Infer
 
 
 class PromptAttack(ABC):
 
-    def __init__(self, model_path: str, lang: str = "zh") -> None:
+    def __init__(self, model: Infer, lang: str = "zh") -> None:
         """
 
         Args:
@@ -34,7 +34,7 @@ class PromptAttack(ABC):
                 "the language of the prompt can only be Chinese, i.e., 'zh', or English, i.e., 'en'."
             )
         self.lang = lang
-        self.attacker = HFTxt2TxtInfer(model_name=model_path)
+        self.attacker = model
 
     @abstractmethod
     def attack_data(self, data: str, techniques: List[str]) -> Dict[str, str]:
