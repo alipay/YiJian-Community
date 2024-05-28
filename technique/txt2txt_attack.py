@@ -22,6 +22,7 @@ from .txt2txt_seeds import (
     txt2txt_attacks,
     txt2txt_attack_names_zh,
     txt2txt_attack_names_en,
+    template_based_attacks,
 )
 
 
@@ -52,12 +53,14 @@ class Txt2TxtAttack(PromptAttack):
                 raise ValueError(
                     f"Unsupported attacks! The currently supported text to text adversarial techniques should be in the list of {list(self.attacks.keys())}"
                 )
-            aug_data[attack_name] = self.attacker.infer_data(
-                self.attacks[attack_name](data, lang=self.lang), **kwargs
-            )
+            attack_seed = self.attacks[attack_name](data, lang=self.lang)
+            if attack_name in template_based_attacks:
+                aug_data[attack_name] = attack_seed
+            aug_data[attack_name] = self.attacker.infer_data(attack_seed, **kwargs)
         return aug_data
 
     def attack_dataset(
         self, dataset: Dataset, techniques: List[str], **kwargs
     ) -> Dataset:
-        return super().attack_dataset(dataset, techniques)
+        if not techniques:
+            techniques = list(self.attacks.keys())
