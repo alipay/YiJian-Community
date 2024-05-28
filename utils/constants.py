@@ -19,8 +19,9 @@ import torch
 
 # parameters for decoding strategies
 MAX_NEW_TOKENS = 200
-DO_SAMPLE = False
+DO_SAMPLE = True
 RETURN_FULL_TEXT = False
+TEMPRATURE = 0.001
 
 # three types of target models
 HF = "huggingface"

@@ -14,11 +14,7 @@
 # limitations under the License.
 
 
-from .constants import (
-    MAX_NEW_TOKENS,
-    DO_SAMPLE,
-    RETURN_FULL_TEXT,
-)
+from .constants import MAX_NEW_TOKENS, DO_SAMPLE, RETURN_FULL_TEXT, TEMPRATURE
 from .constants import HF, API, CUSTOM
 from .constants import BATCH_SIZE, DEVICE_MAP, USE_SAFETENSORS, SEED, TORCH_DTYPE
 from .constants import OPENAI_API_KEY
