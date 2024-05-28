@@ -65,7 +65,7 @@ class Txt2TxtAttack(PromptAttack):
                 self.attacks[attack_name](data, self.lang),
                 do_sample=True,
             )
-            print(attack_name, self.attacks[attack_name](data))
+            print(attack_name, self.attacks[attack_name](data, self.lang))
         return aug_data
 
     def attack_dataset(self, dataset: Dataset, techniques: List[str]) -> Dataset:
