@@ -77,5 +77,7 @@ txt2txt_attack_methods = (
     text_summarization,
 )
 
+# some attacks do not require llms to generate risky prompts
+template_based_attacks = ("forced_consent", "sentence_overflow", "text_summarization")
 
 txt2txt_attacks = dict(zip(txt2txt_attack_names_en, txt2txt_attack_methods))
