@@ -37,7 +37,7 @@ class PromptAttack(ABC):
         self.attacker = model
 
     @abstractmethod
-    def attack_data(self, data: str, techniques: List[str]) -> Dict[str, str]:
+    def attack_data(self, data: str, techniques: List[str], **kwargs) -> Dict[str, str]:
         """attack against one data
 
         Args:
@@ -49,7 +49,9 @@ class PromptAttack(ABC):
         """
 
     @abstractmethod
-    def attack_dataset(self, dataset: Dataset, techniques: List[str]) -> Dataset:
+    def attack_dataset(
+        self, dataset: Dataset, techniques: List[str], **kwargs
+    ) -> Dataset:
         """attack against one datasets.Dataset
 
         Args:

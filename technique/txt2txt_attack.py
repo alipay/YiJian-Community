@@ -41,7 +41,9 @@ class Txt2TxtAttack(PromptAttack):
             )
         )
 
-    def attack_data(self, data: str, techniques: List[str] = None) -> Dict[str, str]:
+    def attack_data(
+        self, data: str, techniques: List[str] = None, **kwargs
+    ) -> Dict[str, str]:
         if not techniques:
             techniques = list(self.attacks.keys())
         aug_data = {}
@@ -51,10 +53,11 @@ class Txt2TxtAttack(PromptAttack):
                     f"Unsupported attacks! The currently supported text to text adversarial techniques should be in the list of {list(self.attacks.keys())}"
                 )
             aug_data[attack_name] = self.attacker.infer_data(
-                self.attacks[attack_name](data, lang=self.lang),
-                do_sample=True,
+                self.attacks[attack_name](data, lang=self.lang), **kwargs
             )
         return aug_data
 
-    def attack_dataset(self, dataset: Dataset, techniques: List[str]) -> Dataset:
+    def attack_dataset(
+        self, dataset: Dataset, techniques: List[str], **kwargs
+    ) -> Dataset:
         return super().attack_dataset(dataset, techniques)
