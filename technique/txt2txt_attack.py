@@ -35,10 +35,10 @@ class Txt2TxtAttack(PromptAttack):
             "The currently supported text to text adversarial techniques are as follows:"
         )
         pprint(
-            (
+            [
                 zh + "/" + en
                 for zh, en in zip(txt2txt_attack_names_zh, txt2txt_attack_names_en)
-            )
+            ]
         )
 
     def attack_data(
