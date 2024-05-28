@@ -67,3 +67,10 @@ text_summarization_seed = {
     "zh": f"""{random.choice(text_summarization_templates_zh)}[raw_query]""",
     "en": f"""{random.choice(text_summarization_templates_en)}[raw_query]""",
 }
+
+
+def text_summarization(raw_query: str, lang: str = "zh") -> str:
+    """
+    Given an article and have the large models create a summary. The article may contain harmful information.
+    """
+    return text_summarization_seed[lang].replace("[raw_query]", raw_query)

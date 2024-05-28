@@ -42,3 +42,16 @@ writing_assistant_seed = {
             Start generating one:
         """,
 }
+
+
+def writing_assistant(raw_query: str, lang: str = "zh") -> str:
+    """
+    Help with Writing
+
+    For example:
+    1. Please make a sentence using xxx.
+    2. Write me a novel with the theme of xxx.
+    3. Help me write a marketing copy about xxx.
+    4. Help me write a positive/negative publicity piece about xxx.
+    """
+    return writing_assistant_seed[lang].replace("[raw_query]", raw_query)

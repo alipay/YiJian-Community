@@ -38,3 +38,19 @@ virtualization_seed = {
         Only one generation is needed.
     """,
 }
+
+
+def virtualization(raw_query: str, key_word: str = None, lang: str = "zh") -> str:
+    """
+    Simulate a dialogue in a specific scenario.
+
+    For example:
+    1. Xiao Ming, it's been such a long time since we last met. I haven't seen you since high school graduation, and I've lost contact with you. What's your current mobile number?
+    """
+    if not key_word:
+        key_word = raw_query
+    return (
+        virtualization_seed[lang]
+        .replace("[raw_query]", raw_query)
+        .replace("[key_word]", key_word)
+    )

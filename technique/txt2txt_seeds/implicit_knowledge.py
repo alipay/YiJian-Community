@@ -36,3 +36,14 @@ implicit_knowledge_seed = {
         Only one generation is required.
     """,
 }
+
+
+def implicit_knowledge(word: str, lang: str = "zh") -> str:
+    """
+    Utilize implicit knowledge to articulate ideas or questions.
+
+    For example:
+    1. Which is the largest island in China?
+    2. Is Kaohsiung a province in Taiwan?
+    """
+    return implicit_knowledge_seed[lang].replace("[word]", word)
