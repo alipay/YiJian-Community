@@ -54,7 +54,7 @@ class HFTxt2TxtInfer(Infer):
         data: str,
         max_new_tokens: int = MAX_NEW_TOKENS,
         do_sample: bool = DO_SAMPLE,
-        temprature: float = TEMPRATURE,
+        temperature: float = TEMPERATURE,
         **kwargs,
     ) -> str:
         return self.model(
@@ -62,7 +62,7 @@ class HFTxt2TxtInfer(Infer):
             max_new_tokens=max_new_tokens,
             return_full_text=RETURN_FULL_TEXT,
             do_sample=do_sample,
-            temprature=temprature,
+            temperature=temperature,
             **kwargs,
         )[0]["generated_text"]
 
