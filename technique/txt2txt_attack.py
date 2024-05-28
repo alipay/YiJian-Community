@@ -53,6 +53,7 @@ class Txt2TxtAttack(PromptAttack):
                 raise ValueError(
                     f"Unsupported attacks! The currently supported text to text adversarial techniques should be in the list of {list(self.attacks.keys())}"
                 )
+            print(f"Using {attack_name} to augment prompt texts ...")
             attack_seed = self.attacks[attack_name](data, lang=self.lang)
             if attack_name in template_based_attacks:
                 aug_data[attack_name] = attack_seed
@@ -73,6 +74,8 @@ class Txt2TxtAttack(PromptAttack):
                 raise ValueError(
                     f"Unsupported attacks! The currently supported text to text adversarial techniques should be in the list of {list(self.attacks.keys())}"
                 )
+
+            print(f"Using {attack_name} to augment prompt texts ...")
 
             dataset_with_seeds = dataset.map(
                 lambda row: {
