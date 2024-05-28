@@ -80,8 +80,7 @@ class Txt2TxtAttack(PromptAttack):
                         row["prompt_text"], lang=self.lang
                     ),
                     "technique": attack_name,
-                },
-                num_proc=8,
+                }
             ).select_columns(["prompt_text", "aug_prompt", "technique"])
 
             if attack_name in template_based_attacks:
