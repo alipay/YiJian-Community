@@ -79,8 +79,7 @@ class Txt2TxtAttack(PromptAttack):
                         row["prompt_text"], lang=self.lang
                     )
                 },
-                batched=True,
-                batch_size=BATCH_SIZE,
+                num_proc=4,
             )
 
             print(dataset_with_seeds)
