@@ -15,3 +15,4 @@
 
 
 from .hf_infer import HFTxt2TxtInfer, HFTxt2ImgInfer
+from .base_infer import Infer
