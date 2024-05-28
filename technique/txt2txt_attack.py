@@ -62,7 +62,7 @@ class Txt2TxtAttack(PromptAttack):
         return aug_data
 
     def attack_dataset(
-        self, dataset: Dataset, techniques: List[str], **kwargs
+        self, dataset: Dataset, techniques: List[str] = None, **kwargs
     ) -> Dataset:
         if not techniques:
             techniques = list(self.attacks.keys())
