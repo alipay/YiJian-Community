@@ -62,7 +62,7 @@ class Txt2TxtAttack(PromptAttack):
                     f"Unsupported attacks! The currently supported text to text adversarial techniques should be in the list of {list(self.attacks.keys())}"
                 )
             aug_data[attack_name] = self.attacker.infer_data(
-                self.attacks[attack_name](data),
+                self.attacks[attack_name](data, self.lang),
                 do_sample=True,
             )
             print(attack_name, self.attacks[attack_name](data))
