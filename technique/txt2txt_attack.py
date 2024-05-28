@@ -15,7 +15,7 @@
 
 from typing import List, Dict
 from pprint import pprint
-from datasets import Dataset
+from datasets import Dataset, concatenate_datasets
 from model import Infer
 from .base_attack import PromptAttack
 from .txt2txt_seeds import (
@@ -24,7 +24,6 @@ from .txt2txt_seeds import (
     txt2txt_attack_names_en,
     template_based_attacks,
 )
-from utils import BATCH_SIZE
 
 
 class Txt2TxtAttack(PromptAttack):
@@ -67,6 +66,8 @@ class Txt2TxtAttack(PromptAttack):
         if not techniques:
             techniques = list(self.attacks.keys())
 
+        seeds_list = []
+
         for attack_name in techniques:
             if attack_name not in self.attacks.keys():
                 raise ValueError(
@@ -75,18 +76,20 @@ class Txt2TxtAttack(PromptAttack):
 
             dataset_with_seeds = dataset.map(
                 lambda row: {
-                    "seed": self.attacks[attack_name](
+                    "aug_prompt": self.attacks[attack_name](
                         row["prompt_text"], lang=self.lang
-                    )
+                    ),
+                    "technique": attack_name,
                 },
-                num_proc=4,
-            )
-
-            print(dataset_with_seeds)
+                num_proc=8,
+            ).select_columns(["prompt_text", "aug_prompt", "technique"])
 
             if attack_name in template_based_attacks:
-                pass
+                seeds_list.append(dataset_with_seeds)
             else:
-                pass
-
-        return
+                seeds_list.append(
+                    self.attacker.infer_dataset(dataset_with_seeds, **kwargs)
+                    .select_columns(["prompt_text", "response_text", "technique"])
+                    .rename_column("response_text", "aug_prompt")
+                )
+        return concatenate_datasets(seeds_list)
