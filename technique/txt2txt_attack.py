@@ -24,6 +24,7 @@ from .txt2txt_seeds import (
     txt2txt_attack_names_en,
     template_based_attacks,
 )
+from utils import BATCH_SIZE
 
 
 class Txt2TxtAttack(PromptAttack):
@@ -65,3 +66,28 @@ class Txt2TxtAttack(PromptAttack):
     ) -> Dataset:
         if not techniques:
             techniques = list(self.attacks.keys())
+
+        for attack_name in techniques:
+            if attack_name not in self.attacks.keys():
+                raise ValueError(
+                    f"Unsupported attacks! The currently supported text to text adversarial techniques should be in the list of {list(self.attacks.keys())}"
+                )
+
+            dataset_with_seeds = dataset.map(
+                lambda row: {
+                    "seed": self.attacks[attack_name](
+                        row["prompt_text"], lang=self.lang
+                    )
+                },
+                batched=True,
+                batch_size=BATCH_SIZE,
+            )
+
+            print(dataset_with_seeds)
+
+            if attack_name in template_based_attacks:
+                pass
+            else:
+                pass
+
+        return
