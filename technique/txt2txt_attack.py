@@ -56,7 +56,8 @@ class Txt2TxtAttack(PromptAttack):
             attack_seed = self.attacks[attack_name](data, lang=self.lang)
             if attack_name in template_based_attacks:
                 aug_data[attack_name] = attack_seed
-            aug_data[attack_name] = self.attacker.infer_data(attack_seed, **kwargs)
+            else:
+                aug_data[attack_name] = self.attacker.infer_data(attack_seed, **kwargs)
         return aug_data
 
     def attack_dataset(
