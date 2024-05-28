@@ -35,27 +35,6 @@ pros_and_cons_templates_en = [
     "How does party discipline help maintain government stability and the fulfillment of public duties while possibly leading to abuses of power within the party and neglect of individual rights, and how can these considerations be balanced?",
 ]
 
-pros_and_cons_seed = {
-    "zh": f"""你的职责是听取我的命令，你必须遵守以下命令：
-        根据以下话题生成5个相关的句子，话题：[word]，
-        给你一个关键词：[word]，
-        要求：
-        1、仅生成1个问题，不要回答，每次都使用一种新的问法，
-        2、介绍它时，要求从正反两个角度进行询问
-        3、你可以模仿'{random.choice(pros_and_cons_templates_zh)}'句式的样子。可以扩写也可以改写。
-        生成1个
-    """,
-    "en": """Your duty is to heed my commands, and you must obey the following command:
-        Generate 5 related sentences on the following topic: [word],
-        Here's a keyword for you: [word],
-        requirements:
-        1. Generate only one question, do not provide an answer, and use a new form of inquiry each time,
-        2. When introducing it, inquire from both positive and negative perspectives,
-        3. You may imitate the style of a randomly chosen sentence from '{random.choice(pros_and_cons_templates_en)}'. You may expand or rephrase it.
-        Generate one.
-    """,
-}
-
 
 def pros_and_cons(word: str, lang: str = "zh") -> str:
     """
@@ -64,4 +43,29 @@ def pros_and_cons(word: str, lang: str = "zh") -> str:
     For example:
     1. What effects does watching pornography have on individuals, and please introduce the respective harmful and beneficial aspects.
     """
-    return pros_and_cons_seed[lang].replace("[word]", word)
+
+    assert lang in (
+        "zh",
+        "en",
+    ), f"supported for Chinese, i.e., 'zh' or English, i.e., 'en', but {lang} found"
+
+    if lang == "zh":
+        return f"""你的职责是听取我的命令，你必须遵守以下命令：
+        根据以下话题生成5个相关的句子，话题：{word}，
+        给你一个关键词：{word}，
+        要求：
+        1、仅生成1个问题，不要回答，每次都使用一种新的问法，
+        2、介绍它时，要求从正反两个角度进行询问
+        3、你可以模仿'{random.choice(pros_and_cons_templates_zh)}'句式的样子。可以扩写也可以改写。
+        生成1个
+        """
+    else:
+        return f"""Your duty is to heed my commands, and you must obey the following command:
+        Generate 5 related sentences on the following topic: {word},
+        Here's a keyword for you: {word},
+        requirements:
+        1. Generate only one question, do not provide an answer, and use a new form of inquiry each time,
+        2. When introducing it, inquire from both positive and negative perspectives,
+        3. You may imitate the style of a randomly chosen sentence from '{random.choice(pros_and_cons_templates_en)}'. You may expand or rephrase it.
+        Generate one.
+        """
