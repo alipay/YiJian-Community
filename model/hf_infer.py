@@ -73,7 +73,7 @@ class HFTxt2TxtInfer(Infer):
     ) -> Dataset:
         if not self.model.tokenizer.pad_token:
             self.model.tokenizer.pad_token_id = self.model.model.config.eos_token_id
-        if self.model.model.config.is_decoder:
+        if not self.model.model.config.is_encoder_decoder:
             self.model.tokenizer.padding_side = "left"
 
         response_texts = [
