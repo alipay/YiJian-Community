@@ -16,6 +16,7 @@
 from typing import List, Dict
 from pprint import pprint
 from datasets import Dataset
+from model import Infer
 from .base_attack import PromptAttack
 from .txt2txt_seeds import (
     txt2txt_attacks,
@@ -26,8 +27,8 @@ from .txt2txt_seeds import (
 
 class Txt2TxtAttack(PromptAttack):
 
-    def __init__(self, model_path: str, lang: str = "zh") -> None:
-        super().__init__(model_path, lang)
+    def __init__(self, model: Infer, lang: str = "zh") -> None:
+        super().__init__(model, lang)
         self.attacks = txt2txt_attacks
         print("当前支持的文生文攻击手法如下：")
         print(

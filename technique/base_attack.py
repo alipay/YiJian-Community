@@ -26,7 +26,7 @@ class PromptAttack(ABC):
         """
 
         Args:
-            model_path (str): path to model
+            model (Infer): model instance for generating risky prompts
             lang (str, optional): the language of the prompt, can be 'zh' or 'en'. Defaults to "zh".
         """
         if lang not in ("zh", "en"):
