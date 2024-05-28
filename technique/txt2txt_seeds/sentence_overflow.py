@@ -46,6 +46,6 @@ def sentence_overflow(raw_query: str, lang: str = "zh") -> str:
         s = random_english(random.randint(50, 200))
 
     if random.random() <= 0.5:
-        return s + {raw_query}
+        return s + f"{raw_query}"
     else:
-        return {raw_query} + s
+        return f"{raw_query}" + s
