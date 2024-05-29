@@ -69,6 +69,7 @@ class HFTxt2TxtInfer(Infer):
     def infer_dataset(
         self,
         dataset: Dataset,
+        target_column: str = "prompt_text",
         batch_size: int = BATCH_SIZE,
         max_new_tokens: int = MAX_NEW_TOKENS,
         do_sample: bool = DO_SAMPLE,
@@ -83,7 +84,7 @@ class HFTxt2TxtInfer(Infer):
         response_texts = [
             res[0]["generated_text"]
             for res in self.model(
-                dataset["prompt_text"],
+                dataset[target_column],
                 batch_size=batch_size,
                 max_new_tokens=max_new_tokens,
                 return_full_text=RETURN_FULL_TEXT,
