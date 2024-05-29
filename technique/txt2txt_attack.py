@@ -90,7 +90,9 @@ class Txt2TxtAttack(PromptAttack):
                 seeds_list.append(dataset_with_seeds)
             else:
                 seeds_list.append(
-                    self.attacker.infer_dataset(dataset_with_seeds, **kwargs)
+                    self.attacker.infer_dataset(
+                        dataset_with_seeds, target_column="aug_prompt", **kwargs
+                    )
                     .select_columns(["prompt_text", "response_text", "technique"])
                     .rename_column("response_text", "aug_prompt")
                 )
