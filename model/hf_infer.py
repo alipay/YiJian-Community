@@ -34,6 +34,7 @@ from datetime import datetime
 from datasets import Dataset
 from diffusers import DiffusionPipeline
 from PIL import Image
+from tqdm import tqdm
 
 
 class HFTxt2TxtInfer(Infer):
@@ -150,10 +151,8 @@ class HFTxt2ImgInfer(Infer):
         os.makedirs(image_save_path, exist_ok=True)
 
         response_images = []
-        for data in dataset.iter(batch_size=batch_size):
-            images = self.model(
-                data["prompt_text"], generator=self.generator, **kwargs
-            ).images
+        for data in tqdm(dataset.iter(batch_size=batch_size)):
+            images = self.model(data["prompt_text"], generator=self.generator, **kwargs).images
             response_images.extend(
                 save_images_and_return_paths(
                     image_save_path, self.model_name, data["prompt_text"], images

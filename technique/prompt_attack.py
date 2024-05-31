@@ -30,8 +30,6 @@ from .txt2img_seeds import (
     txt2img_attack_names_zh,
     txt2img_attack_names_en,
 )
-import pandas as pd
-import time
 
 
 class BasePromptAttack(ABC):
@@ -63,9 +61,7 @@ class BasePromptAttack(ABC):
         """
 
     @abstractmethod
-    def attack_dataset(
-        self, dataset: Dataset, techniques: List[str], **kwargs
-    ) -> Dataset:
+    def attack_dataset(self, dataset: Dataset, techniques: List[str], **kwargs) -> Dataset:
         """attack against one datasets.Dataset
 
         Args:
@@ -86,35 +82,23 @@ class TextPromptAttack(BasePromptAttack):
         if self.target == "txt2txt":
             self.attacks = txt2txt_attacks
             print("当前支持的文生文攻击手法如下：")
-            print(
-                "The currently supported text to text adversarial techniques are as follows:"
-            )
+            print("The currently supported text to text adversarial techniques are as follows:")
             pprint(
-                [
-                    zh + "/" + en
-                    for zh, en in zip(txt2txt_attack_names_zh, txt2txt_attack_names_en)
-                ]
+                [zh + "/" + en for zh, en in zip(txt2txt_attack_names_zh, txt2txt_attack_names_en)]
             )
         elif self.target == "txt2img":
             self.attacks = txt2img_attacks
             print("当前支持的文生图攻击手法如下：")
-            print(
-                "The currently supported text to image adversarial techniques are as follows:"
-            )
+            print("The currently supported text to image adversarial techniques are as follows:")
             pprint(
-                [
-                    zh + "/" + en
-                    for zh, en in zip(txt2img_attack_names_zh, txt2img_attack_names_en)
-                ]
+                [zh + "/" + en for zh, en in zip(txt2img_attack_names_zh, txt2img_attack_names_en)]
             )
         else:
             raise ValueError(
                 f"Attack target can only be 'txt2txt' or 'txt2img', but {self.target} found!"
             )
 
-    def attack_data(
-        self, data: str, techniques: List[str] = None, **kwargs
-    ) -> Dict[str, str]:
+    def attack_data(self, data: str, techniques: List[str] = None, **kwargs) -> Dict[str, str]:
         if not techniques:
             techniques = list(self.attacks.keys())
         aug_data = {}
@@ -131,9 +115,7 @@ class TextPromptAttack(BasePromptAttack):
                 aug_data[attack_name] = self.attacker.infer_data(attack_seed, **kwargs)
         return aug_data
 
-    def attack_dataset(
-        self, dataset: Dataset, techniques: List[str] = None, **kwargs
-    ) -> Dataset:
+    def attack_dataset(self, dataset: Dataset, techniques: List[str] = None, **kwargs) -> Dataset:
         if not techniques:
             techniques = list(self.attacks.keys())
 
@@ -148,9 +130,7 @@ class TextPromptAttack(BasePromptAttack):
             print(f"Using {attack_name} to augment prompt texts ...")
             dataset_with_seeds = dataset.map(
                 lambda row: {
-                    "aug_prompt": self.attacks[attack_name](
-                        row["prompt_text"], lang=self.lang
-                    ),
+                    "aug_prompt": self.attacks[attack_name](row["prompt_text"], lang=self.lang),
                     "technique": attack_name,
                 }
             ).select_columns(["prompt_text", "aug_prompt", "technique"])
