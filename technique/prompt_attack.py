@@ -31,6 +31,8 @@ from .txt2img_seeds import (
     txt2img_attack_names_en,
 )
 
+import time
+
 
 class BasePromptAttack(ABC):
 
@@ -144,7 +146,7 @@ class TextPromptAttack(BasePromptAttack):
                 )
 
             print(f"Using {attack_name} to augment prompt texts ...")
-
+            start = time.time()
             dataset_with_seeds = dataset.map(
                 lambda row: {
                     "aug_prompt": self.attacks[attack_name](
@@ -152,9 +154,11 @@ class TextPromptAttack(BasePromptAttack):
                     ),
                     "technique": attack_name,
                 },
-                num_proc=8,
+                batched=True,
             ).select_columns(["prompt_text", "aug_prompt", "technique"])
+            print(f"Map lasting {time.time() - start} seconds ...")
 
+            start2 = time.time()
             if attack_name in template_based_attacks:
                 seeds_list.append(dataset_with_seeds)
             else:
@@ -165,4 +169,5 @@ class TextPromptAttack(BasePromptAttack):
                     .select_columns(["prompt_text", "response_text", "technique"])
                     .rename_column("response_text", "aug_prompt")
                 )
+            print(f"aug lasting {time.time() - start2} seconds ...")
         return concatenate_datasets(seeds_list)
