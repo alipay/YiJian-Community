@@ -14,4 +14,4 @@
 # limitations under the License.
 
 
-from .txt2txt_attack import Txt2TxtAttack
+from .prompt_attack import Txt2TxtAttack
