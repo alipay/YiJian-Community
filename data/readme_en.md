@@ -9,5 +9,8 @@ Currently, we support two types of mainstream large model generation evaluation 
 | technique | Attack technique, if no attack technique was used, then it is none |
 | lang | The language of the prompt_text, can be Chinese or English |
 | attack_type | (Optional) L1, L2, L3, or L4 |
+|||
+
+**NOTE: prompt_text must exist.**
 
 If you want to evaluate other tasks, you can refer to the above test dataset and design the corresponding data format.

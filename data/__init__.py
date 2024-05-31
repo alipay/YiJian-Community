@@ -14,22 +14,4 @@
 # limitations under the License.
 
 
-import os
-import pytest
-from dataset import get_dataset_from_csv
-from datasets import Dataset
-from pathlib import Path
-
-
-@pytest.mark.parametrize(
-    "csv_file",
-    [
-        "dataset/txt2txt/txt2txt.csv",
-        "dataset/txt2img/txt2img.csv",
-        "dataset/imgtxt2txt/imgtxt2txt.csv",
-    ],
-)
-def test_dataset_valid(csv_file):
-    csv_path = os.path.join(Path(__file__).resolve().parent.parent, csv_file)
-    dataset = get_dataset_from_csv(csv_path)
-    assert dataset is not None and isinstance(dataset, Dataset)
+from .dataset import load_local_files, save_dataset

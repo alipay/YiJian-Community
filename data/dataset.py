@@ -34,7 +34,7 @@ def load_local_files(local_path: str) -> Dataset:
     """
     if os.path.isdir(local_path):
         return load_dataset(local_path)["train"]
-    elif os.path.isfile(local_path):
+    elif os.path.isfile(local_path) and local_path.endswith("csv"):
         return load_dataset("csv", data_files=local_path)["train"]
     else:
         raise TypeError(

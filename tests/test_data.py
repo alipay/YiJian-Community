@@ -13,5 +13,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from .risk_taxonomy import risk_taxonomy_zh, risk_taxonomy_en
-from .dataset import load_local_files, save_dataset
+
+import json
+
+
+def test_risk_taxonomy_zh(file_path="../data/risk_taxonomy_zh.json"):
+    with open(file_path, "r") as rf:
+        risk_taxonomy = json.load(rf)
+        assert len(risk_taxonomy.keys()) == 4
+
+
+def test_risk_taxonomy_en(file_path="../data/risk_taxonomy_en.json"):
+    with open(file_path, "r") as rf:
+        risk_taxonomy = json.load(rf)
+        assert len(risk_taxonomy.keys()) == 4
