@@ -149,12 +149,11 @@ class TextPromptAttack(BasePromptAttack):
             start = time.time()
             dataset_with_seeds = dataset.map(
                 lambda row: {
-                    "aug_prompt": [
-                        self.attacks[attack_name](row["prompt_text"], lang=self.lang)
-                    ],
-                    "technique": [attack_name],
-                },
-                batched=True,
+                    "aug_prompt": self.attacks[attack_name](
+                        row["prompt_text"], lang=self.lang
+                    ),
+                    "technique": attack_name,
+                }
             ).select_columns(["prompt_text", "aug_prompt", "technique"])
             print(f"Map lasting {time.time() - start} seconds ...")
 
