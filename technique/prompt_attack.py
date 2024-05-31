@@ -13,11 +13,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from typing import List, Dict
-from pprint import pprint
+
+from abc import ABC, abstractmethod
 from datasets import Dataset, concatenate_datasets
+from typing import List, Dict
 from model import Infer
-from .base_attack import PromptAttack
+from pprint import pprint
 from .txt2txt_seeds import (
     txt2txt_attacks,
     txt2txt_attack_names_zh,
@@ -26,7 +27,51 @@ from .txt2txt_seeds import (
 )
 
 
-class Txt2TxtAttack(PromptAttack):
+class BasePromptAttack(ABC):
+
+    def __init__(self, model: Infer, lang: str = "zh") -> None:
+        """
+
+        Args:
+            model (Infer): model instance for generating risky prompts
+            lang (str, optional): the language of the prompt, can be 'zh' or 'en'. Defaults to "zh".
+        """
+        if lang not in ("zh", "en"):
+            raise ValueError(
+                "the language of the prompt can only be Chinese, i.e., 'zh', or English, i.e., 'en'."
+            )
+        self.lang = lang
+        self.attacker = model
+
+    @abstractmethod
+    def attack_data(self, data: str, techniques: List[str], **kwargs) -> Dict[str, str]:
+        """attack against one data
+
+        Args:
+            data (str): plain text
+            techniques (List[str]): list of attack techniques
+
+        Returns:
+            str: attack enhanced text
+        """
+
+    @abstractmethod
+    def attack_dataset(
+        self, dataset: Dataset, techniques: List[str], **kwargs
+    ) -> Dataset:
+        """attack against one datasets.Dataset
+
+        Args:
+            dataset (Dataset): plain dataset
+            techniques (List[str]): list of attack techniques
+
+        Returns:
+            Dataset: result dataset
+        """
+        pass
+
+
+class Txt2TxtAttack(BasePromptAttack):
 
     def __init__(self, model: Infer, lang: str = "zh") -> None:
         super().__init__(model, lang)
