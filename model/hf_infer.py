@@ -82,18 +82,21 @@ class HFTxt2TxtInfer(Infer):
         if not self.model.model.config.is_encoder_decoder:
             self.model.tokenizer.padding_side = "left"
 
-        response_texts = [
-            res[0]["generated_text"]
-            for res in self.model(
-                dataset[target_column],
-                batch_size=batch_size,
-                max_new_tokens=max_new_tokens,
-                return_full_text=RETURN_FULL_TEXT,
-                do_sample=do_sample,
-                temperature=temperature,
-                **kwargs,
+        response_texts = []
+        for data in tqdm(dataset.iter(batch_size=batch_size)):
+            response_texts.extend(
+                [
+                    res[0]["generated_text"]
+                    for res in self.model(
+                        data[target_column],
+                        max_new_tokens=max_new_tokens,
+                        return_full_text=RETURN_FULL_TEXT,
+                        do_sample=do_sample,
+                        temperature=temperature,
+                        **kwargs,
+                    )
+                ]
             )
-        ]
         return dataset.add_column("response_text", response_texts)
 
 
