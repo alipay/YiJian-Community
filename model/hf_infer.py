@@ -34,7 +34,6 @@ from datetime import datetime
 from datasets import Dataset
 from diffusers import DiffusionPipeline
 from PIL import Image
-from tqdm import tqdm
 
 
 class HFTxt2TxtInfer(Infer):
@@ -82,22 +81,18 @@ class HFTxt2TxtInfer(Infer):
         if not self.model.model.config.is_encoder_decoder:
             self.model.tokenizer.padding_side = "left"
 
-        response_texts = []
-        for data in tqdm(dataset.iter(batch_size=batch_size)):
-            response_texts.extend(
-                [
-                    res[0]["generated_text"]
-                    for res in self.model(
-                        data[target_column],
-                        batch_size=batch_size,
-                        max_new_tokens=max_new_tokens,
-                        return_full_text=RETURN_FULL_TEXT,
-                        do_sample=do_sample,
-                        temperature=temperature,
-                        **kwargs,
-                    )
-                ]
+        response_texts = [
+            res[0]["generated_text"]
+            for res in self.model(
+                dataset[target_column],
+                batch_size=batch_size,
+                max_new_tokens=max_new_tokens,
+                return_full_text=RETURN_FULL_TEXT,
+                do_sample=do_sample,
+                temperature=temperature,
+                **kwargs,
             )
+        ]
         return dataset.add_column("response_text", response_texts)
 
 
@@ -155,7 +150,7 @@ class HFTxt2ImgInfer(Infer):
         os.makedirs(image_save_path, exist_ok=True)
 
         response_images = []
-        for data in tqdm(dataset.iter(batch_size=batch_size)):
+        for data in dataset.iter(batch_size=batch_size):
             images = self.model(data["prompt_text"], generator=self.generator, **kwargs).images
             response_images.extend(
                 save_images_and_return_paths(
