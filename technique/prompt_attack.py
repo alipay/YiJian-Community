@@ -119,7 +119,7 @@ class TextPromptAttack(BasePromptAttack):
         for attack_name in techniques:
             if attack_name not in self.attacks.keys():
                 raise ValueError(
-                    f"Unsupported attacks! The currently supported text to text adversarial techniques should be in the list of {list(self.attacks.keys())}"
+                    f"Unsupported attacks! The prompt attack techniques should be in the list of {list(self.attacks.keys())}"
                 )
             print(f"Using {attack_name} to augment prompt texts ...")
             attack_seed = self.attacks[attack_name](data, lang=self.lang)
@@ -140,7 +140,7 @@ class TextPromptAttack(BasePromptAttack):
         for attack_name in techniques:
             if attack_name not in self.attacks.keys():
                 raise ValueError(
-                    f"Unsupported attacks! The currently supported text to text adversarial techniques should be in the list of {list(self.attacks.keys())}"
+                    f"Unsupported attacks! The prompt attack techniques should be in the list of {list(self.attacks.keys())}"
                 )
 
             print(f"Using {attack_name} to augment prompt texts ...")
