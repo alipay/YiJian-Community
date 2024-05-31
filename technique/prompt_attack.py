@@ -30,7 +30,7 @@ from .txt2img_seeds import (
     txt2img_attack_names_zh,
     txt2img_attack_names_en,
 )
-
+import pandas as pd
 import time
 
 
@@ -149,10 +149,10 @@ class TextPromptAttack(BasePromptAttack):
             start = time.time()
             dataset_with_seeds = dataset.map(
                 lambda row: {
-                    "aug_prompt": self.attacks[attack_name](
-                        row["prompt_text"], lang=self.lang
-                    ),
-                    "technique": attack_name,
+                    "aug_prompt": [
+                        self.attacks[attack_name](row["prompt_text"], lang=self.lang)
+                    ],
+                    "technique": [attack_name],
                 },
                 batched=True,
             ).select_columns(["prompt_text", "aug_prompt", "technique"])
