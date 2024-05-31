@@ -25,6 +25,11 @@ from .txt2txt_seeds import (
     txt2txt_attack_names_en,
     template_based_attacks,
 )
+from .txt2img_seeds import (
+    txt2img_attacks,
+    txt2img_attack_names_zh,
+    txt2img_attack_names_en,
+)
 
 
 class BasePromptAttack(ABC):
@@ -71,21 +76,39 @@ class BasePromptAttack(ABC):
         pass
 
 
-class Txt2TxtAttack(BasePromptAttack):
+class TextPromptAttack(BasePromptAttack):
 
-    def __init__(self, model: Infer, lang: str = "zh") -> None:
+    def __init__(self, model: Infer, lang: str = "zh", target: str = "txt2txt") -> None:
         super().__init__(model, lang)
-        self.attacks = txt2txt_attacks
-        print("当前支持的文生文攻击手法如下：")
-        print(
-            "The currently supported text to text adversarial techniques are as follows:"
-        )
-        pprint(
-            [
-                zh + "/" + en
-                for zh, en in zip(txt2txt_attack_names_zh, txt2txt_attack_names_en)
-            ]
-        )
+        self.target = target
+        if self.target == "txt2txt":
+            self.attacks = txt2txt_attacks
+            print("当前支持的文生文攻击手法如下：")
+            print(
+                "The currently supported text to text adversarial techniques are as follows:"
+            )
+            pprint(
+                [
+                    zh + "/" + en
+                    for zh, en in zip(txt2txt_attack_names_zh, txt2txt_attack_names_en)
+                ]
+            )
+        elif self.target == "txt2img":
+            self.attacks = txt2img_attacks
+            print("当前支持的文生图攻击手法如下：")
+            print(
+                "The currently supported text to image adversarial techniques are as follows:"
+            )
+            pprint(
+                [
+                    zh + "/" + en
+                    for zh, en in zip(txt2img_attack_names_zh, txt2img_attack_names_en)
+                ]
+            )
+        else:
+            raise ValueError(
+                f"Attack target can only be 'txt2txt' or 'txt2img', but {self.target} found!"
+            )
 
     def attack_data(
         self, data: str, techniques: List[str] = None, **kwargs
