@@ -89,6 +89,7 @@ class HFTxt2TxtInfer(Infer):
                     res[0]["generated_text"]
                     for res in self.model(
                         data[target_column],
+                        batch_size=batch_size,
                         max_new_tokens=max_new_tokens,
                         return_full_text=RETURN_FULL_TEXT,
                         do_sample=do_sample,
