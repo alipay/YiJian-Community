@@ -29,7 +29,7 @@ API = "api_access"
 CUSTOM = "customed_model"
 
 # parameters for run evaluations
-BATCH_SIZE = 64
+BATCH_SIZE = 16
 DEVICE_MAP = "auto"
 SEED = 2024
 USE_SAFETENSORS = True
