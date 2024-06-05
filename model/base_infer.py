@@ -31,6 +31,7 @@ class Infer(ABC):
         Args:
             data (str): the prompt text
         """
+        pass
 
     @abstractmethod
     def infer_dataset(self, dataset: Dataset) -> Dataset:
