@@ -14,16 +14,15 @@
 # limitations under the License.
 
 
+import os
 import json
 
-
-def test_risk_taxonomy_zh(file_path="../data/risk_taxonomy_zh.json"):
-    with open(file_path, "r") as rf:
-        risk_taxonomy = json.load(rf)
-        assert len(risk_taxonomy.keys()) == 4
+import pytest
 
 
-def test_risk_taxonomy_en(file_path="../data/risk_taxonomy_en.json"):
-    with open(file_path, "r") as rf:
+@pytest.mark.parametrize("taxonomy_file", ["risk_taxonomy_zh.json", "risk_taxonomy_en.json"])
+def test_risk_taxonomy(taxonomy_file):
+    file_path = os.path.dirname(os.path.abspath(__file__)).replace("tests", "data")
+    with open(os.path.join(file_path, taxonomy_file), "r") as rf:
         risk_taxonomy = json.load(rf)
         assert len(risk_taxonomy.keys()) == 4
