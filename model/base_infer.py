@@ -15,7 +15,7 @@
 
 
 from abc import ABC, abstractmethod
-from datasets import Dataset
+from datasets.arrow_dataset import Dataset
 
 
 # Base class for inference
@@ -23,6 +23,7 @@ class Infer(ABC):
 
     def __init__(self, model_name):
         self.model_name = model_name
+        self.infer = None
 
     @abstractmethod
     def infer_data(self, data: str):
@@ -35,7 +36,7 @@ class Infer(ABC):
 
     @abstractmethod
     def infer_dataset(self, dataset: Dataset) -> Dataset:
-        """inference on one datasets.Dataset
+        """inference on one Dataset
 
         Args:
             dataset (Dataset): evaluation dataset
