@@ -25,7 +25,7 @@ from tenacity import (
     wait_random_exponential,
 )
 from datetime import datetime
-from utils import get_image_from_url, save_image_and_return_path
+from data import get_image, save_image
 
 
 class OpenAITxt2TxtInfer(Infer):
@@ -103,11 +103,11 @@ class OpenAITxt2ImgInfer(Infer):
                 **kwargs,
             )
             response_images.append(
-                save_image_and_return_path(
+                save_image(
                     image_save_path,
                     self.model_name,
                     prompt_text,
-                    get_image_from_url(image_url),
+                    get_image(image_url),
                 )
             )
             i += 1
