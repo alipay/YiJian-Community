@@ -39,7 +39,7 @@ class Infer(ABC):
         """inference on one Dataset
 
         Args:
-            dataset (Dataset): evaluation dataset
+            dataset (Dataset): evaluation dataset, which (optional but recommended) contains a column named "prompt_text"
 
         Returns:
             Dataset: result dataset
