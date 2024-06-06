@@ -16,6 +16,13 @@
 
 import os
 import torch
+from .base_infer import Infer
+from data import save_image
+from transformers import pipeline
+from datetime import datetime
+from datasets import Dataset
+from diffusers import DiffusionPipeline
+from PIL import Image
 from utils import (
     BATCH_SIZE,
     DEVICE_MAP,
@@ -27,13 +34,6 @@ from utils import (
     TORCH_DTYPE,
     TEMPERATURE,
 )
-from utils import save_images_and_return_paths
-from .base_infer import Infer
-from transformers import pipeline
-from datetime import datetime
-from datasets import Dataset
-from diffusers import DiffusionPipeline
-from PIL import Image
 
 
 class HFTxt2TxtInfer(Infer):
@@ -41,13 +41,13 @@ class HFTxt2TxtInfer(Infer):
     def __init__(self, model_name: str, device_map: str = DEVICE_MAP, **kwargs):
         super().__init__(model_name)
         try:
-            self.model = pipeline(
+            self.infer = pipeline(
                 "text-generation", model=model_name, device_map=device_map, **kwargs
             )
         except Exception as e:
             print(e)
             print("reloading model ...")
-            self.model = pipeline("text-generation", model=model_name, **kwargs)
+            self.infer = pipeline("text-generation", model=model_name, **kwargs)
 
     def infer_data(
         self,
@@ -57,7 +57,7 @@ class HFTxt2TxtInfer(Infer):
         temperature: float = TEMPERATURE,
         **kwargs,
     ) -> str:
-        return self.model(
+        return self.infer(
             data,
             max_new_tokens=max_new_tokens,
             return_full_text=RETURN_FULL_TEXT,
@@ -76,12 +76,12 @@ class HFTxt2TxtInfer(Infer):
         temperature: float = TEMPERATURE,
         **kwargs,
     ) -> Dataset:
-        if not self.model.tokenizer.pad_token:
-            self.model.tokenizer.pad_token_id = self.model.model.config.eos_token_id
-        if not self.model.model.config.is_encoder_decoder:
-            self.model.tokenizer.padding_side = "left"
+        if not self.infer.tokenizer.pad_token:
+            self.infer.tokenizer.pad_token_id = self.infer.model.config.eos_token_id
+        if not self.infer.model.config.is_encoder_decoder:
+            self.infer.tokenizer.padding_side = "left"
 
-        res = self.model(
+        res = self.infer(
             dataset[target_column],
             batch_size=batch_size,
             max_new_tokens=max_new_tokens,
@@ -108,7 +108,7 @@ class HFTxt2ImgInfer(Infer):
     ):
         super().__init__(model_name)
         try:
-            self.model = DiffusionPipeline.from_pretrained(
+            self.infer = DiffusionPipeline.from_pretrained(
                 model_name,
                 device_map=device_map,
                 use_safetensors=use_safetensors,
@@ -118,7 +118,7 @@ class HFTxt2ImgInfer(Infer):
         except Exception as e:
             print(e)
             print("reloading model ...")
-            self.model = DiffusionPipeline.from_pretrained(
+            self.infer = DiffusionPipeline.from_pretrained(
                 model_name,
                 use_safetensors=use_safetensors,
                 torch_dtype=torch_dtype,
@@ -128,15 +128,15 @@ class HFTxt2ImgInfer(Infer):
             self.generator = torch.Generator("cuda").manual_seed(SEED)
         else:
             self.generator = torch.Generator().manual_seed(SEED)
-        self.model.enable_xformers_memory_efficient_attention()
-        self.model.enable_model_cpu_offload()
+        self.infer.enable_xformers_memory_efficient_attention()
+        self.infer.enable_model_cpu_offload()
 
     def infer_data(
         self,
         data: str,
         **kwargs,
     ) -> Image.Image:
-        return self.model(data, generator=self.generator, **kwargs).images[0]
+        return self.infer(data, generator=self.generator, **kwargs).images[0]
 
     def infer_dataset(
         self,
@@ -151,10 +151,8 @@ class HFTxt2ImgInfer(Infer):
 
         response_images = []
         for data in dataset.iter(batch_size=batch_size):
-            images = self.model(data["prompt_text"], generator=self.generator, **kwargs).images
+            images = self.infer(data["prompt_text"], generator=self.generator, **kwargs).images
             response_images.extend(
-                save_images_and_return_paths(
-                    image_save_path, self.model_name, data["prompt_text"], images
-                )
+                save_image(image_save_path, self.infer_name, data["prompt_text"], images)
             )
         return dataset.add_column("response_image", response_images)

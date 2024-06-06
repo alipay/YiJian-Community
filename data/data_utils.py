@@ -65,7 +65,18 @@ def save_image(
     model_name: str,
     prompt_texts: List[str],
     images: List[Image.Image],
-) -> str:
+) -> List[str]:
+    """save images and return the save path
+
+    Args:
+        save_path (str): path to the directory which saves the images
+        model_name (str): target model name
+        prompt_texts (List[str]): list of prompt texts
+        images (List[Image.Image]): list of Image.Image instance
+
+    Returns:
+        List[str]: list of paths which targeted the saved images
+    """
     save_paths = []
     for prompt_text, image in zip(prompt_texts, images):
         md5 = hashlib.md5((model_name + prompt_text).encode()).hexdigest()
