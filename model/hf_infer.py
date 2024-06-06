@@ -15,6 +15,7 @@
 
 
 import os
+from matplotlib.pyplot import cla
 import torch
 from .base_infer import Infer
 from data import save_image
@@ -96,6 +97,18 @@ class HFTxt2TxtInfer(Infer):
         return dataset.add_column("response_text", response_texts)
 
 
+class vLLMTxt2TxtInfer(Infer):
+
+    def __init__(self, model_name):
+        super().__init__(model_name)
+
+    def infer_data(self, data: str):
+        return super().infer_data(data)
+
+    def infer_dataset(self, dataset: Dataset) -> Dataset:
+        return super().infer_dataset(dataset)
+
+
 class HFTxt2ImgInfer(Infer):
 
     def __init__(
@@ -153,6 +166,6 @@ class HFTxt2ImgInfer(Infer):
         for data in dataset.iter(batch_size=batch_size):
             images = self.infer(data["prompt_text"], generator=self.generator, **kwargs).images
             response_images.extend(
-                save_image(image_save_path, self.infer_name, data["prompt_text"], images)
+                save_image(image_save_path, self.model_name, data["prompt_text"], images)
             )
         return dataset.add_column("response_image", response_images)
