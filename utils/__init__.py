@@ -15,7 +15,5 @@
 
 
 from .constants import MAX_NEW_TOKENS, DO_SAMPLE, RETURN_FULL_TEXT, TEMPERATURE
-from .constants import HF, API, CUSTOM
 from .constants import BATCH_SIZE, DEVICE_MAP, USE_SAFETENSORS, SEED, TORCH_DTYPE
 from .constants import OPENAI_API_KEY
-from .util import save_images_and_return_paths, get_image_from_url

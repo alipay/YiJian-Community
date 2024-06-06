@@ -23,11 +23,6 @@ DO_SAMPLE = True
 RETURN_FULL_TEXT = False
 TEMPERATURE = 0.001
 
-# three types of target models
-HF = "huggingface"
-API = "api_access"
-CUSTOM = "customed_model"
-
 # parameters for run evaluations
 BATCH_SIZE = 16
 DEVICE_MAP = "auto"
