@@ -14,4 +14,11 @@
 # limitations under the License.
 
 
-from .data_utils import load_data, save_data
+import pytest
+from data import save_data
+from datasets import Dataset
+
+
+def test_save_data_type_invalid():
+    with pytest.raises(ValueError):
+        save_data("./test.txt", Dataset.from_dict({"prompt": [1, 3, 2]}))
