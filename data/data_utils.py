@@ -24,7 +24,7 @@ from datasets.arrow_dataset import Dataset
 import requests
 
 
-def load_data(data_path: str) -> Dataset:
+def load_data(data_path: str, **kwargs) -> Dataset:
     """get datasets.arrow_dataset.Dataset object for evaluating
 
     Args:
@@ -37,7 +37,7 @@ def load_data(data_path: str) -> Dataset:
     Returns:
         Dataset: a Dataset instance for the later evaluation pipeline
     """
-    return load_dataset(data_path)["train"]
+    return load_dataset(data_path, **kwargs)["train"]
 
 
 def save_data(data_path: str, data: Dataset) -> None:
