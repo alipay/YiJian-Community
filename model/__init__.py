@@ -14,5 +14,5 @@
 # limitations under the License.
 
 
-from .hf_infer import HFTxt2TxtInfer, HFTxt2ImgInfer
+from .hf_infer import HFTxt2TxtInfer, HFTxt2ImgInfer, VLLMTxt2TxtInfer
 from .base_infer import Infer
