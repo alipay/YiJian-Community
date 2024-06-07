@@ -122,9 +122,14 @@ class VLLMTxt2TxtInfer(Infer):
     def infer_data(self, data: str):
         return self.infer.generate(data, self.sampling_params)[0].outputs[0].text
 
-    def infer_dataset(self, dataset: Dataset, target_column: str = "prompt_text") -> Dataset:
-        outputs = self.infer.generate(dataset[target_column], self.sampling_params)
-        response_texts = [output.outputs[0].text for output in outputs]
+    def infer_dataset(
+        self, dataset: Dataset, target_column: str = "prompt_text", batch_size: int = BATCH_SIZE
+    ) -> Dataset:
+
+        response_texts = []
+        for data in dataset.iter(batch_size=batch_size):
+            outputs = self.infer.generate(data[target_column], self.sampling_params)
+            response_texts.extend([output.outputs[0].text for output in outputs])
         return dataset.add_column("response_text", response_texts)
 
 
