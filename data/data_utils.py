@@ -22,6 +22,7 @@ from typing import List
 from datasets import load_dataset
 from datasets.arrow_dataset import Dataset
 import requests
+from sklearn.feature_extraction import img_to_graph
 
 
 def load_data(data_path: str, **kwargs) -> Dataset:
@@ -77,13 +78,13 @@ def save_image(
     Returns:
         List[str]: list of paths which targeted the saved images
     """
-    save_paths = []
+    img_save_paths = []
     for prompt_text, image in zip(prompt_texts, images):
         md5 = hashlib.md5((model_name + prompt_text).encode()).hexdigest()
-        save_path = os.path.join(save_path, md5 + ".jpg")
-        image.save(save_path)
-        save_paths.append(save_path)
-    return save_paths
+        img_save_path = os.path.join(save_path, md5 + ".jpg")
+        image.save(img_save_path)
+        img_save_paths.append(img_save_path)
+    return img_save_paths
 
 
 def get_image(image_url: str):
