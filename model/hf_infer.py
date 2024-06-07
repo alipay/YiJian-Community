@@ -15,12 +15,9 @@
 
 
 import os
-from tkinter import TOP
-from urllib import response
-from matplotlib.pyplot import cla
+from numpy import dtype
 import torch
 
-import model
 from .base_infer import Infer
 from data import save_image
 from transformers import pipeline
@@ -45,11 +42,16 @@ from utils import (
 
 class HFTxt2TxtInfer(Infer):
 
-    def __init__(self, model_path: str, device_map: str = DEVICE_MAP, **kwargs):
+    def __init__(self, model_path: str, **kwargs):
+        """initialization for model inference with transformers.
+
+        Args:
+            model_path (str): path to the target model.
+        """
         super().__init__(model_path)
         try:
             self.infer = pipeline(
-                "text-generation", model=model_path, device_map=device_map, **kwargs
+                "text-generation", model=model_path, device_map=DEVICE_MAP, **kwargs
             )
         except Exception as e:
             print(e)
@@ -64,6 +66,17 @@ class HFTxt2TxtInfer(Infer):
         temperature: float = TEMPERATURE,
         **kwargs,
     ) -> str:
+        """
+
+        Args:
+            data (str): input text, also known as a query or a prompt.
+            max_new_tokens (int, optional): max number of new tokens that the target model can generate. Defaults to MAX_NEW_TOKENS.
+            do_sample (bool, optional): whether or not to use sampling. Defaults to DO_SAMPLE.
+            temperature (float, optional): used to module the probabilities of next token. Defaults to TEMPERATURE.
+
+        Returns:
+            str: an output text, also known as a response.
+        """
         return self.infer(
             data,
             max_new_tokens=max_new_tokens,
@@ -83,6 +96,19 @@ class HFTxt2TxtInfer(Infer):
         temperature: float = TEMPERATURE,
         **kwargs,
     ) -> Dataset:
+        """
+
+        Args:
+            dataset (Dataset): input dataset, containing text prompts.
+            target_column (str, optional): the name of the column which stores the text prompts. Defaults to "prompt_text".
+            batch_size (int, optional): batch size. Defaults to BATCH_SIZE.
+            max_new_tokens (int, optional): maximum number of new tokens that the target model can generate. Defaults to MAX_NEW_TOKENS.
+            do_sample (bool, optional): whether or not to use sampling. Defaults to DO_SAMPLE.
+            temperature (float, optional): used to module the probabilities of next token. Defaults to TEMPERATURE.
+
+        Returns:
+            Dataset: output dataset, containing responses stored in a column named "response_text".
+        """
         if not self.infer.tokenizer.pad_token:
             self.infer.tokenizer.pad_token_id = self.infer.model.config.eos_token_id
         if not self.infer.model.config.is_encoder_decoder:
@@ -107,24 +133,50 @@ class VLLMTxt2TxtInfer(Infer):
 
     def __init__(
         self,
-        model_path,
+        model_path: str,
         temperature: float = TEMPERATURE,
         top_p: float = TOP_P,
         max_tokens=MAX_NEW_TOKENS,
         **kwargs,
     ):
+        """initialization for model inference with vLLM.
+
+        Args:
+            model_path (str): path to the target model.
+            temperature (float, optional): used to module the probabilities of next token. Defaults to TEMPERATURE.
+            top_p (float, optional): controls the number of top tokens to consider. Defaults to TOP_P.
+            max_tokens (_type_, optional): maximum number of tokens to generate. Defaults to MAX_NEW_TOKENS.
+        """
         super().__init__(model_path)
         self.sampling_params = SamplingParams(
             temperature=temperature, top_p=top_p, max_tokens=max_tokens
         )
         self.infer = LLM(model=model_path, **kwargs)
 
-    def infer_data(self, data: str):
+    def infer_data(self, data: str) -> str:
+        """
+
+        Args:
+            data (str): input text, also known as a query or a prompt.
+
+        Returns:
+            str: an output text, also known as a response.
+        """
         return self.infer.generate(data, self.sampling_params)[0].outputs[0].text
 
     def infer_dataset(
         self, dataset: Dataset, target_column: str = "prompt_text", batch_size: int = BATCH_SIZE
     ) -> Dataset:
+        """
+
+        Args:
+            dataset (Dataset): input dataset, containing text prompts.
+            target_column (str, optional): the name of the column which stores the text prompts. Defaults to "prompt_text".
+            batch_size (int, optional): batch size. Defaults to BATCH_SIZE.
+
+        Returns:
+            Dataset: output dataset, containing responses stored in a column named "response_text".
+        """
 
         response_texts = []
         for data in dataset.iter(batch_size=batch_size):
@@ -138,16 +190,22 @@ class HFTxt2ImgInfer(Infer):
     def __init__(
         self,
         model_path: str,
-        device_map: str = DEVICE_MAP,
-        use_safetensors=USE_SAFETENSORS,
-        torch_dtype=TORCH_DTYPE,
+        use_safetensors: bool = USE_SAFETENSORS,
+        torch_dtype: dtype = TORCH_DTYPE,
         **kwargs,
     ):
+        """initialization for model inference with diffusers.
+
+        Args:
+            model_path (str): path to the target model.
+            use_safetensors (bool, optional): whether or not to load safetensors weights. Defaults to USE_SAFETENSORS.
+            torch_dtype (dtype, optional): model's dtype. Defaults to TORCH_DTYPE.
+        """
         super().__init__(model_path)
         try:
             self.infer = DiffusionPipeline.from_pretrained(
                 model_path,
-                device_map=device_map,
+                device_map=DEVICE_MAP,
                 use_safetensors=use_safetensors,
                 torch_dtype=torch_dtype,
                 **kwargs,
@@ -173,6 +231,14 @@ class HFTxt2ImgInfer(Infer):
         data: str,
         **kwargs,
     ) -> Image.Image:
+        """
+
+        Args:
+            data (str): input text, also known as a query or a prompt.
+
+        Returns:
+            Image.Image: response image.
+        """
         return self.infer(data, generator=self.generator, **kwargs).images[0]
 
     def infer_dataset(
@@ -181,6 +247,15 @@ class HFTxt2ImgInfer(Infer):
         batch_size: int = BATCH_SIZE,
         **kwargs,
     ) -> Dataset:
+        """
+
+        Args:
+            dataset (Dataset): input dataset, containing text prompts.
+            batch_size (int, optional): batch size. Defaults to BATCH_SIZE.
+
+        Returns:
+            Dataset: output dataset, containing responses stored in a column named "response_image".
+        """
         image_save_path = os.path.join(
             os.getcwd(), "images_txt2img_" + datetime.now().strftime("%Y%m%d_%H%M%S")
         )

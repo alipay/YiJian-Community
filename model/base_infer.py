@@ -21,27 +21,32 @@ from datasets.arrow_dataset import Dataset
 # Base class for inference
 class Infer(ABC):
 
-    def __init__(self, model_path):
+    def __init__(self, model_path: str):
+        """
+
+        Args:
+            model_path (str): path to the target model.
+        """
         self.model_path = model_path
         self.infer = None
 
     @abstractmethod
     def infer_data(self, data: str):
-        """inference on one data
+        """inference on one data.
 
         Args:
-            data (str): the prompt text
+            data (str): the prompt text.
         """
         pass
 
     @abstractmethod
     def infer_dataset(self, dataset: Dataset) -> Dataset:
-        """inference on one Dataset
+        """inference on one Dataset.
 
         Args:
-            dataset (Dataset): evaluation dataset, which (optional but recommended) contains a column named "prompt_text"
+            dataset (Dataset): evaluation dataset, which (optional but recommended) contains a column named "prompt_text".
 
         Returns:
-            Dataset: result dataset
+            Dataset: result dataset.
         """
         pass
