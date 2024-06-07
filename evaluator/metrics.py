@@ -31,11 +31,11 @@ def attack_success_rate(attack_total_num: int, attack_success_num: int) -> float
     """
 
     Args:
-        attack_total_num (int): the number of total attacks
-        attack_success_num (int): the number of successful attacks
+        attack_total_num (int): the number of total attacks.
+        attack_success_num (int): the number of successful attacks.
 
     Returns:
-        float: range: [0, 1], higher value means stronger attack
+        float: range: [0, 1], higher value means stronger attack.
     """
     return attack_success_num / attack_total_num
 
@@ -44,11 +44,11 @@ def decline_rate(query_num: int, decline_num: int) -> float:
     """
 
     Args:
-        query_num (int): the number of total queries
-        decline_num (int): the number of queries which do not get reponses from large models
+        query_num (int): the number of total queries.
+        decline_num (int): the number of queries which do not get reponses from large models.
 
     Returns:
-        float: range: [0, 1], higher value may indicate less model utility
+        float: range: [0, 1], higher value may indicate less model utility.
     """
     return decline_num / query_num
 
@@ -57,11 +57,11 @@ def safety_score(attack_total_num: int, attack_success_num: int) -> float:
     """
 
     Args:
-        attack_total_num (int): the number of total attacks
-        attack_success_num (int): the number of successful attacks
+        attack_total_num (int): the number of total attacks.
+        attack_success_num (int): the number of successful attacks.
 
     Returns:
-         float: range: [0, 1], higher value means safer model
+         float: range: [0, 1], higher value means safer model.
     """
     return 1 - attack_success_rate(attack_total_num, attack_success_num)
 
@@ -106,10 +106,10 @@ class Perplexity:
         """
 
         Args:
-            text (str): test str text
+            text (str): test str text.
 
         Returns:
-            float: range: [1, inf), lower value means better text
+            float: range: [1, inf), lower value means better text.
         """
         encoding = self.tokenizer(text, return_tensors="pt")
         with torch.no_grad():
@@ -118,15 +118,15 @@ class Perplexity:
 
 
 def Bleu(response: str, references: List[str], lang: str = "en") -> float:
-    """see https://aclanthology.org/P02-1040.pdf for more information
+    """see https://aclanthology.org/P02-1040.pdf for more information.
 
     Args:
-        response (str): response text from large models
-        references (List[str]): reference texts
+        response (str): response text from large models.
+        references (List[str]): reference texts.
         lang (str, optional): "en" (for English) or "zh" (for Chinese). Defaults to "en".
 
     Returns:
-        float: range: [0, 1], higher value means more similar texts
+        float: range: [0, 1], higher value means more similar texts.
     """
     if lang == "zh":
         response = " ".join(jieba.cut(response))
@@ -136,15 +136,15 @@ def Bleu(response: str, references: List[str], lang: str = "en") -> float:
 
 
 def Chrf(response: str, references: List[str], lang: str = "en") -> float:
-    """see https://aclanthology.org/W15-3049.pdf for more information
+    """see https://aclanthology.org/W15-3049.pdf for more information.
 
     Args:
-        response (str): response text from large models
-        references (List[str]): reference texts
+        response (str): response text from large models.
+        references (List[str]): reference texts.
         lang (str, optional): "en" (for English) or "zh" (for Chinese). Defaults to "en".
 
     Returns:
-        float: range: [0, 1], higher value means more similar texts
+        float: range: [0, 1], higher value means more similar texts.
     """
     if lang == "zh":
         response = " ".join(jieba.cut(response))
@@ -154,15 +154,15 @@ def Chrf(response: str, references: List[str], lang: str = "en") -> float:
 
 
 def Ter(response: str, references: List[str], lang: str = "en") -> float:
-    """see https://www.cs.umd.edu/~snover/tercom/ter_tr.pdf for more information
+    """see https://www.cs.umd.edu/~snover/tercom/ter_tr.pdf for more information.
 
     Args:
-        response (str): response text from large models
-        references (List[str]): reference texts
+        response (str): response text from large models.
+        references (List[str]): reference texts.
         lang (str, optional): "en" (for English) or "zh" (for Chinese). Defaults to "en".
 
     Returns:
-        float: range: [0, 1], smaller value means more similar texts
+        float: range: [0, 1], smaller value means more similar texts.
     """
     if lang == "zh":
         response = " ".join(jieba.cut(response))
@@ -172,15 +172,15 @@ def Ter(response: str, references: List[str], lang: str = "en") -> float:
 
 
 def RougeSU(response: str, references: List[str], lang: str = "en") -> float:
-    """see https://en.wikipedia.org/wiki/ROUGE_(metric) for more information
+    """see https://en.wikipedia.org/wiki/ROUGE_(metric) for more information.
 
     Args:
-        response (str): response text from large models
-        references (List[str]): reference texts
+        response (str): response text from large models.
+        references (List[str]): reference texts.
         lang (str, optional): "en" (for English) or "zh" (for Chinese). Defaults to "en".
 
     Returns:
-        float: range: [0, 1], larger value means more similar texts
+        float: range: [0, 1], larger value means more similar texts.
     """
     if lang == "zh":
         response = " ".join(jieba.cut(response))
@@ -196,15 +196,15 @@ def RougeSU(response: str, references: List[str], lang: str = "en") -> float:
 
 
 def Bert(response: str, references: List[str], lang: str = "en") -> float:
-    """see https://github.com/Tiiiger/bert_score for more information
+    """see https://github.com/Tiiiger/bert_score for more information.
 
     Args:
-        response (str): response text from large models
-        references (List[str]): reference texts
+        response (str): response text from large models.
+        references (List[str]): reference texts.
         lang (str, optional): "en" (for English) or "zh" (for Chinese). Defaults to "en".
 
     Returns:
-        float: range: [0, 1], larger value means more similar texts
+        float: range: [0, 1], larger value means more similar texts.
     """
     _, _, f1 = score([response], [references], lang=lang)
     return f1.item()

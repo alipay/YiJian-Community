@@ -38,7 +38,7 @@ class BasePromptAttack(ABC):
         """
 
         Args:
-            model (Infer): model instance for generating risky prompts
+            model (Infer): model instance for generating risky prompts.
             lang (str, optional): the language of the prompt, can be 'zh' or 'en'. Defaults to "zh".
         """
         if lang not in ("zh", "en"):
@@ -50,26 +50,26 @@ class BasePromptAttack(ABC):
 
     @abstractmethod
     def attack_data(self, data: str, techniques: List[str], **kwargs) -> Dict[str, str]:
-        """attack against one data
+        """attack against one data.
 
         Args:
-            data (str): plain text
-            techniques (List[str]): list of attack techniques
+            data (str): plain text.
+            techniques (List[str]): list of attack techniques.
 
         Returns:
-            str: attack enhanced text
+            str: attack enhanced text.
         """
 
     @abstractmethod
     def attack_dataset(self, dataset: Dataset, techniques: List[str], **kwargs) -> Dataset:
-        """attack against one datasets.Dataset
+        """attack against one datasets.Dataset.
 
         Args:
-            dataset (Dataset): plain dataset
-            techniques (List[str]): list of attack techniques
+            dataset (Dataset): plain dataset.
+            techniques (List[str]): list of attack techniques.
 
         Returns:
-            Dataset: result dataset
+            Dataset: result dataset.
         """
         pass
 
@@ -77,6 +77,16 @@ class BasePromptAttack(ABC):
 class TextPromptAttack(BasePromptAttack):
 
     def __init__(self, model: Infer, lang: str = "zh", target: str = "txt2txt") -> None:
+        """initialization for text prompt attack
+
+        Args:
+            model (Infer): Infer instance for inference
+            lang (str, optional): language, either "zh" or "en". Defaults to "zh".
+            target (str, optional): target task, either "txt2txt" or "txt2img". Defaults to "txt2txt".
+
+        Raises:
+            ValueError: Unsupported target
+        """
         super().__init__(model, lang)
         self.target = target
         if self.target == "txt2txt":
@@ -99,6 +109,18 @@ class TextPromptAttack(BasePromptAttack):
             )
 
     def attack_data(self, data: str, techniques: List[str] = None, **kwargs) -> Dict[str, str]:
+        """
+
+        Args:
+            data (str): input text, also known as a query or a prompt.
+            techniques (List[str], optional): list of attacks used to generated attack-enhanced prompts. Defaults to None.
+
+        Raises:
+            ValueError: invalid techniques.
+
+        Returns:
+            Dict[str, str]: attack results.
+        """
         if not techniques:
             techniques = list(self.attacks.keys())
         aug_data = {}
@@ -116,6 +138,18 @@ class TextPromptAttack(BasePromptAttack):
         return aug_data
 
     def attack_dataset(self, dataset: Dataset, techniques: List[str] = None, **kwargs) -> Dataset:
+        """
+
+        Args:
+            dataset (Dataset): input dataset, containing text prompts.
+            techniques (List[str], optional): list of attacks used to generated attack-enhanced prompts. Defaults to None.
+
+        Raises:
+            ValueError: invalid techniques.
+
+        Returns:
+            Dataset: attack results, containing attack-enhanced prompts stored in a column named "aug_prompt".
+        """
         if not techniques:
             techniques = list(self.attacks.keys())
 
