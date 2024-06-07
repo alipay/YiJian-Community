@@ -15,8 +15,12 @@
 
 
 import os
+from tkinter import TOP
+from urllib import response
 from matplotlib.pyplot import cla
 import torch
+
+import model
 from .base_infer import Infer
 from data import save_image
 from transformers import pipeline
@@ -24,6 +28,7 @@ from datetime import datetime
 from datasets import Dataset
 from diffusers import DiffusionPipeline
 from PIL import Image
+from vllm import LLM, SamplingParams
 from utils import (
     BATCH_SIZE,
     DEVICE_MAP,
@@ -34,21 +39,22 @@ from utils import (
     SEED,
     TORCH_DTYPE,
     TEMPERATURE,
+    TOP_P,
 )
 
 
 class HFTxt2TxtInfer(Infer):
 
-    def __init__(self, model_name: str, device_map: str = DEVICE_MAP, **kwargs):
-        super().__init__(model_name)
+    def __init__(self, model_path: str, device_map: str = DEVICE_MAP, **kwargs):
+        super().__init__(model_path)
         try:
             self.infer = pipeline(
-                "text-generation", model=model_name, device_map=device_map, **kwargs
+                "text-generation", model=model_path, device_map=device_map, **kwargs
             )
         except Exception as e:
             print(e)
             print("reloading model ...")
-            self.infer = pipeline("text-generation", model=model_name, **kwargs)
+            self.infer = pipeline("text-generation", model=model_path, **kwargs)
 
     def infer_data(
         self,
@@ -97,32 +103,45 @@ class HFTxt2TxtInfer(Infer):
         return dataset.add_column("response_text", response_texts)
 
 
-class vLLMTxt2TxtInfer(Infer):
+class VLLMTxt2TxtInfer(Infer):
 
-    def __init__(self, model_name):
-        super().__init__(model_name)
+    def __init__(
+        self,
+        model_path,
+        temperature: float = TEMPERATURE,
+        top_p: float = TOP_P,
+        max_tokens=MAX_NEW_TOKENS,
+        **kwargs,
+    ):
+        super().__init__(model_path)
+        self.sampling_params = SamplingParams(
+            temperature=temperature, top_p=top_p, max_tokens=max_tokens
+        )
+        self.infer = LLM(model=model_path, **kwargs)
 
     def infer_data(self, data: str):
-        return super().infer_data(data)
+        return self.infer.generate(data, self.sampling_params)[0].outputs[0].text
 
-    def infer_dataset(self, dataset: Dataset) -> Dataset:
-        return super().infer_dataset(dataset)
+    def infer_dataset(self, dataset: Dataset, target_column: str = "prompt_text") -> Dataset:
+        outputs = self.infer.generate(dataset[target_column], self.sampling_params)
+        response_texts = [output.outputs[0].text for output in outputs]
+        return dataset.add_column("response_text", response_texts)
 
 
 class HFTxt2ImgInfer(Infer):
 
     def __init__(
         self,
-        model_name: str,
+        model_path: str,
         device_map: str = DEVICE_MAP,
         use_safetensors=USE_SAFETENSORS,
         torch_dtype=TORCH_DTYPE,
         **kwargs,
     ):
-        super().__init__(model_name)
+        super().__init__(model_path)
         try:
             self.infer = DiffusionPipeline.from_pretrained(
-                model_name,
+                model_path,
                 device_map=device_map,
                 use_safetensors=use_safetensors,
                 torch_dtype=torch_dtype,
@@ -132,7 +151,7 @@ class HFTxt2ImgInfer(Infer):
             print(e)
             print("reloading model ...")
             self.infer = DiffusionPipeline.from_pretrained(
-                model_name,
+                model_path,
                 use_safetensors=use_safetensors,
                 torch_dtype=torch_dtype,
                 **kwargs,
@@ -166,6 +185,6 @@ class HFTxt2ImgInfer(Infer):
         for data in dataset.iter(batch_size=batch_size):
             images = self.infer(data["prompt_text"], generator=self.generator, **kwargs).images
             response_images.extend(
-                save_image(image_save_path, self.model_name, data["prompt_text"], images)
+                save_image(image_save_path, self.model_path, data["prompt_text"], images)
             )
         return dataset.add_column("response_image", response_images)
