@@ -21,7 +21,8 @@ import torch
 MAX_NEW_TOKENS = 300
 DO_SAMPLE = True
 RETURN_FULL_TEXT = False
-TEMPERATURE = 0.001
+TEMPERATURE = 0.5
+TOP_P = 0.5
 
 # parameters for run evaluations
 BATCH_SIZE = 16
