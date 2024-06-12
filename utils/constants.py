@@ -18,7 +18,7 @@ import torch
 
 
 # parameters for decoding strategies
-MAX_NEW_TOKENS = 300
+MAX_NEW_TOKENS = 100
 DO_SAMPLE = True
 RETURN_FULL_TEXT = False
 TEMPERATURE = 0.5
