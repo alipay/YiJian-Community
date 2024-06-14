@@ -22,7 +22,6 @@ from typing import List
 from datasets import load_dataset
 from datasets.arrow_dataset import Dataset
 import requests
-from sklearn.feature_extraction import img_to_graph
 
 
 def load_data(data_path: str, **kwargs) -> Dataset:
@@ -38,7 +37,18 @@ def load_data(data_path: str, **kwargs) -> Dataset:
     Returns:
         Dataset: a Dataset instance for the later evaluation pipeline
     """
-    return load_dataset(data_path, **kwargs)["train"]
+    if os.path.isdir(data_path):
+        return load_dataset(data_path, **kwargs)["train"]
+    if os.path.isfile(data_path):
+        if data_path.endswith("csv"):
+            return load_dataset("csv", data_files=data_path)["train"]
+        if data_path.endswith("json") or data_path.endswith("jsonl"):
+            return load_dataset("json", data_files=data_path)["train"]
+        if data_path.endswith("parquet"):
+            return load_dataset("parquet", data_files=data_path)["train"]
+    raise ValueError(
+        f"Invalid data_path, should be a path to a 'csv', 'json' or 'parquet' file, or a path to a directory containing the three types of files, but {data_path} found!"
+    )
 
 
 def save_data(data_path: str, data: Dataset) -> None:
