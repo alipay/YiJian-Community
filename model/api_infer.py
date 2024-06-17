@@ -27,6 +27,7 @@ class OpenAITxt2TxtInfer(Infer):
     def __init__(self, model_path: str):
         api_key = os.environ.get("OPENAI_API_KEY")
         if not api_key:
+            print("api_key = ", api_key)
             raise ValueError(
                 "Invalid OPENAI_API_KEY, please check whether is has been set properly!"
             )
