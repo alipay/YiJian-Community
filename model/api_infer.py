@@ -40,15 +40,18 @@ class OpenAIInfer(Infer):
         top_p: int = TOP_P,
         **kwargs
     ):
-        response = self.infer.chat.completions.create(
-            messages=[{"role": "user", "content": data}],
-            model=self.model,
-            max_tokens=max_tokens,
-            temperature=temperature,
-            top_p=top_p,
-            **kwargs
-        )
-        return response.choices[0].message.content
+        async def _get_one() -> None:
+            response = await self.infer.chat.completions.create(
+                messages=[{"role": "user", "content": data}],
+                model=self.model,
+                max_tokens=max_tokens,
+                temperature=temperature,
+                top_p=top_p,
+                **kwargs
+            )
+            return response.choices[0].message.content
+
+        return asyncio.run(_get_one())
 
     def infer_dataset(
         self,
