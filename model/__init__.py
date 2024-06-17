@@ -14,5 +14,6 @@
 # limitations under the License.
 
 
-from .hf_infer import HFTxt2TxtInfer, HFTxt2ImgInfer, VLLMTxt2TxtInfer
 from .base_infer import Infer
+from .hf_infer import HFTxt2TxtInfer, HFTxt2ImgInfer, VLLMTxt2TxtInfer
+from .api_infer import OpenAIInfer
