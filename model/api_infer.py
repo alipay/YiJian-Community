@@ -24,8 +24,8 @@ from utils import BATCH_SIZE, MAX_NEW_TOKENS, TEMPERATURE, TOP_P
 
 class OpenAITxt2TxtInfer(Infer):
 
-    def __init__(self, model_path: str):
-        api_key = os.getenv("OPENAI_API_KEY")
+    def __init__(self, model_path: str, api_key: str):
+        api_key = os.getenv("OPENAI_API_KEY", api_key)
         if not api_key:
             raise ValueError(
                 "Invalid OPENAI_API_KEY, please check whether is has been set properly!"
