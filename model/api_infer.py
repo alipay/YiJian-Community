@@ -25,11 +25,13 @@ from utils import BATCH_SIZE, MAX_NEW_TOKENS, TEMPERATURE, TOP_P
 class OpenAITxt2TxtInfer(Infer):
 
     def __init__(self, model_path: str):
-        self.infer = OpenAI(
-            api_key=os.environ.get(
-                "OPENAI_API_KEY", "Please set the openai api key in the environment!"
+        api_key = os.environ.get("OPENAI_API_KEY")
+        if not api_key:
+            raise ValueError(
+                "Invalid OPENAI_API_KEY, please check whether is has been set properly!"
             )
-        )
+
+        self.infer = OpenAI(api_key=api_key)
         self.model = model_path
 
     def infer_data(
