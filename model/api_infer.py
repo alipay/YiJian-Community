@@ -18,14 +18,14 @@ import os
 import asyncio
 from datasets.arrow_dataset import Dataset
 from .base_infer import Infer
-from openai import AsyncOpenAI
+from openai import AsyncOpenAI, OpenAI
 from utils import BATCH_SIZE, MAX_NEW_TOKENS, TEMPERATURE, TOP_P
 
 
 class OpenAIInfer(Infer):
 
     def __init__(self, model_path: str):
-        self.infer = AsyncOpenAI(
+        self.infer = OpenAI(
             api_key=os.environ.get(
                 "OPENAI_API_KEY", "Please set the openai api key in the environment!"
             )
@@ -40,18 +40,15 @@ class OpenAIInfer(Infer):
         top_p: int = TOP_P,
         **kwargs
     ):
-        async def _get_one() -> None:
-            response = await self.infer.chat.completions.create(
-                messages=[{"role": "user", "content": data}],
-                model=self.model,
-                max_tokens=max_tokens,
-                temperature=temperature,
-                top_p=top_p,
-                **kwargs
-            )
-            return response.choices[0].message.content
-
-        return asyncio.run(_get_one())
+        response = self.infer.chat.completions.create(
+            messages=[{"role": "user", "content": data}],
+            model=self.model,
+            max_tokens=max_tokens,
+            temperature=temperature,
+            top_p=top_p,
+            **kwargs
+        )
+        return response.choices[0].message.content
 
     def infer_dataset(
         self,
