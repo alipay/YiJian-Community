@@ -22,7 +22,7 @@ from openai import AsyncOpenAI, OpenAI
 from utils import BATCH_SIZE, MAX_NEW_TOKENS, TEMPERATURE, TOP_P
 
 
-class OpenAIInfer(Infer):
+class OpenAITxt2TxtInfer(Infer):
 
     def __init__(self, model_path: str):
         self.infer = OpenAI(
