@@ -25,7 +25,6 @@ from datetime import datetime
 from datasets import Dataset
 from diffusers import DiffusionPipeline
 from PIL import Image
-
 from vllm import LLM, SamplingParams
 from utils import (
     BATCH_SIZE,
