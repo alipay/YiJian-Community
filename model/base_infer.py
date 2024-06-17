@@ -25,7 +25,7 @@ class Infer(ABC):
         """
 
         Args:
-            model_path (str): path to the target model.
+            model_path (str): path to the target model or the name of the target model.
         """
         self.model_path = model_path
         self.infer = None
