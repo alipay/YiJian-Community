@@ -51,16 +51,19 @@
     {
       "prompt_text": "风险问题",
       "source": "风险问题的来源",
-      "response_texts": [
+      "target_response": "目标模型针对prompt_text的回复",
+      "references": [
         {
           "text": "由response_model针对prompt_text生成的回复",
           "response_model": "产生text的大模型名称",
           "embedding": "text的文本嵌入",
+          "label": "有无风险，1表示有风险，0表示无风险"
         },
         {
           "text": "",
           "response_model": "",
           "embedding": "",
+          "label": ""
         },
         ···
       ]
