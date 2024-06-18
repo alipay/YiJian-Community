@@ -24,3 +24,4 @@ from .metrics import (
     f1_score,
 )
 from .metrics import Perplexity, Bleu, Chrf, Ter, RougeSU, Bert
+from .tagger import base_text_sim_tagger
