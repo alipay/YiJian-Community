@@ -45,20 +45,40 @@
 </p>
 
 测评核心组件有：
-- **data**
-  - 提供X条风险测评数据，每条数据辅以5～12条不等的大模型回复
+- **`data`**
+  - 提供X条风险测评问题，问题来源于100+开源数据集，经过长度、毒性、类别等条件筛选并采样后得到。每条prompt辅以5～12条不等的大模型response，prompt和response皆有中英文形式，分别存于`eval_base_zh.jsonl`和`eval_base_en.jsonl`中。每条数据格式如下所示：
+    ```json
+    {
+      "prompt_text": "风险问题",
+      "source": "风险问题的来源",
+      "response_texts": [
+        {
+          "text": "由response_model针对prompt_text生成的回复",
+          "response_model": "产生text的大模型名称",
+          "embedding": "text的文本嵌入",
+        },
+        {
+          "text": "",
+          "response_model": "",
+          "embedding": "",
+        },
+        ···
+      ]
+    }
+    ```
   - 原生支持csv、json和parquet格式的测试数据
   - 其他类型文件可转为上述三种文件格式使用，或编写脚本将数据加载为[datasets.Dataset](https://huggingface.co/docs/datasets/v2.19.0/en/package_reference/main_classes#datasets.Dataset)的实例
-- **technique**
+- **`technique`**
   - 提供13种针对文生文大模型的对抗攻击手法实现和7种手法介绍
   - 提供5种针对文生图大模型的对抗攻击手法实现和4种手法介绍
-- **model**
+- **`model`**
   - 支持Hugging Face上所有文生文和文生图大模型的加载与推理
   - 支持主流闭源大模型的API访问，如ChatGPT和GPT-4
   - 支持其他任意格式的模型加载与推理（需继承适配model组件的[Infer](./model/base_infer.py)基础类）
-- **evaluator**
+- **`evaluator`**
   - 提供多样的大模型安全测评指标，如攻击成功率和拒答率等
   - 提供轻量级的自动化风险判断方法
+  - 支持[JailbreakEval](https://github.com/ThuCCSLab/JailbreakEval)
 
 针对待测模型，通过配置上述4个组件（technique非必需），形成task，即可实现自动化测评。
 
@@ -68,17 +88,31 @@
 
 ### 快速启动
 
-1. 测评数据准备
-   > de
+1. 测评数据加载
+   ```python
+   from yijian.data import load_data
+   test_set = load_data("path/to/eval_base_zh.jsonl")
+   # 风险问题所在列为prompt_text
+   ```
 2. 数据攻击增强（可选）
-   > de 
+   ```python
+   from yijian.technique import TextPromptAttack
+   prompt_attack = TextPromptAttack("LLM instance or API", lang="zh")
+   aug_test_set = prompt_attack.attack_dataset(test_set, techniques=None)
+   # 如果未指定techniques，默认将使用全部的攻击手法进行样本增强
+   ```
+   攻击列表详见[readme_txt2txt_zh.md](./technique/readme_txt2txt_zh.md)。
 3. 待测模型配置
-   > de
+   ```python
+   from yijian.model import VLLMTxt2TxtInfer
+   target_model = VLLMTxt2TxtInfer("path/to/target_model")
+   response_set = target_model.infer_dataset(test_set, batch_size=32, target_column="prompt_text")
+   # 若加载自定义数据集，或需更改target_column为风险问题所在的列名
+   ```
 4. 发起测评
-   > de
-
-### 自定义测评
-
+   ```python
+   from evaluator import 
+   ```
 
 ### 高级功能
 若需进行更全面准确或定制化的测评，可申请使用[蚁鉴平台](https://acta.alipay.com/detect/security)。
