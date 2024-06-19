@@ -16,12 +16,10 @@
 
 import os
 import hashlib
-from io import BytesIO
 from PIL import Image
 from typing import List
 from datasets import load_dataset
-from datasets.arrow_dataset import Dataset
-import requests
+from datasets import Dataset
 
 
 def load_data(data_path: str) -> Dataset:
@@ -95,12 +93,3 @@ def save_image(
         image.save(img_save_path)
         img_save_paths.append(img_save_path)
     return img_save_paths
-
-
-def get_image(image_url: str):
-    response = requests.get(image_url)
-    if response.status_code == 200:
-        image_bytes = BytesIO(response.content)
-        image = Image.open(image_bytes)
-        return image
-    return "iamge download failure"

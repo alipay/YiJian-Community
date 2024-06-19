@@ -30,6 +30,7 @@ from .txt2img_seeds import (
     txt2img_attack_names_zh,
     txt2img_attack_names_en,
 )
+from utils import console
 
 
 class BasePromptAttack(ABC):
@@ -91,15 +92,17 @@ class TextPromptAttack(BasePromptAttack):
         self.target = target
         if self.target == "txt2txt":
             self.attacks = txt2txt_attacks
-            print("当前支持的文生文攻击手法如下：")
-            print("The currently supported text to text adversarial techniques are as follows:")
+            console.log(
+                "当前支持的文生文攻击手法如下：\nThe currently supported text to text adversarial techniques are as follows:"
+            )
             pprint(
                 [zh + "/" + en for zh, en in zip(txt2txt_attack_names_zh, txt2txt_attack_names_en)]
             )
         elif self.target == "txt2img":
             self.attacks = txt2img_attacks
-            print("当前支持的文生图攻击手法如下：")
-            print("The currently supported text to image adversarial techniques are as follows:")
+            console.log(
+                "当前支持的文生图攻击手法如下：\nThe currently supported text to image adversarial techniques are as follows:"
+            )
             pprint(
                 [zh + "/" + en for zh, en in zip(txt2img_attack_names_zh, txt2img_attack_names_en)]
             )
@@ -129,7 +132,7 @@ class TextPromptAttack(BasePromptAttack):
                 raise ValueError(
                     f"Unsupported attacks! The prompt attack techniques should be in the list of {list(self.attacks.keys())}"
                 )
-            print(f"Using {attack_name} to augment prompt texts ...")
+            console.log(f"Using {attack_name} to augment prompt texts ...")
             attack_seed = self.attacks[attack_name](data, lang=self.lang)
             if attack_name in template_based_attacks:
                 aug_data[attack_name] = attack_seed
@@ -161,7 +164,7 @@ class TextPromptAttack(BasePromptAttack):
                     f"Unsupported attacks! The prompt attack techniques should be in the list of {list(self.attacks.keys())}"
                 )
 
-            print(f"Using {attack_name} to augment prompt texts ...")
+            console.log(f"Using {attack_name} to augment prompt texts ...")
             dataset_with_seeds = dataset.map(
                 lambda row: {
                     "aug_prompt": self.attacks[attack_name](row["prompt_text"], lang=self.lang),

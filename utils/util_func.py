@@ -14,4 +14,6 @@
 # limitations under the License.
 
 
-from .data_utils import load_data, save_data, save_image
+from rich.console import Console
+
+console = Console()
