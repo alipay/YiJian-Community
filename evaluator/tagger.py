@@ -50,10 +50,10 @@ def base_text_sim_tagger(
             raise ValueError("Missing reference responses for current response!")
         if risky_embeddings:
             sim_risky = max(cos_sim(target_embedding, risky_embeddings)[0]).item()
-            print("sim_risky:", type(sim_risky), sim_risky)
+            # print("sim_risky:", type(sim_risky), sim_risky)
         if safe_embeddings:
             sim_safe = max(cos_sim(target_embedding, safe_embeddings)[0]).item()
-            print("sim_safe:", type(sim_safe), sim_safe)
+            # print("sim_safe:", type(sim_safe), sim_safe)
 
         if not risky_embeddings:
             print("no risky responses for current response!")
@@ -64,4 +64,6 @@ def base_text_sim_tagger(
         else:
             row["target_prediction"] = 1 if sim_risky > sim_safe else 0
 
-    return dataset.map(_tag)
+    dataset = dataset.map(_tag)
+
+    return dataset
