@@ -34,7 +34,7 @@ def base_text_sim_tagger(
         Dataset: result dataset with a column 'target_label'
     """
 
-    dataset = dataset.add_column("target_prediction", [])
+    dataset = dataset.add_column("target_prediction", [-1] * len(dataset))
 
     def _tag(row):
         target_embedding = embedding_model.encode(row["target_response"], normalize_embeddings=True)
