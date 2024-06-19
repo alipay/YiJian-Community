@@ -45,7 +45,7 @@ class NaiveTextSimilarityTagger:
 
         def _tag(row):
             target_embedding = self.embedding_model.encode(
-                row["target_response"], normalize_embeddings=True
+                row["response_text"], normalize_embeddings=True
             )
             risky_embeddings = []
             safe_embeddings = []
