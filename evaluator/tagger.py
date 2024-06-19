@@ -20,7 +20,7 @@ from sentence_transformers.util import cos_sim
 
 
 def base_text_sim_tagger(
-    dataset: Dataset, embedding_model, risky_threshold: float = 0.6, safe_threshold: float = 0.6
+    dataset: Dataset, embedding_model, risky_threshold: float = 0.6, safe_threshold: float = 0.9
 ) -> Dataset:
     """a lightweight method to decide whether a response contains risky content or not
 
