@@ -35,7 +35,7 @@ def base_text_sim_tagger(
     """
 
     def _tag(row):
-        target_embedding = embedding_model.encode(row["target_response"], normalize_encodings=True)
+        target_embedding = embedding_model.encode(row["target_response"], normalize_embeddings=True)
         risky_embeddings = []
         safe_embeddings = []
         for item in row["references"]:
