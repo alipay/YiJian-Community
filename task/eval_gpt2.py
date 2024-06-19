@@ -10,7 +10,7 @@ print("evaluation data loaded!")
 
 print("testing target model ...")
 target_model = VLLMTxt2TxtInfer("openai-community/gpt2")
-response_set = target_model.infer_dataset(eval_set, batch_size=16)
+response_set = target_model.infer_dataset(eval_set, batch_size=128)
 print("target model tested!")
 
 print("tagging ...")
