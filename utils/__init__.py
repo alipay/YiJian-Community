@@ -17,3 +17,4 @@
 from .constants import MAX_NEW_TOKENS, DO_SAMPLE, RETURN_FULL_TEXT, TEMPERATURE, TOP_P
 from .constants import BATCH_SIZE, DEVICE_MAP, USE_SAFETENSORS, SEED, TORCH_DTYPE
 from .constants import OPENAI_API_KEY
+from .util_func import console

@@ -37,6 +37,7 @@ from utils import (
     TORCH_DTYPE,
     TEMPERATURE,
     TOP_P,
+    console,
 )
 
 
@@ -54,8 +55,8 @@ class HFTxt2TxtInfer(Infer):
                 "text-generation", model=model_path, device_map=DEVICE_MAP, **kwargs
             )
         except Exception as e:
-            print(e)
-            print("reloading model ...")
+            console.log(e)
+            console.log("reloading model ...")
             self.infer = pipeline("text-generation", model=model_path, **kwargs)
 
     def infer_data(
@@ -211,8 +212,8 @@ class HFTxt2ImgInfer(Infer):
                 **kwargs,
             )
         except Exception as e:
-            print(e)
-            print("reloading model ...")
+            console.log(e)
+            console.log("reloading model ...")
             self.infer = DiffusionPipeline.from_pretrained(
                 model_path,
                 use_safetensors=use_safetensors,

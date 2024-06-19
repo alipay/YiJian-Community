@@ -14,8 +14,8 @@
 # limitations under the License.
 
 
-from abc import ABC, abstractmethod
-from typing import Any, List
+from abc import ABC
+from typing import Any
 from datasets import Dataset
 from sentence_transformers.util import cos_sim
 
