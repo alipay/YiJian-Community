@@ -9,7 +9,7 @@ eval_set = load_data("./DoNotAnswer.jsonl")
 print("evaluation data loaded!")
 
 print("testing target model ...")
-target_model = VLLMTxt2TxtInfer("mistralai/Mistral-7B-Instruct-v0.2")
+target_model = VLLMTxt2TxtInfer("openai-community/gpt2")
 response_set = target_model.infer_dataset(eval_set, batch_size=16)
 print("target model tested!")
 
