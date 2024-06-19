@@ -24,4 +24,4 @@ from .metrics import (
     f1_score,
 )
 from .metrics import Perplexity, Bleu, Chrf, Ter, RougeSU, Bert
-from .tagger import NaiveTextSimilarityTagger
+from .tagger import Tagger, NaiveTextSimilarityTagger

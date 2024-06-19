@@ -61,7 +61,7 @@ def save_data(data_path: str, data: Dataset) -> None:
     file_type = data_path.split(".")[-1].strip()
     if file_type == "csv":
         data.to_csv(data_path)
-    elif file_type == "json":
+    elif file_type == "json" or file_type == "jsonl":
         data.to_json(data_path)
     elif file_type == "parquet":
         data.to_parquet(data_path)

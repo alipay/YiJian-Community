@@ -15,7 +15,7 @@
 
 
 from abc import ABC, abstractmethod
-from datasets.arrow_dataset import Dataset
+from datasets import Dataset
 
 
 # Base class for inference

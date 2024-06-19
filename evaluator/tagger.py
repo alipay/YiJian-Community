@@ -14,12 +14,22 @@
 # limitations under the License.
 
 
+from abc import ABC, abstractmethod
 from typing import Any, List
 from datasets import Dataset
 from sentence_transformers.util import cos_sim
 
 
-class NaiveTextSimilarityTagger:
+class Tagger(ABC):
+
+    def __init__(self) -> None:
+        super().__init__()
+
+    def __call__(self, *args: Any, **kwds: Any) -> Any:
+        return super().__call__(*args, **kwds)
+
+
+class NaiveTextSimilarityTagger(Tagger):
 
     def __init__(self, embedding_model) -> None:
         """a lightweight method to decide whether a response contains risky content or not
