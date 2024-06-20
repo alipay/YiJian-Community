@@ -15,7 +15,7 @@
 
 
 import pytest
-from data import save_data
+from yijian.data import save_data
 from datasets import Dataset
 
 
