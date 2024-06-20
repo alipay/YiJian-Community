@@ -15,11 +15,10 @@
 
 
 import os
-import asyncio
 from datasets.arrow_dataset import Dataset
 from .base_infer import Infer
 from openai import AsyncOpenAI, OpenAI
-from utils import BATCH_SIZE, MAX_NEW_TOKENS, TEMPERATURE, TOP_P
+from ..utils import BATCH_SIZE, MAX_NEW_TOKENS, TEMPERATURE, TOP_P
 
 
 class OpenAITxt2TxtInfer(Infer):
