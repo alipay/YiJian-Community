@@ -1,8 +1,8 @@
-from data import load_data, save_data
-from model import VLLMTxt2TxtInfer
-from evaluator import NaiveTextSimilarityTagger, tagger
+from yijian.data import load_data, save_data
+from yijian.model import VLLMTxt2TxtInfer
+from yijian.evaluator import NaiveTextSimilarityTagger, tagger
 from sentence_transformers import SentenceTransformer
-from utils import console
+from yijian.utils import console
 
 
 console.log("loading evalation data ...")

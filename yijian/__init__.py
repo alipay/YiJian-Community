@@ -14,14 +14,23 @@
 # limitations under the License.
 
 
-import os
-import json
-import pytest
-
-
-@pytest.mark.parametrize("taxonomy_file", ["risk_taxonomy_zh.json", "risk_taxonomy_en.json"])
-def test_risk_taxonomy(taxonomy_file):
-    file_path = os.path.dirname(os.path.abspath(__file__)).replace("tests", "data")
-    with open(os.path.join(file_path, taxonomy_file), "r") as rf:
-        risk_taxonomy = json.load(rf)
-        assert len(risk_taxonomy.keys()) == 4
+from .data import load_data, save_data, save_image
+from model import Infer, HFTxt2TxtInfer, VLLMTxt2TxtInfer, HFTxt2ImgInfer, OpenAITxt2TxtInfer
+from evaluator import (
+    attack_success_rate,
+    decline_rate,
+    safety_score,
+    accuracy,
+    precision,
+    recall,
+    f1_score,
+    Perplexity,
+    Bleu,
+    Chrf,
+    Ter,
+    RougeSU,
+    Bert,
+    Tagger,
+    NaiveTextSimilarityTagger,
+)
+from technique import TextPromptAttack
