@@ -15,10 +15,10 @@
 
 
 import os
-from datasets.arrow_dataset import Dataset
-from .base_infer import Infer
+from datasets import Dataset
 from openai import AsyncOpenAI, OpenAI
-from ..utils import BATCH_SIZE, MAX_NEW_TOKENS, TEMPERATURE, TOP_P
+from yijian.model.base_infer import Infer
+from yijian.utils import BATCH_SIZE, MAX_NEW_TOKENS, TEMPERATURE, TOP_P
 
 
 class OpenAITxt2TxtInfer(Infer):

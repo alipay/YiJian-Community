@@ -17,20 +17,20 @@
 from abc import ABC, abstractmethod
 from datasets import Dataset, concatenate_datasets
 from typing import List, Dict
-from ..model import Infer
 from pprint import pprint
-from .txt2txt_seeds import (
+from yijian.model import Infer
+from yijian.technique.txt2txt_seeds import (
     txt2txt_attacks,
     txt2txt_attack_names_zh,
     txt2txt_attack_names_en,
     template_based_attacks,
 )
-from .txt2img_seeds import (
+from yijian.technique.txt2img_seeds import (
     txt2img_attacks,
     txt2img_attack_names_zh,
     txt2img_attack_names_en,
 )
-from ..utils import console
+from yijian.utils import console
 
 
 class BasePromptAttack(ABC):

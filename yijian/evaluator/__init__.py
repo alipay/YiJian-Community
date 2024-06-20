@@ -14,7 +14,7 @@
 # limitations under the License.
 
 
-from .metrics import (
+from yijian.evaluator.metrics import (
     attack_success_rate,
     decline_rate,
     safety_score,
@@ -22,6 +22,11 @@ from .metrics import (
     precision,
     recall,
     f1_score,
+    Perplexity,
+    Bleu,
+    Chrf,
+    Ter,
+    RougeSU,
+    Bert,
 )
-from .metrics import Perplexity, Bleu, Chrf, Ter, RougeSU, Bert
-from .tagger import Tagger, NaiveTextSimilarityTagger
+from yijian.evaluator.tagger import Tagger, NaiveTextSimilarityTagger
