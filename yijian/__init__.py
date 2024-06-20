@@ -15,8 +15,8 @@
 
 
 from .data import load_data, save_data, save_image
-from model import Infer, HFTxt2TxtInfer, VLLMTxt2TxtInfer, HFTxt2ImgInfer, OpenAITxt2TxtInfer
-from evaluator import (
+from .model import Infer, HFTxt2TxtInfer, VLLMTxt2TxtInfer, HFTxt2ImgInfer, OpenAITxt2TxtInfer
+from .evaluator import (
     attack_success_rate,
     decline_rate,
     safety_score,
@@ -33,4 +33,4 @@ from evaluator import (
     Tagger,
     NaiveTextSimilarityTagger,
 )
-from technique import TextPromptAttack
+from .technique import TextPromptAttack
