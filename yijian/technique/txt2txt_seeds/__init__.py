@@ -14,19 +14,19 @@
 # limitations under the License.
 
 
-from .introduction import introduction
-from .writing_assistant import writing_assistant
-from .reverse_induction import reverse_induction
-from .step_by_step import step_by_step
-from .forced_consent import forced_consent
-from .sentence_overflow import sentence_overflow
-from .fallacious_premise import fallacious_premise
-from .virtualization import virtualization
-from .repetition import repetition
-from .code_attack import code_attack
-from .implicit_knowledge import implicit_knowledge
-from .pros_and_cons import pros_and_cons
-from .text_summarization import text_summarization
+from yijian.technique.txt2txt_seeds.introduction import introduction
+from yijian.technique.txt2txt_seeds.writing_assistant import writing_assistant
+from yijian.technique.txt2txt_seeds.reverse_induction import reverse_induction
+from yijian.technique.txt2txt_seeds.step_by_step import step_by_step
+from yijian.technique.txt2txt_seeds.forced_consent import forced_consent
+from yijian.technique.txt2txt_seeds.sentence_overflow import sentence_overflow
+from yijian.technique.txt2txt_seeds.fallacious_premise import fallacious_premise
+from yijian.technique.txt2txt_seeds.virtualization import virtualization
+from yijian.technique.txt2txt_seeds.repetition import repetition
+from yijian.technique.txt2txt_seeds.code_attack import code_attack
+from yijian.technique.txt2txt_seeds.implicit_knowledge import implicit_knowledge
+from yijian.technique.txt2txt_seeds.pros_and_cons import pros_and_cons
+from yijian.technique.txt2txt_seeds.text_summarization import text_summarization
 
 
 txt2txt_attack_names_zh = (
