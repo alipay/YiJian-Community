@@ -14,9 +14,9 @@
 # limitations under the License.
 
 
-from .data import load_data, save_data, save_image
-from .model import Infer, HFTxt2TxtInfer, VLLMTxt2TxtInfer, HFTxt2ImgInfer, OpenAITxt2TxtInfer
-from .evaluator import (
+from yijian.data import load_data, save_data, save_image
+from yijian.model import Infer, HFTxt2TxtInfer, VLLMTxt2TxtInfer, HFTxt2ImgInfer, OpenAITxt2TxtInfer
+from yijian.evaluator import (
     attack_success_rate,
     decline_rate,
     safety_score,
@@ -33,4 +33,4 @@ from .evaluator import (
     Tagger,
     NaiveTextSimilarityTagger,
 )
-from .technique import TextPromptAttack
+from yijian.technique import TextPromptAttack
