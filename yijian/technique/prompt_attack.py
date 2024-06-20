@@ -44,7 +44,7 @@ class BasePromptAttack(ABC):
         """
         if lang not in ("zh", "en"):
             raise ValueError(
-                "the language of the prompt can only be Chinese, i.e., 'zh', or English, i.e., 'en'."
+                f"the language of the prompt can only be Chinese, i.e., 'zh', or English, i.e., 'en', but {lang} found"
             )
         self.lang = lang
         self.attacker = model
@@ -60,6 +60,7 @@ class BasePromptAttack(ABC):
         Returns:
             str: attack enhanced text.
         """
+        pass
 
     @abstractmethod
     def attack_dataset(self, dataset: Dataset, techniques: List[str], **kwargs) -> Dataset:
@@ -72,7 +73,7 @@ class BasePromptAttack(ABC):
         Returns:
             Dataset: result dataset.
         """
-        pass
+        raise NotImplementedError("attack_dataset should be implemented!")
 
 
 class TextPromptAttack(BasePromptAttack):
