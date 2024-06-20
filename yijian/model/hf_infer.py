@@ -19,7 +19,7 @@ from numpy import dtype
 import torch
 
 from .base_infer import Infer
-from data import save_image
+from ..data import save_image
 from transformers import pipeline
 from datetime import datetime
 from datasets import Dataset
