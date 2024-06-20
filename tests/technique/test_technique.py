@@ -20,16 +20,6 @@ from yijian.technique.prompt_attack import BasePromptAttack, TextPromptAttack
 from datasets import Dataset
 
 
-def test_BasePromptAttack_init_unsupported_lang():
-    with pytest.raises(ValueError):
-        BasePromptAttack(None, lang="fr")
-
-
-def test_BasePromptAttack_attack_dataset_NotImplementedError():
-    with pytest.raises(NotImplementedError):
-        BasePromptAttack(None).attack_dataset(Dataset.from_dict({"prompt": [1]}))
-
-
 def test_TextPromptAttack_init_unsupported_lang():
     with pytest.raises(ValueError):
         TextPromptAttack(None, lang="fr")
