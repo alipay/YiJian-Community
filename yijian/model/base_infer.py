@@ -49,4 +49,4 @@ class Infer(ABC):
         Returns:
             Dataset: result dataset.
         """
-        pass
+        raise NotImplementedError("infer_dataset should be implemented!")

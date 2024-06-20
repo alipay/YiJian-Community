@@ -33,4 +33,4 @@ from yijian.evaluator import (
     Tagger,
     NaiveTextSimilarityTagger,
 )
-from yijian.technique import TextPromptAttack
+from yijian.technique import BasePromptAttack, TextPromptAttack

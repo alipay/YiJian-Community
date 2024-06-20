@@ -14,4 +14,4 @@
 # limitations under the License.
 
 
-from yijian.technique.prompt_attack import TextPromptAttack
+from yijian.technique.prompt_attack import BasePromptAttack, TextPromptAttack
