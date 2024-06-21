@@ -16,4 +16,12 @@
 
 from .base_infer import Infer
 from .hf_infer import HFTxt2TxtInfer, HFTxt2ImgInfer, VLLMTxt2TxtInfer
-from .api_infer import OpenAITxt2TxtInfer, AnthropicTxt2TxtInfer, CohereTxt2TxtInfer
+from .api_infer import (
+    OpenAITxt2TxtInfer,
+    AnthropicTxt2TxtInfer,
+    CohereTxt2TxtInfer,
+    TongyiQwenTxt2TxtInfer,
+    MoonshotTxt2TxtInfer,
+    BaichuanTxt2TxtInfer,
+)
+from .api_infer import StabilityAITxt2ImgInfer, OpenAITxt2ImgInfer, MidJourneyTxt2ImgInfer
