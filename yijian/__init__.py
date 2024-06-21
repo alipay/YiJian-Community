@@ -15,7 +15,16 @@
 
 
 from yijian.data import load_data, save_data, save_image
-from yijian.model import Infer, HFTxt2TxtInfer, VLLMTxt2TxtInfer, HFTxt2ImgInfer, OpenAITxt2TxtInfer
+from yijian.model import Infer, HFTxt2TxtInfer, VLLMTxt2TxtInfer, HFTxt2ImgInfer
+from yijian.model import (
+    OpenAITxt2TxtInfer,
+    AnthropicTxt2TxtInfer,
+    CohereTxt2TxtInfer,
+    TongyiQwenTxt2TxtInfer,
+    MoonshotTxt2TxtInfer,
+    BaichuanTxt2TxtInfer,
+)
+from yijian.model import StabilityAITxt2ImgInfer, OpenAITxt2ImgInfer, MidJourneyTxt2ImgInfer
 from yijian.evaluator import (
     attack_success_rate,
     decline_rate,
