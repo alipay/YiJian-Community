@@ -38,6 +38,6 @@ setup(
     author="Ant Group",
     url="https://acta.alipay.com/detect/security",
     packages=find_packages(),
-    install_requires=read_requirements(),
     python_requires=">=3.8",
+    install_requires=read_requirements(),
 )
