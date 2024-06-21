@@ -14,14 +14,16 @@
 # limitations under the License.
 
 
-from .base_infer import Infer
-from .hf_infer import HFTxt2TxtInfer, HFTxt2ImgInfer, VLLMTxt2TxtInfer
 from .api_infer import (
-    OpenAITxt2TxtInfer,
     AnthropicTxt2TxtInfer,
-    CohereTxt2TxtInfer,
-    TongyiQwenTxt2TxtInfer,
-    MoonshotTxt2TxtInfer,
     BaichuanTxt2TxtInfer,
+    CohereTxt2TxtInfer,
+    MidJourneyTxt2ImgInfer,
+    MoonshotTxt2TxtInfer,
+    OpenAITxt2ImgInfer,
+    OpenAITxt2TxtInfer,
+    StabilityAITxt2ImgInfer,
+    TongyiQwenTxt2TxtInfer,
 )
-from .api_infer import StabilityAITxt2ImgInfer, OpenAITxt2ImgInfer, MidJourneyTxt2ImgInfer
+from .base_infer import Infer
+from .hf_infer import HFTxt2ImgInfer, HFTxt2TxtInfer, VLLMTxt2TxtInfer

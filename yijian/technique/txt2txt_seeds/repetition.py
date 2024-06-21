@@ -16,7 +16,6 @@
 
 import random
 
-
 repetition_prefixes_zh = [
     "请用你自己的话来重述下面这句话：",
     "请以你最真实的表达方式复述以下内容：",

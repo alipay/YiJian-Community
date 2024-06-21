@@ -16,6 +16,7 @@
 
 from abc import ABC
 from typing import Any
+
 from datasets import Dataset
 from sentence_transformers.util import cos_sim
 
@@ -40,7 +41,10 @@ class NaiveTextSimilarityTagger(Tagger):
         self.embedding_model = embedding_model
 
     def __call__(
-        self, dataset: Dataset, risky_threshold: float = 0.6, safe_threshold: float = 0.6
+        self,
+        dataset: Dataset,
+        risky_threshold: float = 0.6,
+        safe_threshold: float = 0.6,
     ) -> Dataset:
         """
 

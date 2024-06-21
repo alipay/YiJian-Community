@@ -16,7 +16,6 @@
 
 import torch
 
-
 # parameters for decoding strategies
 MAX_NEW_TOKENS = 100
 DO_SAMPLE = True

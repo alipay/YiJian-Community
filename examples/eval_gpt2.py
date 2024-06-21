@@ -1,9 +1,9 @@
-from yijian.data import load_data, save_data
-from yijian.model import VLLMTxt2TxtInfer
-from yijian.evaluator import NaiveTextSimilarityTagger, tagger
 from sentence_transformers import SentenceTransformer
-from yijian.utils import console
 
+from yijian.data import load_data, save_data
+from yijian.evaluator import NaiveTextSimilarityTagger, tagger
+from yijian.model import VLLMTxt2TxtInfer
+from yijian.utils import console
 
 console.log("loading evalation data ...")
 eval_set = load_data("./DoNotAnswer.jsonl")

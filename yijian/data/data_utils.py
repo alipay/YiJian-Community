@@ -14,12 +14,12 @@
 # limitations under the License.
 
 
-import os
 import hashlib
-from PIL import Image
+import os
 from typing import List
-from datasets import load_dataset
-from datasets import Dataset
+
+from datasets import Dataset, load_dataset
+from PIL import Image
 
 
 def load_data(data_path: str) -> Dataset:

@@ -14,30 +14,31 @@
 # limitations under the License.
 
 
-from operator import imod
 import os
-from numpy import dtype
-import torch
-
-from transformers import pipeline
 from datetime import datetime
+from operator import imod
+
+import torch
 from datasets import Dataset
 from diffusers import DiffusionPipeline
+from numpy import dtype
 from PIL import Image
+from transformers import pipeline
 from vllm import LLM, SamplingParams
-from yijian.model.base_infer import Infer
+
 from yijian.data import save_image
+from yijian.model.base_infer import Infer
 from yijian.utils import (
     BATCH_SIZE,
     DEVICE_MAP,
+    DO_SAMPLE,
     MAX_NEW_TOKENS,
     RETURN_FULL_TEXT,
-    DO_SAMPLE,
-    USE_SAFETENSORS,
     SEED,
-    TORCH_DTYPE,
     TEMPERATURE,
     TOP_P,
+    TORCH_DTYPE,
+    USE_SAFETENSORS,
     console,
 )
 
@@ -167,7 +168,10 @@ class VLLMTxt2TxtInfer(Infer):
         return self.infer.generate(data, self.sampling_params)[0].outputs[0].text
 
     def infer_dataset(
-        self, dataset: Dataset, target_column: str = "prompt_text", batch_size: int = BATCH_SIZE
+        self,
+        dataset: Dataset,
+        target_column: str = "prompt_text",
+        batch_size: int = BATCH_SIZE,
     ) -> Dataset:
         """
 
@@ -266,8 +270,12 @@ class HFTxt2ImgInfer(Infer):
 
         response_images = []
         for data in dataset.iter(batch_size=batch_size):
-            images = self.infer(data[target_column], generator=self.generator, **kwargs).images
+            images = self.infer(
+                data[target_column], generator=self.generator, **kwargs
+            ).images
             response_images.extend(
-                save_image(image_save_path, self.model_path, data[target_column], images)
+                save_image(
+                    image_save_path, self.model_path, data[target_column], images
+                )
             )
         return dataset.add_column("response_image", response_images)

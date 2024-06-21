@@ -15,31 +15,36 @@
 
 
 from yijian.data import load_data, save_data, save_image
-from yijian.model import Infer, HFTxt2TxtInfer, VLLMTxt2TxtInfer, HFTxt2ImgInfer
-from yijian.model import (
-    OpenAITxt2TxtInfer,
-    AnthropicTxt2TxtInfer,
-    CohereTxt2TxtInfer,
-    TongyiQwenTxt2TxtInfer,
-    MoonshotTxt2TxtInfer,
-    BaichuanTxt2TxtInfer,
-)
-from yijian.model import StabilityAITxt2ImgInfer, OpenAITxt2ImgInfer, MidJourneyTxt2ImgInfer
 from yijian.evaluator import (
-    attack_success_rate,
-    decline_rate,
-    safety_score,
-    accuracy,
-    precision,
-    recall,
-    f1_score,
-    Perplexity,
+    Bert,
     Bleu,
     Chrf,
-    Ter,
-    RougeSU,
-    Bert,
-    Tagger,
     NaiveTextSimilarityTagger,
+    Perplexity,
+    RougeSU,
+    Tagger,
+    Ter,
+    accuracy,
+    attack_success_rate,
+    decline_rate,
+    f1_score,
+    precision,
+    recall,
+    safety_score,
+)
+from yijian.model import (
+    AnthropicTxt2TxtInfer,
+    BaichuanTxt2TxtInfer,
+    CohereTxt2TxtInfer,
+    HFTxt2ImgInfer,
+    HFTxt2TxtInfer,
+    Infer,
+    MidJourneyTxt2ImgInfer,
+    MoonshotTxt2TxtInfer,
+    OpenAITxt2ImgInfer,
+    OpenAITxt2TxtInfer,
+    StabilityAITxt2ImgInfer,
+    TongyiQwenTxt2TxtInfer,
+    VLLMTxt2TxtInfer,
 )
 from yijian.technique import BasePromptAttack, TextPromptAttack

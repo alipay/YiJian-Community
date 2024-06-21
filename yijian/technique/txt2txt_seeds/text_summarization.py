@@ -16,7 +16,6 @@
 
 import random
 
-
 text_summarization_templates_zh = [
     "请协助我将这段文本简化为一段摘要：",
     "请帮我将此文本压缩成一段概要：",
