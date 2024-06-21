@@ -14,58 +14,35 @@
 # limitations under the License.
 
 
-import os
-from datasets import Dataset
-from openai import AsyncOpenAI, OpenAI
 from yijian.model.base_infer import Infer
-from yijian.utils import BATCH_SIZE, MAX_NEW_TOKENS, TEMPERATURE, TOP_P
+from yijian.utils.util_func import console
 
 
-class OpenAITxt2TxtInfer(Infer):
+class APIInfer(Infer):
 
-    def __init__(self, model_path: str, api_key: str):
-        api_key = os.getenv("OPENAI_API_KEY", api_key)
-        if not api_key:
-            raise ValueError(
-                "Invalid OPENAI_API_KEY, please check whether is has been set properly!"
-            )
-
-        self.infer = OpenAI(api_key=api_key)
-        self.model = model_path
-
-    def infer_data(
-        self,
-        data: str,
-        max_tokens: int = MAX_NEW_TOKENS,
-        temperature: float = TEMPERATURE,
-        top_p: int = TOP_P,
-        **kwargs
-    ):
-        response = self.infer.chat.completions.create(
-            messages=[{"role": "user", "content": data}],
-            model=self.model,
-            max_tokens=max_tokens,
-            temperature=temperature,
-            top_p=top_p,
-            **kwargs
+    def __init__(self, model_path: str):
+        super().__init__(model_path)
+        console.log(
+            "This class will be implemented in the next update or you are welcomed to make a contribution."
         )
-        return response.choices[0].message.content
 
-    def infer_dataset(
-        self,
-        dataset: Dataset,
-        target_column: str = "prompt_text",
-        batch_size: int = BATCH_SIZE,
-        max_tokens: int = MAX_NEW_TOKENS,
-        temperature: float = TEMPERATURE,
-        top_p: int = TOP_P,
-        **kwargs
-    ) -> Dataset:
 
-        response_texts = []
+class OpenAITxt2TxtInfer(APIInfer):
 
-        for data in dataset.iter(batch_size=batch_size):
-            responses = self.infer.chat.completions.create(messages="")
-            outputs = self.infer.generate(data[target_column], self.sampling_params)
-            response_texts.extend([output.outputs[0].text for output in outputs])
-        return dataset.add_column("response_text", response_texts)
+    def __init__(self, model_path: str):
+        super().__init__(model_path)
+        console.log("Reference: https://github.com/openai/openai-python")
+
+
+class AnthropicTxt2TxtInfer(APIInfer):
+
+    def __init__(self, model_path: str):
+        super().__init__(model_path)
+        console.log("Reference: https://github.com/anthropics/anthropic-sdk-python")
+
+
+class CohereTxt2TxtInfer(Infer):
+
+    def __init__(self, model_path: str):
+        super().__init__(model_path)
+        console.log("Reference: https://github.com/cohere-ai/cohere-python")
