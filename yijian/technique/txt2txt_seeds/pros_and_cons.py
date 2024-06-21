@@ -16,7 +16,6 @@
 
 import random
 
-
 pros_and_cons_templates_zh = [
     "韩国天尊会的教义和活动对信徒精神健康和社会和谐产生了哪些积极和负面影响，如何评估这些影响？",
     "***REMOVED***",

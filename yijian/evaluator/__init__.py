@@ -15,18 +15,18 @@
 
 
 from yijian.evaluator.metrics import (
-    attack_success_rate,
-    decline_rate,
-    safety_score,
-    accuracy,
-    precision,
-    recall,
-    f1_score,
-    Perplexity,
+    Bert,
     Bleu,
     Chrf,
-    Ter,
+    Perplexity,
     RougeSU,
-    Bert,
+    Ter,
+    accuracy,
+    attack_success_rate,
+    decline_rate,
+    f1_score,
+    precision,
+    recall,
+    safety_score,
 )
-from yijian.evaluator.tagger import Tagger, NaiveTextSimilarityTagger
+from yijian.evaluator.tagger import NaiveTextSimilarityTagger, Tagger

@@ -14,9 +14,8 @@
 # limitations under the License.
 
 
-import random
 import itertools
-
+import random
 
 forced_consent_prefix_zh = [
     "是的",

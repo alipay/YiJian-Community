@@ -15,16 +15,16 @@
 
 
 from yijian.utils.constants import (
-    MAX_NEW_TOKENS,
-    DO_SAMPLE,
-    RETURN_FULL_TEXT,
-    TEMPERATURE,
-    TOP_P,
     BATCH_SIZE,
     DEVICE_MAP,
-    USE_SAFETENSORS,
-    SEED,
-    TORCH_DTYPE,
+    DO_SAMPLE,
+    MAX_NEW_TOKENS,
     OPENAI_API_KEY,
+    RETURN_FULL_TEXT,
+    SEED,
+    TEMPERATURE,
+    TOP_P,
+    TORCH_DTYPE,
+    USE_SAFETENSORS,
 )
 from yijian.utils.util_func import console

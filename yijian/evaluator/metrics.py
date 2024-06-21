@@ -14,15 +14,15 @@
 # limitations under the License.
 
 
-import torch
+from typing import List
+
 import jieba
 import sacrebleu
+import torch
 from bert_score import score
-from sklearn import metrics
-from typing import List
-from transformers import GPT2Tokenizer, GPT2LMHeadModel
-from transformers import BertTokenizer
 from rouge_metric import PyRouge
+from sklearn import metrics
+from transformers import BertTokenizer, GPT2LMHeadModel, GPT2Tokenizer
 
 "general metrics"
 

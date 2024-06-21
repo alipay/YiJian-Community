@@ -15,9 +15,10 @@
 
 
 import pytest
+from datasets import Dataset
+
 from yijian.model.base_infer import Infer
 from yijian.technique.prompt_attack import BasePromptAttack, TextPromptAttack
-from datasets import Dataset
 
 
 def test_TextPromptAttack_init_unsupported_lang():

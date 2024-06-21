@@ -15,6 +15,7 @@
 
 
 from datasets import Dataset
+
 from yijian.model.base_infer import Infer
 from yijian.utils.util_func import console
 
