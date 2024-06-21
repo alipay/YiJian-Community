@@ -14,6 +14,7 @@
 # limitations under the License.
 
 
+from datasets import Dataset
 from yijian.model.base_infer import Infer
 from yijian.utils.util_func import console
 
@@ -22,6 +23,16 @@ class APIInfer(Infer):
 
     def __init__(self, model_path: str):
         super().__init__(model_path)
+        console.log(
+            "This class will be implemented in the next update or you are welcomed to make a contribution."
+        )
+
+    def infer_data(self, data: str):
+        console.log(
+            "This class will be implemented in the next update or you are welcomed to make a contribution."
+        )
+
+    def infer_dataset(self, dataset: Dataset) -> Dataset:
         console.log(
             "This class will be implemented in the next update or you are welcomed to make a contribution."
         )
