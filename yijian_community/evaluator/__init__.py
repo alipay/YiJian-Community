@@ -14,15 +14,12 @@
 # limitations under the License.
 
 
-from yijian.data import load_data, save_data, save_image
-from yijian.evaluator import (
+from yijian_community.evaluator.metrics import (
     Bert,
     Bleu,
     Chrf,
-    NaiveTextSimilarityTagger,
     Perplexity,
     RougeSU,
-    Tagger,
     Ter,
     accuracy,
     attack_success_rate,
@@ -32,19 +29,4 @@ from yijian.evaluator import (
     recall,
     safety_score,
 )
-from yijian.model import (
-    AnthropicTxt2TxtInfer,
-    BaichuanTxt2TxtInfer,
-    CohereTxt2TxtInfer,
-    HFTxt2ImgInfer,
-    HFTxt2TxtInfer,
-    Infer,
-    MidJourneyTxt2ImgInfer,
-    MoonshotTxt2TxtInfer,
-    OpenAITxt2ImgInfer,
-    OpenAITxt2TxtInfer,
-    StabilityAITxt2ImgInfer,
-    TongyiQwenTxt2TxtInfer,
-    VLLMTxt2TxtInfer,
-)
-from yijian.technique import BasePromptAttack, TextPromptAttack
+from yijian_community.evaluator.tagger import NaiveTextSimilarityTagger, Tagger

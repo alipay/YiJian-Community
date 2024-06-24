@@ -14,4 +14,4 @@
 # limitations under the License.
 
 
-from yijian.data.data_utils import load_data, save_data, save_image
+from yijian_community.data.data_utils import load_data, save_data, save_image

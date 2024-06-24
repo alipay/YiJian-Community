@@ -14,4 +14,17 @@
 # limitations under the License.
 
 
-from yijian.technique.prompt_attack import BasePromptAttack, TextPromptAttack
+from yijian_community.utils.constants import (
+    BATCH_SIZE,
+    DEVICE_MAP,
+    DO_SAMPLE,
+    MAX_NEW_TOKENS,
+    OPENAI_API_KEY,
+    RETURN_FULL_TEXT,
+    SEED,
+    TEMPERATURE,
+    TOP_P,
+    TORCH_DTYPE,
+    USE_SAFETENSORS,
+)
+from yijian_community.utils.util_func import console

@@ -26,9 +26,9 @@ from PIL import Image
 from transformers import pipeline
 from vllm import LLM, SamplingParams
 
-from yijian.data import save_image
-from yijian.model.base_infer import Infer
-from yijian.utils import (
+from yijian_community.data import save_image
+from yijian_community.model.base_infer import Infer
+from yijian_community.utils import (
     BATCH_SIZE,
     DEVICE_MAP,
     DO_SAMPLE,
@@ -270,12 +270,8 @@ class HFTxt2ImgInfer(Infer):
 
         response_images = []
         for data in dataset.iter(batch_size=batch_size):
-            images = self.infer(
-                data[target_column], generator=self.generator, **kwargs
-            ).images
+            images = self.infer(data[target_column], generator=self.generator, **kwargs).images
             response_images.extend(
-                save_image(
-                    image_save_path, self.model_path, data[target_column], images
-                )
+                save_image(image_save_path, self.model_path, data[target_column], images)
             )
         return dataset.add_column("response_image", response_images)
