@@ -202,7 +202,10 @@ class TextPromptAttack(BasePromptAttack):
             else:
                 seeds_list.append(
                     self.attacker.infer_dataset(
-                        dataset_with_seeds, target_column="aug_prompt", **kwargs
+                        dataset_with_seeds,
+                        target_column="aug_prompt",
+                        batch_size=batch_size,
+                        **kwargs,
                     )
                     .select_columns(["response_text", "technique", "references"])
                     .rename_columns(
