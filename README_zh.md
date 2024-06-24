@@ -17,7 +17,7 @@
   <img src="./docs/figs/yijian_zh.jpg" width="100%" />
   <text> <b>平台架构</b> </text>
 </p>
-
+ 
 蚁鉴平台提供了全面、智能、高效、易用的工业级大模型安全测评能力。
 - **全面**
   - 测评数据：千亿级安全领域风险数据
@@ -37,21 +37,22 @@
 
 ### 蚁鉴开源
 
+**本项目仅用于测评和提升大模型的安全性，其中包含若干违法违规内容，均不代表本团队任何主观观点。**
+
 大模型安全测评的重要性已达成业界共识，为促进该领域的发展，我们特此开源全流程的测评工具。
 
 <p align="center">
-  <img src="./docs/figs/yijian-open.png" width="100%" />
+  <img src="./docs/figs/yijian_opensource_zh.png" width="100%" />
   <text> <b>项目概览</b> </text>
 </p>
 
 测评核心组件有：
 - **`data`**
-  - 提供X条风险测评问题，问题来源于100+开源数据集，经过长度、毒性、类别等条件筛选并采样后得到。每条prompt辅以5～12条不等的大模型response，prompt和response皆有中英文形式，分别存于`eval_base_zh.jsonl`和`eval_base_en.jsonl`中。每条数据格式如下所示：
+  - 提供<font style="background: yellow">X</font>条全风险测评问题，问题来源于100+开源数据集，经过长度、毒性、类别等条件筛选并采样后得到。每条prompt辅以5～12条不等的大模型response，prompt和response皆有中英文形式，分别存于`YiJian_Benchmark_zh.jsonl`和`YiJian_Benchmark_en.jsonl`中。每条数据格式如下所示：
     ```json
     {
       "prompt_text": "风险问题",
       "source": "风险问题的来源",
-      "target_response": "目标模型针对prompt_text的回复",
       "references": [
         {
           "text": "由response_model针对prompt_text生成的回复",
@@ -69,7 +70,13 @@
       ]
     }
     ```
-  - 原生支持csv、json和parquet格式的测试数据
+    风险分类体系如下所示：
+    <p align="center">
+      <img src="./docs/figs/risk_taxonomy_zh.jpeg" width="100%" />
+      <text> <b>风险分类</b> </text>
+    </p>
+    <font style="color: gray">注意：业务合规与医疗、政务和金融等具体业务场景相关，相较其他三类风险，通用性较弱，此处不做具体说明。</font>
+  - 原生支持csv、json和parquet格式的数据
   - 其他类型文件可转为上述三种文件格式使用，或编写脚本将数据加载为[datasets.Dataset](https://huggingface.co/docs/datasets/v2.19.0/en/package_reference/main_classes#datasets.Dataset)的实例
 - **`technique`**
   - 提供13种针对文生文大模型的对抗攻击手法实现和7种手法介绍
@@ -83,7 +90,7 @@
   - 提供轻量级的自动化风险判断方法
   - 支持[JailbreakEval](https://github.com/ThuCCSLab/JailbreakEval)
 
-针对待测模型，通过配置上述4个组件（technique非必需），形成task，即可实现自动化测评。
+针对待测模型，通过配置上述4个组件（technique非必需），即可实现自动化测评。
 
 ## 如何使用？
 

@@ -38,6 +38,21 @@ setup(
     author="Ant Group",
     url="https://acta.alipay.com/detect/security",
     packages=find_packages(),
-    python_requires=">=3.8",
+    python_requires=">=3.10",
+    platforms=["Linux"],
+    classifiers=["Development Status :: 3 - Alpha",
+                 "Environment :: GPU",
+                 "Intended Audience :: Developers",
+                 "Intended Audience :: Education",
+                 "License :: OSI Approved :: Apache Software License",
+                 "Natural Language :: Chinese (Simplified)",
+                 "Natural Language :: English",
+                 "Operating System :: POSIX :: Linux",
+                 "Programming Language :: Python :: 3.10",
+                 "Programming Language :: Python :: 3.11",
+                 "Programming Language :: Python :: 3.12",
+                 "Programming Language :: Python :: 3.13",
+                 "Programming Language :: Python :: 3.14"
+                 ]
     install_requires=read_requirements(),
 )
