@@ -29,10 +29,10 @@ def long_description():
 
 
 setup(
-    name="yijian",
+    name="yijian-community",
     version="0.1.0",
     license="Apache 2.0",
-    description="YiJian",
+    description="YiJian-Community",
     long_description=long_description(),
     long_description_content_type="text/markdown",
     author="Ant Group",
