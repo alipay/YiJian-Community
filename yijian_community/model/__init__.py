@@ -14,17 +14,16 @@
 # limitations under the License.
 
 
-from yijian.utils.constants import (
-    BATCH_SIZE,
-    DEVICE_MAP,
-    DO_SAMPLE,
-    MAX_NEW_TOKENS,
-    OPENAI_API_KEY,
-    RETURN_FULL_TEXT,
-    SEED,
-    TEMPERATURE,
-    TOP_P,
-    TORCH_DTYPE,
-    USE_SAFETENSORS,
+from yijian_community.model.api_infer import (
+    AnthropicTxt2TxtInfer,
+    BaichuanTxt2TxtInfer,
+    CohereTxt2TxtInfer,
+    MidJourneyTxt2ImgInfer,
+    MoonshotTxt2TxtInfer,
+    OpenAITxt2ImgInfer,
+    OpenAITxt2TxtInfer,
+    StabilityAITxt2ImgInfer,
+    TongyiQwenTxt2TxtInfer,
 )
-from yijian.utils.util_func import console
+from yijian_community.model.base_infer import Infer
+from yijian_community.model.hf_infer import HFTxt2ImgInfer, HFTxt2TxtInfer, VLLMTxt2TxtInfer

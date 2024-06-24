@@ -13,16 +13,5 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from yijian.model.api_infer import (
-    AnthropicTxt2TxtInfer,
-    BaichuanTxt2TxtInfer,
-    CohereTxt2TxtInfer,
-    MidJourneyTxt2ImgInfer,
-    MoonshotTxt2TxtInfer,
-    OpenAITxt2ImgInfer,
-    OpenAITxt2TxtInfer,
-    StabilityAITxt2ImgInfer,
-    TongyiQwenTxt2TxtInfer,
-)
-from yijian.model.base_infer import Infer
-from yijian.model.hf_infer import HFTxt2ImgInfer, HFTxt2TxtInfer, VLLMTxt2TxtInfer
+
+from yijian_community.technique.prompt_attack import BasePromptAttack, TextPromptAttack

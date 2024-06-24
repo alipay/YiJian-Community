@@ -16,8 +16,8 @@
 
 from datasets import Dataset
 
-from yijian.model.base_infer import Infer
-from yijian.utils.util_func import console
+from yijian_community.model.base_infer import Infer
+from yijian_community.utils.util_func import console
 
 
 class APIInfer(Infer):
