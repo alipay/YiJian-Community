@@ -173,16 +173,20 @@ class TextPromptAttack(BasePromptAttack):
                     "aug_prompt": self.attacks[attack_name](row["prompt_text"], lang=self.lang),
                     "technique": attack_name,
                 }
-            ).select_columns(["prompt_text", "aug_prompt", "technique"])
+            ).select_columns(["aug_prompt", "technique", "references"])
 
             if attack_name in template_based_attacks:
-                seeds_list.append(dataset_with_seeds)
+                seeds_list.append(
+                    dataset_with_seeds.rename_columns(
+                        {"aug_prompt": "text_prompt", "technique": "source"}
+                    )
+                )
             else:
                 seeds_list.append(
                     self.attacker.infer_dataset(
                         dataset_with_seeds, target_column="aug_prompt", **kwargs
                     )
-                    .select_columns(["prompt_text", "response_text", "technique"])
-                    .rename_column("response_text", "aug_prompt")
+                    .select_columns(["response_text", "technique", "references"])
+                    .rename_columns({"response_text": "text_prompt", "technique": "source"})
                 )
         return concatenate_datasets(seeds_list)
