@@ -65,9 +65,7 @@ class BasePromptAttack(ABC):
         pass
 
     @abstractmethod
-    def attack_dataset(
-        self, dataset: Dataset, techniques: List[str], **kwargs
-    ) -> Dataset:
+    def attack_dataset(self, dataset: Dataset, techniques: List[str], **kwargs) -> Dataset:
         """attack against one datasets.Dataset.
 
         Args:
@@ -101,10 +99,7 @@ class TextPromptAttack(BasePromptAttack):
                 "当前支持的文生文攻击手法如下：\nThe currently supported text to text adversarial techniques are as follows:"
             )
             pprint(
-                [
-                    zh + "/" + en
-                    for zh, en in zip(txt2txt_attack_names_zh, txt2txt_attack_names_en)
-                ]
+                [zh + "/" + en for zh, en in zip(txt2txt_attack_names_zh, txt2txt_attack_names_en)]
             )
         elif self.target == "txt2img":
             self.attacks = txt2img_attacks
@@ -112,19 +107,14 @@ class TextPromptAttack(BasePromptAttack):
                 "当前支持的文生图攻击手法如下：\nThe currently supported text to image adversarial techniques are as follows:"
             )
             pprint(
-                [
-                    zh + "/" + en
-                    for zh, en in zip(txt2img_attack_names_zh, txt2img_attack_names_en)
-                ]
+                [zh + "/" + en for zh, en in zip(txt2img_attack_names_zh, txt2img_attack_names_en)]
             )
         else:
             raise ValueError(
                 f"Attack target can only be 'txt2txt' or 'txt2img', but {self.target} found!"
             )
 
-    def attack_data(
-        self, data: str, techniques: List[str] = None, **kwargs
-    ) -> Dict[str, str]:
+    def attack_data(self, data: str, techniques: List[str] = None, **kwargs) -> Dict[str, str]:
         """
 
         Args:
@@ -175,7 +165,7 @@ class TextPromptAttack(BasePromptAttack):
         if not techniques:
             techniques = list(self.attacks.keys())
 
-        seeds_list = []
+        seeds_list = [dataset]
 
         for attack_name in techniques:
             if attack_name not in self.attacks.keys():
@@ -186,9 +176,7 @@ class TextPromptAttack(BasePromptAttack):
             console.log(f"Using {attack_name} to augment prompt texts ...")
             dataset_with_seeds = dataset.map(
                 lambda row: {
-                    "aug_prompt": self.attacks[attack_name](
-                        row["prompt_text"], lang=self.lang
-                    ),
+                    "aug_prompt": self.attacks[attack_name](row["prompt_text"], lang=self.lang),
                     "technique": attack_name,
                 }
             ).select_columns(["aug_prompt", "technique", "references"])
@@ -208,8 +196,6 @@ class TextPromptAttack(BasePromptAttack):
                         **kwargs,
                     )
                     .select_columns(["response_text", "technique", "references"])
-                    .rename_columns(
-                        {"response_text": "text_prompt", "technique": "source"}
-                    )
+                    .rename_columns({"response_text": "text_prompt", "technique": "source"})
                 )
         return concatenate_datasets(seeds_list)
