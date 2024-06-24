@@ -14,10 +14,14 @@
 # limitations under the License.
 
 
-from yijian_community.technique.txt2img_seeds.fallacious_premise import fallacious_premise
+from yijian_community.technique.txt2img_seeds.fallacious_premise import (
+    fallacious_premise,
+)
 from yijian_community.technique.txt2img_seeds.info_compression import info_compression
 from yijian_community.technique.txt2img_seeds.info_expansion import info_expansion
-from yijian_community.technique.txt2img_seeds.keyword_extraction import keyword_extraction
+from yijian_community.technique.txt2img_seeds.keyword_extraction import (
+    keyword_extraction,
+)
 from yijian_community.technique.txt2img_seeds.reverse_induction import reverse_induction
 
 txt2img_attack_names_zh = ("错误前提", "反向诱导", "信息压缩", "信息扩展", "关键字提取")
