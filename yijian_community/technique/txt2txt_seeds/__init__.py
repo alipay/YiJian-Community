@@ -15,16 +15,22 @@
 
 
 from yijian_community.technique.txt2txt_seeds.code_attack import code_attack
-from yijian_community.technique.txt2txt_seeds.fallacious_premise import fallacious_premise
+from yijian_community.technique.txt2txt_seeds.fallacious_premise import (
+    fallacious_premise,
+)
 from yijian_community.technique.txt2txt_seeds.forced_consent import forced_consent
-from yijian_community.technique.txt2txt_seeds.implicit_knowledge import implicit_knowledge
+from yijian_community.technique.txt2txt_seeds.implicit_knowledge import (
+    implicit_knowledge,
+)
 from yijian_community.technique.txt2txt_seeds.introduction import introduction
 from yijian_community.technique.txt2txt_seeds.pros_and_cons import pros_and_cons
 from yijian_community.technique.txt2txt_seeds.repetition import repetition
 from yijian_community.technique.txt2txt_seeds.reverse_induction import reverse_induction
 from yijian_community.technique.txt2txt_seeds.sentence_overflow import sentence_overflow
 from yijian_community.technique.txt2txt_seeds.step_by_step import step_by_step
-from yijian_community.technique.txt2txt_seeds.text_summarization import text_summarization
+from yijian_community.technique.txt2txt_seeds.text_summarization import (
+    text_summarization,
+)
 from yijian_community.technique.txt2txt_seeds.virtualization import virtualization
 from yijian_community.technique.txt2txt_seeds.writing_assistant import writing_assistant
 

@@ -26,4 +26,8 @@ from yijian_community.model.api_infer import (
     TongyiQwenTxt2TxtInfer,
 )
 from yijian_community.model.base_infer import Infer
-from yijian_community.model.hf_infer import HFTxt2ImgInfer, HFTxt2TxtInfer, VLLMTxt2TxtInfer
+from yijian_community.model.hf_infer import (
+    HFTxt2ImgInfer,
+    HFTxt2TxtInfer,
+    VLLMTxt2TxtInfer,
+)

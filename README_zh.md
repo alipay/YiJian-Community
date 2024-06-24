@@ -95,17 +95,21 @@
 ### 安装
 
 ### 快速启动
-
+0. 环境配置
+   ```sh
+   # 若无法访问 🤗 Hugging Face
+   export HF_ENDPOINT="https://hf-mirror.com"
+   ```
 1. 测评数据加载
    ```python
-   from yijian.data import load_data
-   test_set = load_data("path/to/eval_base_zh.jsonl")
+   from yijian_community.data import load_data
+   test_set = load_data("path/to/YiJian_Community_Benchmark_zh.jsonl")
    # 风险问题所在列为prompt_text
    ```
 2. 数据攻击增强（可选）
    ```python
    from yijian.technique import TextPromptAttack
-   prompt_attack = TextPromptAttack("LLM instance or API", lang="zh")
+   prompt_attack = TextPromptAttack("Infer Instance", lang="zh")
    aug_test_set = prompt_attack.attack_dataset(test_set, techniques=None)
    # 如果未指定techniques，默认将使用全部的攻击手法进行样本增强
    ```
