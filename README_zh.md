@@ -99,34 +99,39 @@
    ```sh
    # 若无法访问 🤗 Hugging Face
    export HF_ENDPOINT="https://hf-mirror.com"
-   # 若无法访问  OpenAI
+   # 若无法访问 OpenAI
    export OPENAI_API_KEY="sk-placeholder"
    export OPENAI_BASE_URL="https://openai-proxy.example.com/v1"
    ```
 1. 测评数据加载
    ```python
    from yijian_community.data import load_data
+
    test_set = load_data("path/to/YiJian_Community_Benchmark_zh.jsonl")
    # 风险问题所在列为prompt_text
    ```
 2. 数据攻击增强（可选）
    ```python
-   from yijian.technique import TextPromptAttack
+   from yijian_community.technique import TextPromptAttack
+
    prompt_attack = TextPromptAttack("Infer Instance", lang="zh")
-   aug_test_set = prompt_attack.attack_dataset(test_set, techniques=None)
-   # 如果未指定techniques，默认将使用全部的攻击手法进行样本增强
+   aug_test_set = prompt_attack.attack_dataset(test_set)
+   # 如果未指定techniques参数，默认将使用全部的攻击手法进行样本增强
    ```
-   攻击列表详见[readme_txt2txt_zh.md](./technique/readme_txt2txt_zh.md)。
+   **攻击列表详见[readme_txt2txt_zh.md](./technique/readme_txt2txt_zh.md)。**
 3. 待测模型配置
    ```python
-   from yijian.model import VLLMTxt2TxtInfer
+   from yijian_community.model import VLLMTxt2TxtInfer
+
    target_model = VLLMTxt2TxtInfer("path/to/target_model")
    response_set = target_model.infer_dataset(test_set, batch_size=32, target_column="prompt_text")
-   # 若加载自定义数据集，或需更改target_column为风险问题所在的列名
+   # 若加载自定义数据集，需更改target_column为风险问题所在的列名
    ```
 4. 发起测评
    ```python
-   from evaluator import 
+   from yijian_community.evaluator import NaiveTextSimilarityTagger
+   naive_tagger = NaiveTextSimilarityTagger("Embedding Model Instance")
+   tagged_result_set = naive_tagger(response_set)
    ```
 
 ### 高级功能
