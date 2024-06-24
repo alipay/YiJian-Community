@@ -184,7 +184,7 @@ class TextPromptAttack(BasePromptAttack):
             if attack_name in template_based_attacks:
                 seeds_list.append(
                     dataset_with_seeds.rename_columns(
-                        {"aug_prompt": "text_prompt", "technique": "source"}
+                        {"aug_prompt": "prompt_text", "technique": "source"}
                     )
                 )
             else:
@@ -196,6 +196,6 @@ class TextPromptAttack(BasePromptAttack):
                         **kwargs,
                     )
                     .select_columns(["response_text", "technique", "references"])
-                    .rename_columns({"response_text": "text_prompt", "technique": "source"})
+                    .rename_columns({"response_text": "prompt_text", "technique": "source"})
                 )
         return concatenate_datasets(seeds_list)
