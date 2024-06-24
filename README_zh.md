@@ -99,6 +99,9 @@
    ```sh
    # 若无法访问 🤗 Hugging Face
    export HF_ENDPOINT="https://hf-mirror.com"
+   # 若无法访问  OpenAI
+   export OPENAI_API_KEY="sk-placeholder"
+   export OPENAI_BASE_URL="https://openai-proxy.example.com/v1"
    ```
 1. 测评数据加载
    ```python
