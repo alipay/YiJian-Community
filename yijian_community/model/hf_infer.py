@@ -270,12 +270,8 @@ class HFTxt2ImgInfer(Infer):
 
         response_images = []
         for data in dataset.iter(batch_size=batch_size):
-            images = self.infer(
-                data[target_column], generator=self.generator, **kwargs
-            ).images
+            images = self.infer(data[target_column], generator=self.generator, **kwargs).images
             response_images.extend(
-                save_image(
-                    image_save_path, self.model_path, data[target_column], images
-                )
+                save_image(image_save_path, self.model_path, data[target_column], images)
             )
         return dataset.add_column("response_image", response_images)
