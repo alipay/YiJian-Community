@@ -49,7 +49,7 @@
 - **`data`**
   - 原生支持csv、json和parquet格式的数据，其他类型文件可转为上述三种文件格式使用，或编写脚本将数据加载为[datasets.Dataset](https://huggingface.co/docs/datasets/v2.19.0/en/package_reference/main_classes#datasets.Dataset)的实例
   - 原生支持中英文语料测评，可扩展测评其他语言
-  - 提供<font style="background: yellow">X</font>条测评问题，涉及风险类目全，问题来源于100+开源数据集，经过长度、毒性、类别等条件筛选并采样后得到。每条prompt辅以5～12条不等的大模型response以及人工标注结果。prompt和response皆有中英文形式，分别存于`YiJian_Community_Benchmark_zh.jsonl`和`YiJian_Community_Benchmark_en.jsonl`中。每条数据格式如下所示：
+  - 提供<font style="background: yellow">X</font>条测评问题，涉及风险类目全，问题来源于100+开源数据集，经过长度、毒性、类别等条件筛选并采样后得到。每条问题辅以5～12条不等的大模型回复以及人工标注结果。问题和回复皆有中英文形式，分别存于`YiJian_Community_Benchmark_zh.jsonl`和`YiJian_Community_Benchmark_en.jsonl`中。每条数据格式如下所示：
     ```json
     {
       "prompt_text": "风险问题",
@@ -100,7 +100,6 @@ conda create -n yijian python=3.10
 conda activate yijian
 ```
 
-
 #### PIP安装
 ```sh
 pip install yijian-community
@@ -149,6 +148,7 @@ pip install .
 4. 发起测评
    ```python
    from yijian_community.evaluator import NaiveTextSimilarityTagger
+   
    naive_tagger = NaiveTextSimilarityTagger("Embedding Model Instance")
    tagged_result_set = naive_tagger(response_set)
    ```
@@ -164,9 +164,9 @@ pip install .
 - 蚁鉴社区版开源！
 
 ## 相关文档
-- [论文]()
-- [标准]()
-- [专利]()
+- [论文](./docs/papers.md)
+- [专利](./docs/patents.md)
+- [标准](./docs/standards.md)
 
 ## 贡献
 大模型发展势不可挡，大模型安全必不可少，我们期待更多人一起加入，共建蚁鉴开源生态，为大模型和人工智能保驾护航。
