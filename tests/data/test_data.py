@@ -17,7 +17,7 @@
 import pytest
 from datasets import Dataset
 
-from yijian.data import load_data, save_data
+from yijian_community.data import load_data, save_data
 
 
 def test_load_data_invalid_data_path():
