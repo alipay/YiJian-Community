@@ -1,7 +1,7 @@
 # 蚁鉴社区版：全流程自动化大模型安全测评工具
 
 <p align="center">
-  <img src="./docs/figs/logo.png" width="100%" />
+  <img src="./docs/figs/logo.png" width="50%" />
 </p>
 
 <div align="center">
@@ -27,6 +27,7 @@
   - 攻击方法：50+种前沿攻击
 - **智能**
   - 测试数据智能生成
+  - 多轮对话自适应攻击
   - 风险、拒答、攻击方法智能识别
 - **高效**
   - 每日百亿级风险初筛
@@ -46,7 +47,9 @@
 
 测评核心组件有：
 - **`data`**
-  - 提供<font style="background: yellow">X</font>条全风险测评问题，问题来源于100+开源数据集，经过长度、毒性、类别等条件筛选并采样后得到。每条prompt辅以5～12条不等的大模型response，prompt和response皆有中英文形式，分别存于`YiJian_Community_Benchmark_zh.jsonl`和`YiJian_Community_Benchmark_en.jsonl`中。每条数据格式如下所示：
+  - 原生支持csv、json和parquet格式的数据，其他类型文件可转为上述三种文件格式使用，或编写脚本将数据加载为[datasets.Dataset](https://huggingface.co/docs/datasets/v2.19.0/en/package_reference/main_classes#datasets.Dataset)的实例
+  - 原生支持中英文语料测评，可扩展测评其他语言
+  - 提供<font style="background: yellow">X</font>条测评问题，涉及风险类目全，问题来源于100+开源数据集，经过长度、毒性、类别等条件筛选并采样后得到。每条prompt辅以5～12条不等的大模型response以及人工标注结果。prompt和response皆有中英文形式，分别存于`YiJian_Community_Benchmark_zh.jsonl`和`YiJian_Community_Benchmark_en.jsonl`中。每条数据格式如下所示：
     ```json
     {
       "prompt_text": "风险问题",
@@ -74,8 +77,6 @@
       <text> <b>风险分类</b> </text>
     </p>
     <font style="color: gray">注意：业务合规与医疗、政务和金融等具体业务场景相关，相较其他三类风险，通用性较弱，此处不做具体说明。</font>
-  - 原生支持csv、json和parquet格式的数据
-  - 其他类型文件可转为上述三种文件格式使用，或编写脚本将数据加载为[datasets.Dataset](https://huggingface.co/docs/datasets/v2.19.0/en/package_reference/main_classes#datasets.Dataset)的实例
 - **`technique`**
   - 提供13种针对文生文大模型的对抗攻击手法实现和7种手法介绍
   - 提供5种针对文生图大模型的对抗攻击手法实现和4种手法介绍
@@ -85,7 +86,7 @@
   - 支持其他任意格式的模型加载与推理（需继承适配model组件的[Infer](./model/base_infer.py)基础类）
 - **`evaluator`**
   - 提供多样的大模型安全测评指标，如攻击成功率和拒答率等
-  - 提供轻量级的自动化风险判断方法
+  - 提供轻量级的自动化风险研判方法
   - 支持[JailbreakEval](https://github.com/ThuCCSLab/JailbreakEval)
 
 针对待测模型，通过配置上述4个组件（technique非必需），即可实现自动化测评。
@@ -93,6 +94,24 @@
 ## 如何使用？
 
 ### 安装
+建议新建conda环境，在新环境中使用
+```sh
+conda create -n yijian python=3.10
+conda activate yijian
+```
+
+
+#### PIP安装
+```sh
+pip install yijian-community
+```
+
+#### 源码安装
+```sh
+git clone https://github.com/yijian-community/yijian-community.git
+cd yijian-community
+pip install .
+```
 
 ### 快速启动
 0. 环境配置
@@ -118,7 +137,7 @@
    aug_test_set = prompt_attack.attack_dataset(test_set)
    # 如果未指定techniques参数，默认将使用全部的攻击手法进行样本增强
    ```
-   **攻击列表详见[readme_txt2txt_zh.md](./technique/readme_txt2txt_zh.md)。**
+   **攻击列表详见[technique_introduction_zh.md](./docs/technique_introduction_zh.md)。**
 3. 待测模型配置
    ```python
    from yijian_community.model import VLLMTxt2TxtInfer
@@ -134,15 +153,20 @@
    tagged_result_set = naive_tagger(response_set)
    ```
 
+更多例子请参考**examples**文件夹。
+
 ### 高级功能
-若需进行更全面准确或定制化的测评，可申请使用[蚁鉴平台](https://acta.alipay.com/detect/security)。
+若需进行更全面准确或定制化的测评，可申请使用[蚁鉴专业版](https://acta.alipay.com/detect/security)。
 
 ## 重要事项
 
 ### 🗓 2024年7月
-- 蚁鉴开源！
+- 蚁鉴社区版开源！
 
 ## 相关文档
+- [论文]()
+- [标准]()
+- [专利]()
 
 ## 贡献
 大模型发展势不可挡，大模型安全必不可少，我们期待更多人一起加入，共建蚁鉴开源生态，为大模型和人工智能保驾护航。

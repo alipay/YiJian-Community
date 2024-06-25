@@ -16,7 +16,7 @@
 
 import pytest
 
-from yijian.evaluator import (
+from yijian_community.evaluator import (
     Bert,
     Bleu,
     Chrf,
@@ -36,9 +36,7 @@ from yijian.evaluator import (
 def test_attack_sucess_rate():
     attack_total_num = 100
     attack_success_num = 50
-    assert attack_success_rate(attack_total_num, attack_success_num) == pytest.approx(
-        0.5
-    )
+    assert attack_success_rate(attack_total_num, attack_success_num) == pytest.approx(0.5)
 
 
 def test_decline_rate():
@@ -100,9 +98,7 @@ def test_Bleu_zh():
     references = ["敏捷的棕色狐狸跳过了懒狗。"]
     assert Bleu(responses[0], references, lang="zh") > Bleu(
         responses[1], references, lang="zh"
-    ) and Bleu(responses[1], references, lang="zh") > Bleu(
-        responses[2], references, lang="zh"
-    )
+    ) and Bleu(responses[1], references, lang="zh") > Bleu(responses[2], references, lang="zh")
 
 
 def test_Bleu_en():
@@ -114,9 +110,7 @@ def test_Bleu_en():
     references = ["The quick brown fox jumps over the lazy dog."]
     assert Bleu(responses[0], references, lang="en") > Bleu(
         responses[1], references, lang="en"
-    ) and Bleu(responses[1], references, lang="en") > Bleu(
-        responses[2], references, lang="en"
-    )
+    ) and Bleu(responses[1], references, lang="en") > Bleu(responses[2], references, lang="en")
 
 
 def test_Chrf_zh():
@@ -128,9 +122,7 @@ def test_Chrf_zh():
     references = ["敏捷的棕色狐狸跳过了懒狗。"]
     assert Chrf(responses[0], references, lang="zh") > Chrf(
         responses[1], references, lang="zh"
-    ) and Chrf(responses[1], references, lang="zh") > Chrf(
-        responses[2], references, lang="zh"
-    )
+    ) and Chrf(responses[1], references, lang="zh") > Chrf(responses[2], references, lang="zh")
 
 
 def test_Chrf_en():
@@ -142,9 +134,7 @@ def test_Chrf_en():
     references = ["The quick brown fox jumps over the lazy dog."]
     assert Chrf(responses[0], references, lang="en") > Chrf(
         responses[1], references, lang="en"
-    ) and Chrf(responses[1], references, lang="en") > Chrf(
-        responses[2], references, lang="en"
-    )
+    ) and Chrf(responses[1], references, lang="en") > Chrf(responses[2], references, lang="en")
 
 
 def test_Ter_zh():
@@ -156,9 +146,7 @@ def test_Ter_zh():
     references = ["敏捷的棕色狐狸跳过了懒狗。"]
     assert Ter(responses[0], references, lang="zh") < Ter(
         responses[1], references, lang="zh"
-    ) and Ter(responses[1], references, lang="zh") < Ter(
-        responses[2], references, lang="zh"
-    )
+    ) and Ter(responses[1], references, lang="zh") < Ter(responses[2], references, lang="zh")
 
 
 def test_Ter_en():
@@ -170,9 +158,7 @@ def test_Ter_en():
     references = ["The quick brown fox jumps over the lazy dog."]
     assert Ter(responses[0], references, lang="en") < Ter(
         responses[1], references, lang="en"
-    ) and Ter(responses[1], references, lang="en") < Ter(
-        responses[2], references, lang="en"
-    )
+    ) and Ter(responses[1], references, lang="en") < Ter(responses[2], references, lang="en")
 
 
 def test_RougeSU_zh():
@@ -212,9 +198,7 @@ def test_Bert_zh():
     references = ["敏捷的棕色狐狸跳过了懒狗。"]
     assert Bert(responses[0], references, lang="zh") > Bert(
         responses[1], references, lang="zh"
-    ) and Bert(responses[1], references, lang="zh") > Bert(
-        responses[2], references, lang="zh"
-    )
+    ) and Bert(responses[1], references, lang="zh") > Bert(responses[2], references, lang="zh")
 
 
 def test_Bert_en():
@@ -226,6 +210,4 @@ def test_Bert_en():
     references = ["The quick brown fox jumps over the lazy dog."]
     assert Bert(responses[0], references, lang="en") > Bert(
         responses[1], references, lang="en"
-    ) and Bert(responses[1], references, lang="en") > Bert(
-        responses[2], references, lang="en"
-    )
+    ) and Bert(responses[1], references, lang="en") > Bert(responses[2], references, lang="en")
