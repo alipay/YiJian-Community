@@ -7,7 +7,9 @@ from yijian_community.technique import TextPromptAttack
 from yijian_community.utils import console
 
 console.log("loading evalation data ...")
-test_set = load_data("../yijian_community/data/yijian_community/data/samples_50_zh.jsonl")
+test_set = load_data(
+    "../yijian_community/data/yijian_community/data/samples_50_zh.jsonl"
+)
 console.log("evaluation data loaded!")
 
 infer_model = VLLMTxt2TxtInfer("Qwen/Qwen2-7B-Instruct")

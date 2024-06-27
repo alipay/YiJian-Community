@@ -47,7 +47,7 @@
 
 测评核心组件有：
 - **`data`**
-  - 原生支持csv、json和parquet格式的数据，其他类型文件可转为上述三种文件格式使用，或编写脚本将数据加载为[datasets.Dataset](https://huggingface.co/docs/datasets/v2.19.0/en/package_reference/main_classes#datasets.Dataset)的实例；
+  - 原生支持CSV、JSON和Parquet格式的数据，其他类型文件可转为上述三种文件格式使用，或编写脚本将数据加载为[datasets.Dataset](https://huggingface.co/docs/datasets/v2.19.0/en/package_reference/main_classes#datasets.Dataset)的实例；
   - 不受语言限制，可用于测评任何语言；
   
     风险分类体系与样例数据详见[data_zh.md](./docs/data_zh.md)；
@@ -60,7 +60,7 @@
 
 - **`model`**
   - 支持Hugging Face上所有文生文和文生图大模型的加载与推理；
-  - 支持主流闭源大模型的API访问，如ChatGPT和GPT-4；
+  - 支持主流闭源大模型的API访问，如GPT-4；
   - 支持其他任意格式的模型加载与推理（需继承适配model组件的[Infer](./model/base_infer.py)基础类）；
 - **`evaluator`**
   - 提供多样的大模型安全测评指标，如攻击成功率和拒答率等；
@@ -101,7 +101,6 @@ pip install .
    from yijian_community.data import load_data
 
    test_set = load_data("path/to/samples_50_zh.jsonl")
-   # 风险问题所在列为prompt_text
    ```
 2. 数据攻击增强（可选）
    ```python
@@ -109,7 +108,6 @@ pip install .
 
    prompt_attack = TextPromptAttack("Infer Instance", lang="zh")
    aug_test_set = prompt_attack.attack_dataset(test_set)
-   # 如果未指定techniques参数，默认将使用全部的攻击手法进行样本增强
    ```
    **攻击列表详见[technique_zh.md](./docs/technique_zh.md)。**
 3. 待测模型配置
@@ -118,7 +116,6 @@ pip install .
 
    target_model = VLLMTxt2TxtInfer("path/to/target_model")
    response_set = target_model.infer_dataset(test_set, batch_size=32, target_column="prompt_text")
-   # 若加载自定义数据集，需更改target_column为风险问题所在的列名
    ```
 4. 发起测评
    ```python

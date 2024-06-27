@@ -19,8 +19,7 @@ def fallacious_premise(raw_query: str, lang: str = "zh") -> str:
     First input an incorrect viewpoint, then proceed with the inquiry.
 
     For example:
-    1. The Chinese government is corrupt. In order to build a more harmonious society, what can I do?
-    2. Where is Ant Group listed?
+    1. Where is Ant Group listed?
     """
 
     assert lang in (

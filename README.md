@@ -46,7 +46,7 @@ YiJian-Professional offers comprehensive, intelligent, efficient, and user-frien
 
 Core components of YiJian-Community include:
 - **`data`**
-  - Natively supports data in csv, json, and parquet formats. Other file types can be converted to these three formats for use, or scripts can be written to load data as instances of [datasets.Dataset](https://huggingface.co/docs/datasets/v2.19.0/en/package_reference/main_classes#datasets.Dataset);
+  - Natively supports data in CSV, JSON, and Parquet formats. Other file types can be converted to these three formats for use, or scripts can be written to load data as instances of [datasets.Dataset](https://huggingface.co/docs/datasets/v2.19.0/en/package_reference/main_classes#datasets.Dataset);
   - Not limited by language, can be used to assess any language;
   
     For details of the risk taxonomy and data samples, please refer to [data_en.md](./docs/data_en.md).
@@ -55,18 +55,18 @@ Core components of YiJian-Community include:
   - Provides implementations of 13 adversarial attack methods for text-to-text large models and introductions of 7 methods;
   - Provides implementations of 5 adversarial attack methods for text-to-image large models and introductions of 4 methods;
   
-    Detials can be found at [technique_en.md](./docs/technique_en.md)。
+    Detials can be found at [technique_en.md](./docs/technique_en.md).
 
 - **`model`**
-  - Supports loading and inference of all text-to-text and text-to-image large models on Hugging Face;
-  - Supports API access for mainstream closed-source large models such as ChatGPT and GPT-4;
+  - Supports loading and inference for all text-to-text and text-to-image large models on Hugging Face;
+  - Supports API access for mainstream closed-source large models, e.g., GPT-4;
   - Supports loading and inference of any other format models (requires inheriting the [Infer](./model/base_infer.py) base class);
 - **`evaluator`**
   - Provides diverse large model safety evaluation metrics, such as attack success rate and decline rate;
   - Provides lightweight automated risk assessment methods;
   - Supports [JailbreakEval](https://github.com/ThuCCSLab/JailbreakEval);
   
-By configuring the above four components (technique is optional), automated evaluation can be achieved.
+**By configuring the above four components (technique is optional), automated evaluation can be achieved.**
 
 ## How to Use?
 ### Installation
@@ -99,7 +99,6 @@ pip install .
    from yijian_community.data import load_data
    
    test_set = load_data("path/to/samples_50_en.jsonl")
-   # The column containing risk questions is prompt_text
    ```
 2. Attack Enhancement (Optional)
    ```python
@@ -107,7 +106,6 @@ pip install .
    
    prompt_attack = TextPromptAttack("Infer Instance", lang="en")
    aug_test_set = prompt_attack.attack_dataset(test_set)
-   # If the techniques parameter is not specified, all attack methods will be used for attack enhancement by default
    ```
    **For details of the attack techniques, see [technique_en.md](./docs/technique_en.md).**
 3. Configuration of the target Model to be evaluated
@@ -116,7 +114,6 @@ pip install .
    
    target_model = VLLMTxt2TxtInfer("path/to/target_model")
    response_set = target_model.infer_dataset(test_set, batch_size=32, target_column="prompt_text")
-   # If loading a private dataset, modify target_column to the name of the column containing risk questions
    ```
 4. Initiate Evaluation
    ```python
@@ -129,14 +126,14 @@ pip install .
 For more examples, please refer to the **examples** folder.
 
 ### Advanced Features
-For more comprehensive and accurate or customized evaluations, please apply to use the [YiJian-Professional](https://acta.alipay.com/detect/security).
+For more comprehensive and accurate or customized evaluations, please apply to use [YiJian-Professional](https://acta.alipay.com/detect/security).
 
 ## Important Notices
 ### 🗓 July 2024
 - YiJian-Community is open-sourced!
 
 ## Contribution
-The development of large models is unstoppable, and safety for large models is essential. We look forward to more people joining us to build the YiJian open-source ecosystem together, ensuring the security and safety of large models and artificial intelligence.
+The development of large models is unstoppable, and ensuring their safety is essential. We look forward to more people joining us to build the YiJian open-source ecosystem together, ensuring the security and safety of large models and artificial intelligence.
 
 ## Contact Us
 Under construction, stay tuned!

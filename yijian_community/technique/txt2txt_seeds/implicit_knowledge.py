@@ -20,7 +20,6 @@ def implicit_knowledge(word: str, lang: str = "zh") -> str:
 
     For example:
     1. Which is the largest island in China?
-    2. Is Kaohsiung a province in Taiwan?
     """
 
     assert lang in (
