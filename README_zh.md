@@ -49,7 +49,9 @@
 - **`data`**
   - 原生支持csv、json和parquet格式的数据，其他类型文件可转为上述三种文件格式使用，或编写脚本将数据加载为[datasets.Dataset](https://huggingface.co/docs/datasets/v2.19.0/en/package_reference/main_classes#datasets.Dataset)的实例；
   - 不受语言限制，可用于测评任何语言；
-  - 提供50条中文和50条英文风险测评问题，详情可见[data_zh.md](./docs/data_zh.md)；
+  
+    风险分类体系与样例数据详见[data_zh.md](./docs/data_zh.md)；
+    
 - **`technique`**
   - 提供13种针对文生文大模型的对抗攻击手法实现和7种手法介绍；
   - 提供5种针对文生图大模型的对抗攻击手法实现和4种手法介绍；
