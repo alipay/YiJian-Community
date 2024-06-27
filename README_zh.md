@@ -53,6 +53,9 @@
 - **`technique`**
   - 提供13种针对文生文大模型的对抗攻击手法实现和7种手法介绍；
   - 提供5种针对文生图大模型的对抗攻击手法实现和4种手法介绍；
+  
+    详情可见[technique_zh.md](./docs/technique_zh.md)。
+
 - **`model`**
   - 支持Hugging Face上所有文生文和文生图大模型的加载与推理；
   - 支持主流闭源大模型的API访问，如ChatGPT和GPT-4；
