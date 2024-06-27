@@ -133,11 +133,6 @@ For more comprehensive and accurate or customized evaluations, please apply to u
 ### 🗓 July 2024
 - YiJian-Community is open-sourced!
 
-## Related Documents
-- [Papers](./docs/papers.md)
-- [Patents](./docs/patents.md)
-- [Standards](./docs/standards.md)
-
 ## Contribution
 The development of large models is unstoppable, and safety for large models is essential. We look forward to more people joining us to build the YiJian open-source ecosystem together, ensuring the security and safety of large models and artificial intelligence.
 
