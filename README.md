@@ -48,7 +48,9 @@ Core components of YiJian-Community include:
 - **`data`**
   - Natively supports data in csv, json, and parquet formats. Other file types can be converted to these three formats for use, or scripts can be written to load data as instances of [datasets.Dataset](https://huggingface.co/docs/datasets/v2.19.0/en/package_reference/main_classes#datasets.Dataset);
   - Not limited by language, can be used to assess any language;
-  - Provide 50 Chinese and 50 English evaluation questions. For more details, please refer to [data_en.md](./docs/data_en.md);
+  
+    For details of the risk taxonomy and data samples, please refer to [data_en.md](./docs/data_en.md).
+
 - **`technique`**
   - Provides implementations of 13 adversarial attack methods for text-to-text large models and introductions of 7 methods;
   - Provides implementations of 5 adversarial attack methods for text-to-image large models and introductions of 4 methods;
