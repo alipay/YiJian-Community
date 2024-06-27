@@ -19,21 +19,21 @@ For risks such as large model hallucinations, ideologies, and privacy, based on 
 
 YiJian-Professional offers comprehensive, intelligent, efficient, and user-friendly industrial-grade large model safety evaluation capabilities.
 - **Comprehensiveness**
-  - Evaluation Data: Hundred-Billion-level risk data in the safety domain
-  - Risk Taxonomy: Four major categories—Content Safety, Data Safety, Ethics Safety, and Compliance Safety, with over 200 sub-categories
-  - Data Modalities: Text, image, audio, video
-  - Evaluation Objects: Base models, domain models, Agents
-  - Attack Methods: Over 50 advanced attack techniques
+  - Evaluation Data: Hundred-Billion-level risk data in the safety domain;
+  - Risk Taxonomy: Four major categories—Content Safety, Data Safety, Ethics Safety, and Compliance Safety, with over 200 sub-categories;
+  - Data Modalities: Text, image, audio, video;
+  - Evaluation Objects: Base models, domain models, Agents;
+  - Attack Methods: Over 50 advanced attack techniques;
 - **Intelligence**
-  - Intelligent generation of test data
-  - Multi-round dialogue adaptive attacks
-  - Intelligent recognition of risks, refusals, and attack methods
+  - Intelligent generation of test data;
+  - Multi-round dialogue adaptive attacks;
+  - Intelligent recognition of risks, refusals, and attack methods;
 - **Efficience**
-  - Ten-Billion-level risk preliminary screening per day
-  - Billion-level data fine-grained annotation per day
-  - Hour-level evaluation report generation
+  - Ten-Billion-level risk preliminary screening per day;
+  - Billion-level data fine-grained annotation per day;
+  - Hour-level evaluation report generation;
 - **User-Friendly**
-  - One-stop evaluation, requiring only account registration and model API interface provision to initiate the evaluation
+  - One-stop evaluation, requiring only account registration and model API interface provision to initiate the evaluation;
   
 ### YiJian-Community
 
@@ -46,22 +46,23 @@ YiJian-Professional offers comprehensive, intelligent, efficient, and user-frien
 
 Core components of YiJian-Community include:
 - **`data`**
-  - Natively supports data in csv, json, and parquet formats. Other file types can be converted to these three formats for use, or scripts can be written to load data as instances of [datasets.Dataset](https://huggingface.co/docs/datasets/v2.19.0/en/package_reference/main_classes#datasets.Dataset)
-  - Natively supports evaluation of Chinese and English corpora and can be extended to evaluate other languages
-  - Provide <font style="background: yellow">X</font> Chinese and <font style="background: yellow">Y</font> English evaluation questions, covering all risk categories, stored in `YiJian_Community_Benchmark_zh.jsonl` and `YiJian_Community_Benchmark_en.jsonl` respectively. For more details, please refer to [benchmark_data.md](./docs/benchmark_data.md).
+  - Natively supports data in csv, json, and parquet formats. Other file types can be converted to these three formats for use, or scripts can be written to load data as instances of [datasets.Dataset](https://huggingface.co/docs/datasets/v2.19.0/en/package_reference/main_classes#datasets.Dataset);
+  - Not limited by language, can be used to assess any language;
+  - Provide 50 Chinese and 50 English evaluation questions. For more details, please refer to [benchmark_data.md](./docs/benchmark_data.md);
 - **`technique`**
-  - Provides implementations of 13 adversarial attack methods for text-to-text large models and introductions of 7 methods
-  - Provides implementations of 5 adversarial attack methods for text-to-image large models and introductions of 4 methods
+  - Provides implementations of 13 adversarial attack methods for text-to-text large models and introductions of 7 methods;
+  - Provides implementations of 5 adversarial attack methods for text-to-image large models and introductions of 4 methods;
 - **`model`**
-  - Supports loading and inference of all text-to-text and text-to-image large models on Hugging Face
-  - Supports API access for mainstream closed-source large models such as ChatGPT and GPT-4
-  - Supports loading and inference of any other format models (requires inheriting the [Infer](./model/base_infer.py) base class)
+  - Supports loading and inference of all text-to-text and text-to-image large models on Hugging Face;
+  - Supports API access for mainstream closed-source large models such as ChatGPT and GPT-4;
+  - Supports loading and inference of any other format models (requires inheriting the [Infer](./model/base_infer.py) base class);
 - **`evaluator`**
-  - Provides diverse large model safety evaluation metrics, such as attack success rate and decline rate
-  - Provides lightweight automated risk assessment methods
-  - Supports [JailbreakEval](https://github.com/ThuCCSLab/JailbreakEval)
+  - Provides diverse large model safety evaluation metrics, such as attack success rate and decline rate;
+  - Provides lightweight automated risk assessment methods;
+  - Supports [JailbreakEval](https://github.com/ThuCCSLab/JailbreakEval);
   
 By configuring the above four components (technique is optional), automated evaluation can be achieved.
+
 ## How to Use?
 ### Installation
 It is recommended to create a new conda environment and use it there
@@ -87,15 +88,12 @@ pip install .
    ```sh
    # If you cannot access 🤗 Hugging Face
    export HF_ENDPOINT="https://hf-mirror.com"
-   # If you cannot access OpenAI
-   export OPENAI_API_KEY="sk-placeholder"
-   export OPENAI_BASE_URL="https://openai-proxy.example.com/v1"
    ```
 1. Load Evaluation Data
    ```python
    from yijian_community.data import load_data
    
-   test_set = load_data("path/to/YiJian_Community_Benchmark_en.jsonl")
+   test_set = load_data("path/to/samples_50_en.jsonl")
    # The column containing risk questions is prompt_text
    ```
 2. Attack Enhancement (Optional)
@@ -106,7 +104,7 @@ pip install .
    aug_test_set = prompt_attack.attack_dataset(test_set)
    # If the techniques parameter is not specified, all attack methods will be used for attack enhancement by default
    ```
-   **For details of the attack techniques, see [technique_introduction_en.md](./docs/technique_introduction_en.md).**
+   **For details of the attack techniques, see [technique_en.md](./docs/technique_en.md).**
 3. Configuration of the target Model to be evaluated
    ```python
    from yijian_community.model import VLLMTxt2TxtInfer
@@ -126,7 +124,7 @@ pip install .
 For more examples, please refer to the **examples** folder.
 
 ### Advanced Features
-For more comprehensive and accurate or customized evaluations, you can apply to use the [YiJian-Professional](https://acta.alipay.com/detect/security).
+For more comprehensive and accurate or customized evaluations, please apply to use the [YiJian-Professional](https://acta.alipay.com/detect/security).
 
 ## Important Notices
 ### 🗓 July 2024
