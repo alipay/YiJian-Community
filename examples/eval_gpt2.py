@@ -6,7 +6,9 @@ from yijian_community.model import VLLMTxt2TxtInfer
 from yijian_community.utils import console
 
 console.log("loading evalation data ...")
-test_set = load_data("../yijian_community/data/yijian_community/data/samples_50_zh.jsonl")
+test_set = load_data(
+    "../yijian_community/data/yijian_community/data/samples_50_zh.jsonl"
+)
 console.log("evaluation data loaded!")
 
 console.log("testing target model ...")
