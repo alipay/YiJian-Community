@@ -20,21 +20,21 @@
  
 蚁鉴专业版提供了全面、智能、高效、易用的工业级大模型安全测评能力。
 - **全面**
-  - 测评数据：千亿级安全领域风险数据
-  - 风险分类体系：内容安全、数据安全、伦理安全和合规安全4大类，200+子类
-  - 数据模态：文本、图像、音频、视频
-  - 测评对象：基座大模型、领域大模型、Agent
-  - 攻击方法：50+种前沿攻击
+  - 测评数据：千亿级安全领域风险数据；
+  - 风险分类体系：内容安全、数据安全、伦理安全和合规安全4大类，200+子类；
+  - 数据模态：文本、图像、音频、视频；
+  - 测评对象：基座大模型、领域大模型、Agent；
+  - 攻击方法：50+种前沿攻击；
 - **智能**
-  - 测试数据智能生成
-  - 多轮对话自适应攻击
-  - 风险、拒答、攻击方法智能识别
+  - 测试数据智能生成；
+  - 多轮对话自适应攻击；
+  - 风险、拒答、攻击方法智能识别；
 - **高效**
-  - 每日百亿级风险初筛
-  - 每日亿级数据精细化标注
-  - 小时级测评报告生成
+  - 每日百亿级风险初筛；
+  - 每日亿级数据精细化标注；
+  - 小时级测评报告生成；
 - **易用**
-  - 一站式测评，仅需注册账户和提供模型API接口即可发起测评
+  - 一站式测评，仅需注册账户和提供模型API接口即可发起测评；
 
 ### 蚁鉴社区版
 
@@ -47,20 +47,20 @@
 
 测评核心组件有：
 - **`data`**
-  - 原生支持csv、json和parquet格式的数据，其他类型文件可转为上述三种文件格式使用，或编写脚本将数据加载为[datasets.Dataset](https://huggingface.co/docs/datasets/v2.19.0/en/package_reference/main_classes#datasets.Dataset)的实例
-  - 原生支持中英文语料测评，可扩展测评其他语言
-  - 提供<font style="background: yellow">X</font>条中文和<font style="background: yellow">Y</font>条英文测评问题，涉及风险类目全，分别存于`YiJian_Community_Benchmark_zh.jsonl`和`YiJian_Community_Benchmark_en.jsonl`中。详情可见[benchmark_data_zh.md](./docs/benchmark_data_zh.md)。
+  - 原生支持csv、json和parquet格式的数据，其他类型文件可转为上述三种文件格式使用，或编写脚本将数据加载为[datasets.Dataset](https://huggingface.co/docs/datasets/v2.19.0/en/package_reference/main_classes#datasets.Dataset)的实例；
+  - 不受语言限制，可用于测评任何语言；
+  - 提供50条中文和50条英文风险测评问题，详情可见[data_zh.md](./docs/data_zh.md)；
 - **`technique`**
-  - 提供13种针对文生文大模型的对抗攻击手法实现和7种手法介绍
-  - 提供5种针对文生图大模型的对抗攻击手法实现和4种手法介绍
+  - 提供13种针对文生文大模型的对抗攻击手法实现和7种手法介绍；
+  - 提供5种针对文生图大模型的对抗攻击手法实现和4种手法介绍；
 - **`model`**
-  - 支持Hugging Face上所有文生文和文生图大模型的加载与推理
-  - 支持主流闭源大模型的API访问，如ChatGPT和GPT-4
-  - 支持其他任意格式的模型加载与推理（需继承适配model组件的[Infer](./model/base_infer.py)基础类）
+  - 支持Hugging Face上所有文生文和文生图大模型的加载与推理；
+  - 支持主流闭源大模型的API访问，如ChatGPT和GPT-4；
+  - 支持其他任意格式的模型加载与推理（需继承适配model组件的[Infer](./model/base_infer.py)基础类）；
 - **`evaluator`**
-  - 提供多样的大模型安全测评指标，如攻击成功率和拒答率等
-  - 提供轻量级的自动化风险研判方法
-  - 支持[JailbreakEval](https://github.com/ThuCCSLab/JailbreakEval)
+  - 提供多样的大模型安全测评指标，如攻击成功率和拒答率等；
+  - 提供轻量级的自动化风险研判方法；
+  - 支持[JailbreakEval](https://github.com/ThuCCSLab/JailbreakEval)；
 
 针对待测模型，通过配置上述4个组件（technique非必需），即可实现自动化测评。
 
@@ -90,15 +90,12 @@ pip install .
    ```sh
    # 若无法访问 🤗 Hugging Face
    export HF_ENDPOINT="https://hf-mirror.com"
-   # 若无法访问 OpenAI
-   export OPENAI_API_KEY="sk-placeholder"
-   export OPENAI_BASE_URL="https://openai-proxy.example.com/v1"
    ```
 1. 测评数据加载
    ```python
    from yijian_community.data import load_data
 
-   test_set = load_data("path/to/YiJian_Community_Benchmark_zh.jsonl")
+   test_set = load_data("path/to/samples_50_zh.jsonl")
    # 风险问题所在列为prompt_text
    ```
 2. 数据攻击增强（可选）
@@ -109,7 +106,7 @@ pip install .
    aug_test_set = prompt_attack.attack_dataset(test_set)
    # 如果未指定techniques参数，默认将使用全部的攻击手法进行样本增强
    ```
-   **攻击列表详见[technique_introduction_zh.md](./docs/technique_introduction_zh.md)。**
+   **攻击列表详见[technique_zh.md](./docs/technique_zh.md)。**
 3. 待测模型配置
    ```python
    from yijian_community.model import VLLMTxt2TxtInfer
@@ -129,7 +126,7 @@ pip install .
 更多例子请参考**examples**文件夹。
 
 ### 高级功能
-若需进行更全面准确或定制化的测评，可申请使用[蚁鉴专业版](https://acta.alipay.com/detect/security)。
+若需进行更全面准确或定制化的测评，请申请使用[蚁鉴专业版](https://acta.alipay.com/detect/security)。
 
 ## 重要事项
 
