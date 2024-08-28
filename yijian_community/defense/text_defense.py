@@ -12,3 +12,19 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
+
+from datasets import Dataset
+from yijian_community.model.base_infer import Infer
+
+
+class ThuCoaiShieldLM(Infer):
+
+    def __init__(self, model_path: str):
+        super().__init__(model_path)
+
+    def infer_data(self, data: str):
+        return super().infer_data(data)
+
+    def infer_dataset(self, dataset: Dataset) -> Dataset:
+        return super().infer_dataset(dataset)
