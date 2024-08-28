@@ -15,13 +15,34 @@
 
 
 from datasets import Dataset
+import torch
 from yijian_community.model.base_infer import Infer
+from transformers import AutoTokenizer, AutoModelForCausalLM
+
+from yijian_community.utils.constants import DEVICE_MAP
 
 
 class ThuCoaiShieldLM(Infer):
+    # code adapted from [thu-coai/ShieldLM](https://github.com/thu-coai/ShieldLM)
 
     def __init__(self, model_path: str):
         super().__init__(model_path)
+        self.tokenizer = AutoTokenizer.from_pretrained(
+            model_path, padding_side="left", trust_remote_code=True
+        )
+        self.infer = AutoModelForCausalLM.from_pretrained(
+            model_path,
+            load_in_8bit=False,
+            torch_dtype=torch.float16,
+            device_map=DEVICE_MAP,
+            trust_remote_code=True,
+        )
+        self.infer.eval()
+
+        if not self.tokenizer.eos_token:
+            self.tokenizer.eos_token = '<|endoftext|>'
+        if not self.tokenizer.pad_token:
+            self.tokenizer.pad_token = self.tokenizer.eos_token
 
     def infer_data(self, data: str):
         return super().infer_data(data)
