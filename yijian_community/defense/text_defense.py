@@ -62,14 +62,7 @@ class ThuCoaiShieldLM(Infer):
         )
 
     def infer_data(self, data: str, lang: str = "zh"):
-        res = self._generate(
-            [{"query": "", "response": data}],
-            self.infer,
-            self.tokenizer,
-            self.device,
-            lang,
-            self.model_base,
-        )
+        res = self._generate([{"query": "", "response": data}], lang)
         return self._extract_label(res[0]["output"], lang=lang)
 
     def infer_dataset(
@@ -79,10 +72,13 @@ class ThuCoaiShieldLM(Infer):
         lang: str = "zh",
         batch_size: int = BATCH_SIZE,
     ) -> List:
-        pass
-        # res = self._generate()
+        datas = [{"query": "", "response": text} for text in dataset[target_column]]
+        res = self._generate(datas, lang, batch_size=batch_size)
+        return dataset.add_column(
+            "text_rejected", [self._extract_label(r["output"], lang) for r in res]
+        )
 
-    def _create_ipt(self, query, response, lang, model_base, rules=None):
+    def _create_ipt(self, query, response, lang, rules=None):
         def add_model_prompt(ipt, model_base):
             if model_base == 'qwen' or model_base == 'internlm':
                 ipt = f"<|im_start|>system\n<|im_end|>\n<|im_start|>user\n{ipt}\n<|im_end|>\n<|im_start|>assistant\n"
@@ -111,16 +107,12 @@ class ThuCoaiShieldLM(Infer):
                     f"You need to carefully analyze the response and consider the potential implications it may have. Here are some rules that you should STRICTLY follow in your analysis:\n{rules}\n",
                 )
 
-        return add_model_prompt(ipt, model_base)
+        return add_model_prompt(ipt, self.model_base)
 
     def _generate(
         self,
         datas,
-        model,
-        tokenizer,
-        device,
         lang="zh",
-        model_base="internlm",
         batch_size=1,
         rules=None,
     ):
@@ -128,22 +120,24 @@ class ThuCoaiShieldLM(Infer):
             # result
             for i in range(0, len(datas), batch_size):
                 input_text = [
-                    self._create_ipt(data['query'], data['response'], lang, model_base, rules)
+                    self._create_ipt(data['query'], data['response'], lang, self.model_base, rules)
                     for data in datas[i : i + batch_size]
                 ]
-                inputs = tokenizer(input_text, return_tensors="pt", truncation=True, padding=True)
-                generation_output = model.generate(
-                    input_ids=inputs["input_ids"].to(device),
-                    attention_mask=inputs['attention_mask'].to(device),
-                    eos_token_id=tokenizer.eos_token_id,
-                    pad_token_id=tokenizer.pad_token_id,
+                inputs = self.tokenizer(
+                    input_text, return_tensors="pt", truncation=True, padding=True
+                )
+                generation_output = self.model.generate(
+                    input_ids=inputs["input_ids"].to(self.device),
+                    attention_mask=inputs['attention_mask'].to(self.device),
+                    eos_token_id=self.tokenizer.eos_token_id,
+                    pad_token_id=self.tokenizer.pad_token_id,
                     return_dict_in_generate=True,
                     output_scores=True,
                     **self.generation_config,
                 )
                 generation_output = generation_output.sequences
                 generation_output = generation_output[:, inputs['input_ids'].size(1) :]
-                outputs = tokenizer.batch_decode(generation_output, skip_special_tokens=True)
+                outputs = self.tokenizer.batch_decode(generation_output, skip_special_tokens=True)
 
                 for j, output in enumerate(outputs):
                     datas[i + j]['output'] = output
