@@ -20,7 +20,7 @@ from operator import imod
 
 import torch
 from datasets import Dataset
-from diffusers import DiffusionPipeline, KolorsPipeline, FluxPipeline
+from diffusers import DiffusionPipeline
 from numpy import dtype
 from PIL import Image
 from transformers import pipeline
@@ -196,7 +196,7 @@ class HFTxt2ImgInfer(Infer):
     def __init__(
         self,
         model_path: str,
-        use_safetensors: bool = USE_SAFETENSORS,
+        pipeline: DiffusionPipeline,
         torch_dtype: dtype = TORCH_DTYPE,
         **kwargs,
     ):
@@ -204,15 +204,13 @@ class HFTxt2ImgInfer(Infer):
 
         Args:
             model_path (str): path to the target model.
-            use_safetensors (bool, optional): whether or not to load safetensors weights. Defaults to USE_SAFETENSORS.
             torch_dtype (dtype, optional): model's dtype. Defaults to TORCH_DTYPE.
         """
         super().__init__(model_path)
         try:
-            self.infer = DiffusionPipeline.from_pretrained(
+            self.infer = pipeline.from_pretrained(
                 model_path,
                 device_map=DEVICE_MAP,
-                use_safetensors=use_safetensors,
                 torch_dtype=torch_dtype,
                 **kwargs,
             )
@@ -221,16 +219,16 @@ class HFTxt2ImgInfer(Infer):
             console.log("reloading model ...")
             self.infer = DiffusionPipeline.from_pretrained(
                 model_path,
-                use_safetensors=use_safetensors,
                 torch_dtype=torch_dtype,
                 **kwargs,
             )
+            if torch.cuda.is_available():
+                self.infer = self.infer.to("cuda")
+
         if torch.cuda.is_available():
             self.generator = torch.Generator("cuda").manual_seed(SEED)
         else:
             self.generator = torch.Generator().manual_seed(SEED)
-        self.infer.enable_xformers_memory_efficient_attention()
-        self.infer.enable_model_cpu_offload()
 
     def infer_data(
         self,
