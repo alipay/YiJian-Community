@@ -262,14 +262,16 @@ class HFTxt2ImgInfer(Infer):
             Dataset: output dataset, containing responses stored in a column named "response_image".
         """
         image_save_path = os.path.join(
-            os.getcwd(), "images_txt2img_" + datetime.now().strftime("%Y%m%d_%H%M%S")
+            os.getcwd(),
+            "txt2img_"
+            + self.model_path.split("/")[-1]
+            + "_"
+            + datetime.now().strftime("%Y%m%d_%H%M%S"),
         )
         os.makedirs(image_save_path, exist_ok=True)
 
         response_images = []
         for data in dataset.iter(batch_size=batch_size):
             images = self.infer(data[target_column], generator=self.generator, **kwargs).images
-            response_images.extend(
-                save_image(image_save_path, self.model_path, data[target_column], images)
-            )
+            response_images.extend(save_image(image_save_path, data[target_column], images))
         return dataset.add_column("response_image", response_images)
