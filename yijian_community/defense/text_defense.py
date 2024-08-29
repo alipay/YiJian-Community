@@ -120,7 +120,7 @@ class ThuCoaiShieldLM(Infer):
             # result
             for i in range(0, len(datas), batch_size):
                 input_text = [
-                    self._create_ipt(data['query'], data['response'], lang, self.model_base, rules)
+                    self._create_ipt(data['query'], data['response'], lang, rules)
                     for data in datas[i : i + batch_size]
                 ]
                 inputs = self.tokenizer(
