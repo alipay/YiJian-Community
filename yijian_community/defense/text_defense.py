@@ -126,7 +126,7 @@ class ThuCoaiShieldLM(Infer):
                 inputs = self.tokenizer(
                     input_text, return_tensors="pt", truncation=True, padding=True
                 )
-                generation_output = self.model.generate(
+                generation_output = self.infer.generate(
                     input_ids=inputs["input_ids"].to(self.device),
                     attention_mask=inputs['attention_mask'].to(self.device),
                     eos_token_id=self.tokenizer.eos_token_id,
