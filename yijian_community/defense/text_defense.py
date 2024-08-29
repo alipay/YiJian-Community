@@ -14,18 +14,19 @@
 # limitations under the License.
 
 
+from typing import List
 from datasets import Dataset
 import torch
 from yijian_community.model.base_infer import Infer
 from transformers import AutoTokenizer, AutoModelForCausalLM
 
-from yijian_community.utils.constants import DEVICE_MAP
+from yijian_community.utils.constants import DEVICE_MAP, BATCH_SIZE
 
 
 class ThuCoaiShieldLM(Infer):
     # code adapted from [thu-coai/ShieldLM](https://github.com/thu-coai/ShieldLM)
 
-    def __init__(self, model_path: str):
+    def __init__(self, model_path: str, model_base: str = "internlm"):
         super().__init__(model_path)
         self.tokenizer = AutoTokenizer.from_pretrained(
             model_path, padding_side="left", trust_remote_code=True
@@ -38,6 +39,7 @@ class ThuCoaiShieldLM(Infer):
             trust_remote_code=True,
         )
         self.infer.eval()
+        self.model_base = model_base
 
         if not self.tokenizer.eos_token:
             self.tokenizer.eos_token = '<|endoftext|>'
@@ -59,13 +61,28 @@ class ThuCoaiShieldLM(Infer):
             max_new_tokens=8,
         )
 
-    def infer_data(self, data: str):
-        return super().infer_data(data)
+    def infer_data(self, data: str, lang: str = "zh"):
+        res = self._generate(
+            [{"query": "", "response": data}],
+            self.infer,
+            self.tokenizer,
+            self.device,
+            lang,
+            self.model_base,
+        )
+        return self._extract_label(res[0]["output"], lang=lang)
 
-    def infer_dataset(self, dataset: Dataset) -> Dataset:
-        return super().infer_dataset(dataset)
+    def infer_dataset(
+        self,
+        dataset: Dataset,
+        target_column: str = "prompt_text",
+        lang: str = "zh",
+        batch_size: int = BATCH_SIZE,
+    ) -> List:
+        pass
+        # res = self._generate()
 
-    def create_ipt(query, response, lang, model_base, rules=None):
+    def _create_ipt(self, query, response, lang, model_base, rules=None):
         def add_model_prompt(ipt, model_base):
             if model_base == 'qwen' or model_base == 'internlm':
                 ipt = f"<|im_start|>system\n<|im_end|>\n<|im_start|>user\n{ipt}\n<|im_end|>\n<|im_start|>assistant\n"
@@ -96,57 +113,22 @@ class ThuCoaiShieldLM(Infer):
 
         return add_model_prompt(ipt, model_base)
 
-    def get_probs(scores, idx, lang, model_base):
-        token_place = 0
-        safe_token = 0
-        unsafe_token = 0
-        controversial_token = 0
-        if model_base == 'qwen':
-            token_place = 3
-            if lang == 'zh':
-                safe_token, unsafe_token, controversial_token = (41479, 86009, 220)
-            else:
-                safe_token, unsafe_token, controversial_token = (6092, 19860, 20129)
-        elif model_base == 'baichuan':
-            token_place = 3
-            if lang == 'zh':
-                safe_token, unsafe_token, controversial_token = (92311, 100093, 100047)
-            else:
-                safe_token, unsafe_token, controversial_token = (6336, 53297, 20290)
-        elif model_base == 'internlm':
-            if lang == 'zh':
-                token_place = 4
-                safe_token, unsafe_token, controversial_token = (68419, 60358, 60360)
-            else:
-                token_place = 3
-                safe_token, unsafe_token, controversial_token = (6245, 20036, 20304)
-        elif model_base == 'chatglm':
-            if lang == 'zh':
-                token_place = 3
-                safe_token, unsafe_token, controversial_token = (30910, 34121, 35284)
-            else:
-                token_place = 5
-                safe_token, unsafe_token, controversial_token = (3544, 27233, 13204)
-        score = scores[token_place][idx].to('cpu').float()
-        masked_score = torch.full_like(score, -np.inf)
-        masked_score[safe_token] = score[safe_token]
-        masked_score[unsafe_token] = score[unsafe_token]
-        masked_score[controversial_token] = score[controversial_token]
-        probs = torch.softmax(masked_score, dim=-1)
-        res = {
-            'safe': probs[safe_token].item(),
-            'unsafe': probs[unsafe_token].item(),
-            'controversial': probs[controversial_token].item(),
-        }
-
-        return res
-
-    def generate(datas, model, tokenizer, device, lang, model_base, batch_size=1, rules=None):
+    def _generate(
+        self,
+        datas,
+        model,
+        tokenizer,
+        device,
+        lang="zh",
+        model_base="internlm",
+        batch_size=1,
+        rules=None,
+    ):
         with torch.no_grad():
             # result
-            for i in trange(0, len(datas), batch_size):
+            for i in range(0, len(datas), batch_size):
                 input_text = [
-                    create_ipt(data['query'], data['response'], lang, model_base, rules)
+                    self._create_ipt(data['query'], data['response'], lang, model_base, rules)
                     for data in datas[i : i + batch_size]
                 ]
                 inputs = tokenizer(input_text, return_tensors="pt", truncation=True, padding=True)
@@ -157,9 +139,8 @@ class ThuCoaiShieldLM(Infer):
                     pad_token_id=tokenizer.pad_token_id,
                     return_dict_in_generate=True,
                     output_scores=True,
-                    **generation_config,
+                    **self.generation_config,
                 )
-                scores = generation_output.scores
                 generation_output = generation_output.sequences
                 generation_output = generation_output[:, inputs['input_ids'].size(1) :]
                 outputs = tokenizer.batch_decode(generation_output, skip_special_tokens=True)
@@ -167,8 +148,28 @@ class ThuCoaiShieldLM(Infer):
                 for j, output in enumerate(outputs):
                     datas[i + j]['output'] = output
 
-                for j in range(len(generation_output)):
-                    probs = get_probs(scores, j, lang, model_base)
-                    datas[i + j]['prob'] = probs
-
         return datas
+
+    def _extract_label(self, text, lang="zh"):
+        text = text.strip()
+        if lang == 'en':
+            if '[Answer] unsafe' in text:
+                label = 1
+            elif '[Answer] safe' in text:
+                label = 0
+            elif '[Answer] controversial' in text:
+                label = 2
+            else:
+                raise ValueError(f'Failed to extract label from text: {text}')
+
+        if lang == 'zh':
+            if '[答案] 不安全' in text:
+                label = 1
+            elif '[答案] 安全' in text:
+                label = 0
+            elif '[答案] 有争议' in text:
+                label = 1
+            else:
+                raise ValueError(f'Failed to extract label from text: {text}')
+
+        return label
