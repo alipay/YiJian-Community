@@ -14,7 +14,6 @@
 # limitations under the License.
 
 
-import hashlib
 import os
 from typing import List
 
@@ -71,7 +70,6 @@ def save_data(data_path: str, data: Dataset) -> None:
 
 def save_image(
     save_path: str,
-    model_name: str,
     prompt_texts: List[str],
     images: List[Image.Image],
 ) -> List[str]:
@@ -88,8 +86,7 @@ def save_image(
     """
     img_save_paths = []
     for prompt_text, image in zip(prompt_texts, images):
-        md5 = hashlib.md5((model_name + prompt_text).encode()).hexdigest()
-        img_save_path = os.path.join(save_path, md5 + ".jpg")
+        img_save_path = os.path.join(save_path, prompt_text + ".jpg")
         image.save(img_save_path)
         img_save_paths.append(img_save_path)
     return img_save_paths
