@@ -25,6 +25,5 @@ from yijian_community.utils.constants import (
     TEMPERATURE,
     TOP_P,
     TORCH_DTYPE,
-    USE_SAFETENSORS,
 )
 from yijian_community.utils.util_func import console
