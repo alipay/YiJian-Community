@@ -27,7 +27,6 @@ TOP_P = 0.5
 BATCH_SIZE = 16
 DEVICE_MAP = "auto"
 SEED = 2024
-USE_SAFETENSORS = True
 TORCH_DTYPE = torch.float16
 
 # API keys

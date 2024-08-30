@@ -38,7 +38,6 @@ from yijian_community.utils import (
     TEMPERATURE,
     TOP_P,
     TORCH_DTYPE,
-    USE_SAFETENSORS,
     console,
 )
 
