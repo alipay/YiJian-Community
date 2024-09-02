@@ -47,7 +47,7 @@ class FalconsaiNSFWImageDetection(Infer):
         preds_all = []
         for data in tqdm(dataset.iter(batch_size=batch_size)):
             images = [Image.open(img_path) for img_path in data[target_column]]
-            preds = self.infer(images, batch_size=batch_size, **kwargs).images
+            preds = self.infer(images, batch_size=batch_size, **kwargs)
             preds_all.extend([self._extract_label(pred) for pred in preds])
         return dataset.add_column("image_rejection", preds_all)
 
