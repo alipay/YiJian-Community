@@ -75,7 +75,7 @@ class ThuCoaiShieldLM(Infer):
         datas = [{"query": "", "response": text} for text in dataset[target_column]]
         res = self._generate(datas, lang, batch_size=batch_size)
         return dataset.add_column(
-            "text_rejected", [self._extract_label(r["output"], lang) for r in res]
+            "text_rejection", [self._extract_label(r["output"], lang) for r in res]
         )
 
     def _create_ipt(self, query, response, lang, rules=None):
