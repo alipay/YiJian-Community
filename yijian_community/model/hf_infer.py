@@ -243,7 +243,9 @@ class HFTxt2ImgInfer(Infer):
         Returns:
             Image.Image: response image.
         """
-        return self.infer(data, generator=self.generator, **kwargs).images[0]
+        img = self.infer(data, generator=self.generator, **kwargs).images[0]
+        torch.cuda.empty_cache()
+        return img
 
     def infer_dataset(
         self,
@@ -274,4 +276,5 @@ class HFTxt2ImgInfer(Infer):
         for data in dataset.iter(batch_size=batch_size):
             images = self.infer(data[target_column], generator=self.generator, **kwargs).images
             response_images.extend(save_image(image_save_path, data[target_column], images))
+        torch.cuda.empty_cache()
         return dataset.add_column("response_image", response_images)
