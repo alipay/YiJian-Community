@@ -18,7 +18,6 @@ from tqdm import tqdm
 from typing import Union
 from PIL import Image
 from datasets import Dataset
-from torch import normal
 from transformers import pipeline
 from yijian_community.model.base_infer import Infer
 from yijian_community.utils.constants import DEVICE_MAP, BATCH_SIZE

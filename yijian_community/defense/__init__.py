@@ -13,4 +13,5 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from yijian_community.defense.text_defense import ThuCoaiShieldLM, FalconsaiNSFWImageDetection
+from yijian_community.defense.text_defense import ThuCoaiShieldLM
+from yijian_community.defense.image_defense import FalconsaiNSFWImageDetection
