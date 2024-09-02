@@ -25,6 +25,7 @@ from numpy import dtype
 from PIL import Image
 from transformers import pipeline
 from vllm import LLM, SamplingParams
+from tqdm import tqdm
 
 from yijian_community.data import save_image
 from yijian_community.model.base_infer import Infer
@@ -273,7 +274,7 @@ class HFTxt2ImgInfer(Infer):
         os.makedirs(image_save_path, exist_ok=True)
 
         response_images = []
-        for data in dataset.iter(batch_size=batch_size):
+        for data in tqdm(dataset.iter(batch_size=batch_size)):
             images = self.infer(data[target_column], generator=self.generator, **kwargs).images
             response_images.extend(save_image(image_save_path, data[target_column], images))
             torch.cuda.empty_cache()
