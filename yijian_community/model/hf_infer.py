@@ -197,6 +197,7 @@ class HFTxt2ImgInfer(Infer):
         model_path: str,
         pipeline: DiffusionPipeline = DiffusionPipeline,
         torch_dtype: dtype = TORCH_DTYPE,
+        seed: int = SEED,
         **kwargs,
     ):
         """initialization for model inference with diffusers.
@@ -225,9 +226,9 @@ class HFTxt2ImgInfer(Infer):
                 self.infer = self.infer.to("cuda")
 
         if torch.cuda.is_available():
-            self.generator = torch.Generator("cuda").manual_seed(SEED)
+            self.generator = torch.Generator("cuda").manual_seed(seed)
         else:
-            self.generator = torch.Generator().manual_seed(SEED)
+            self.generator = torch.Generator().manual_seed(seed)
 
     def infer_data(
         self,
