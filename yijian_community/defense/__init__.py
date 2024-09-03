@@ -14,4 +14,4 @@
 # limitations under the License.
 
 from yijian_community.defense.text_defense import ThuCoaiShieldLM
-from yijian_community.defense.image_defense import FalconsaiNSFWImageDetection
+from yijian_community.defense.image_defense import InternVL2ImageDefense
