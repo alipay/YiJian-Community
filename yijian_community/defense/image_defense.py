@@ -14,7 +14,7 @@
 # limitations under the License.
 
 
-from turtle import back
+import torch
 from tqdm import tqdm
 from typing import Union
 from PIL import Image
@@ -57,4 +57,5 @@ class InternVL2ImageDefense(Infer):
             ]
             preds = self.infer(prompts, **kwargs)
             preds_all.extend([0 if pred.text.strip() == '0' else 1 for pred in preds])
+            torch.cuda.empty_cache()
         return dataset.add_column("image_rejection", preds_all)
