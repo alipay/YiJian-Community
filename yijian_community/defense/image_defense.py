@@ -41,7 +41,7 @@ class InternVL2ImageDefense(Infer):
             raise TypeError(
                 f"Unsupported data type, should be str or Image, but {type(data)} found!"
             )
-        pred = self.infer((self.defense_prompt, img), **kwargs)
+        pred = self.infer((self.defense_prompt, img), **kwargs).text
         if pred.strip() == '0':
             return 0
         else:
@@ -56,5 +56,5 @@ class InternVL2ImageDefense(Infer):
                 (self.defense_prompt, Image.open(img_path)) for img_path in data[target_column]
             ]
             preds = self.infer(prompts, **kwargs)
-            preds_all.extend([0 if pred.strip() == '0' else 1 for pred in preds])
+            preds_all.extend([0 if pred.text.strip() == '0' else 1 for pred in preds])
         return dataset.add_column("image_rejection", preds_all)
