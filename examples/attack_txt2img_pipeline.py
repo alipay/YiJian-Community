@@ -21,7 +21,7 @@ import pandas as pd
 from diffusers import KolorsPipeline, FluxPipeline
 from typing import Tuple
 from datasets import Dataset
-
+from PIL import Image
 from yijian_community.data import load_data, save_data
 from yijian_community.model import HFTxt2ImgInfer
 from yijian_community.defense import ThuCoaiShieldLM, InternVL2ImageDefense
@@ -41,8 +41,12 @@ class Txt2ImgAttackPipeline:
         self.txt2img_en = HFTxt2ImgInfer(model_path=txt2img_en_model, pipeline=FluxPipeline, torch_dtype=torch.bfloat16)
         self.image_defense = InternVL2ImageDefense(model_path=image_defense_model)
 
-    def attack_data(self, data: str) -> Tuple[int, str, int]:
-        text_defense_res = None
+    def attack_data(self, data: str, lang: str = "zh") -> Tuple[int, Image.Image, int]:
+        text_defense_res = self.text_defense.infer_data(data, lang=lang)
 
-    def attack_dataset(self, dataset: Dataset) -> Dataset:
-        pass
+    def attack_dataset(
+        self, dataset: Dataset, target_column: str = "prompt_zh", lang: str = "zh", batch_size: int = 100
+    ) -> Dataset:
+        text_defense_res_dataset = self.text_defense.infer_dataset(
+            dataset, target_column=target_column, lang=lang, batch_size=batch_size
+        )
