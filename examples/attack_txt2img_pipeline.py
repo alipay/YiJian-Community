@@ -16,12 +16,9 @@
 # This is specially provided for Global AI Offensive and Defensive Challenge Track 1：Vaccination for Text-to-Image Generative Models (https://tianchi.aliyun.com/competition/entrance/532268/information?lang=en-us)
 
 import torch
-import numpy as np
-import pandas as pd
 from diffusers import KolorsPipeline, FluxPipeline
-from typing import Tuple
 from datasets import Dataset
-from PIL import Image
+from lmdeploy.vl import load_image
 from yijian_community.data import load_data, save_data
 from yijian_community.model import HFTxt2ImgInfer
 from yijian_community.defense import ThuCoaiShieldLM, InternVL2ImageDefense
