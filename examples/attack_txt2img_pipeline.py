@@ -15,11 +15,31 @@
 
 # This is specially provided for Global AI Offensive and Defensive Challenge Track 1：Vaccination for Text-to-Image Generative Models (https://tianchi.aliyun.com/competition/entrance/532268/information?lang=en-us)
 
+from h11 import Data
 import torch
 import numpy as np
 import pandas as pd
 from diffusers import KolorsPipeline, FluxPipeline
+from datasets import Dataset
 
 from yijian_community.data import load_data, save_data
 from yijian_community.model import HFTxt2ImgInfer
 from yijian_community.defense import ThuCoaiShieldLM, InternVL2ImageDefense
+
+
+class Txt2ImgAttackPipeline:
+
+    def __init__(
+        self,
+        text_defense_model: str = "thu-coai/ShieldLM-7B-internlm2",
+        txt2img_zh_model: str = "Kwai-Kolors/Kolors-diffusers",
+        txt2img_en_model: str = "black-forest-labs/FLUX.1-schnell",
+        image_defense_model: str = "OpenGVLab/InternVL2-2B",
+    ) -> None:
+        self.text_defense = ThuCoaiShieldLM(model_path=text_defense_model)
+
+    def attack_data(self, data: str):
+        pass
+
+    def attack_dataset(self, dataset: Dataset) -> Dataset:
+        pass
