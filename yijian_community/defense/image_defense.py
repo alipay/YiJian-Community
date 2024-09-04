@@ -38,9 +38,7 @@ class InternVL2ImageDefense(Infer):
         elif isinstance(data, Image.Image):
             img = data
         else:
-            raise TypeError(
-                f"Unsupported data type, should be str or Image, but {type(data)} found!"
-            )
+            raise TypeError(f"Unsupported data type, should be str or Image, but {type(data)} found!")
         pred = self.infer((self.defense_prompt, img), **kwargs).text
         if pred.strip() == '0':
             return 0
@@ -52,9 +50,7 @@ class InternVL2ImageDefense(Infer):
     ) -> Dataset:
         preds_all = []
         for data in tqdm(dataset.iter(batch_size=batch_size)):
-            prompts = [
-                (self.defense_prompt, Image.open(img_path)) for img_path in data[target_column]
-            ]
+            prompts = [(self.defense_prompt, Image.open(img_path)) for img_path in data[target_column]]
             preds = self.infer(prompts, **kwargs)
             preds_all.extend([0 if pred.text.strip() == '0' else 1 for pred in preds])
             torch.cuda.empty_cache()

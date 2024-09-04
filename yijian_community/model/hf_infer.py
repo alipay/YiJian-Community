@@ -195,7 +195,7 @@ class HFTxt2ImgInfer(Infer):
         pipeline: DiffusionPipeline = DiffusionPipeline,
         torch_dtype: dtype = TORCH_DTYPE,
         seed: int = SEED,
-        cuda_device="cuda:0",
+        memory_reduced: bool = True,
         **kwargs,
     ):
         """initialization for model inference with diffusers.
@@ -205,28 +205,22 @@ class HFTxt2ImgInfer(Infer):
             torch_dtype (dtype, optional): model's dtype. Defaults to TORCH_DTYPE.
         """
         super().__init__(model_path)
-        try:
-            self.infer = pipeline.from_pretrained(
-                model_path,
-                device_map=DEVICE_MAP,
-                torch_dtype=torch_dtype,
-                **kwargs,
-            )
-        except Exception as e:
-            console.log(e)
-            console.log("reloading model ...")
-            self.infer = pipeline.from_pretrained(
-                model_path,
-                torch_dtype=torch_dtype,
-                **kwargs,
-            )
-            if torch.cuda.is_available():
-                self.infer = self.infer.to(cuda_device)
 
-        if torch.cuda.is_available():
-            self.generator = torch.Generator(cuda_device).manual_seed(seed)
+        self.infer = pipeline.from_pretrained(
+            model_path,
+            torch_dtype=torch_dtype,
+            **kwargs,
+        )
+
+        if memory_reduced:
+            self.infer.enable_vae_slicing()
+            self.infer.enable_sequential_cpu_offload()
+            self.infer.enable_model_cpu_offload()
+            self.infer.enable_xformers_memory_efficient_attention()
         else:
-            self.generator = torch.Generator("cpu").manual_seed(seed)
+            self.infer = self.infer.to("cuda")
+
+        self.generator = torch.Generator(self.infer.device).manual_seed(seed)
 
     def infer_data(
         self,
