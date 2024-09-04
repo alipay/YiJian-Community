@@ -192,7 +192,7 @@ class HFTxt2ImgInfer(Infer):
     def __init__(
         self,
         model_path: str,
-        pipeline: DiffusionPipeline = DiffusionPipeline,
+        pipe: DiffusionPipeline = DiffusionPipeline,
         torch_dtype: dtype = TORCH_DTYPE,
         seed: int = SEED,
         memory_reduced: bool = True,
@@ -206,7 +206,7 @@ class HFTxt2ImgInfer(Infer):
         """
         super().__init__(model_path)
 
-        self.infer = pipeline.from_pretrained(
+        self.infer = pipe.from_pretrained(
             model_path,
             torch_dtype=torch_dtype,
             **kwargs,
