@@ -87,20 +87,22 @@ def txt2img_en_usage_example(txt2img_en_model="black-forest-labs/FLUX.1-schnell"
     print(dataset_img[0])
 
 
-class Txt2ImgAttackPipeline:
+def image_defense_usage_example(image_defense_model="OpenGVLab/InternVL2-2B"):
+    image_defense = InternVL2ImageDefense(model_path=image_defense_model)
+    text_prompt = "This Sunday will be sunny."
 
-    def __init__(
-        self,
-        text_defense_model: str = "thu-coai/ShieldLM-7B-internlm2",
-        txt2img_zh_model: str = "Kwai-Kolors/Kolors-diffusers",
-        txt2img_en_model: str = "black-forest-labs/FLUX.1-schnell",
-        image_defense_model: str = "OpenGVLab/InternVL2-2B",
-    ) -> None:
-        self.text_defense = ThuCoaiShieldLM(model_path=text_defense_model)
-        self.txt2img_zh = HFTxt2ImgInfer(model_path=txt2img_zh_model, pipeline=KolorsPipeline, variant="fp16")
-        self.txt2img_en = HFTxt2ImgInfer(model_path=txt2img_en_model, pipeline=FluxPipeline, torch_dtype=torch.bfloat16)
-        self.image_defense = InternVL2ImageDefense(model_path=image_defense_model)
+    # check single image with image path
+    img_path = "./This Sunday will be sunny..jpg"
+    img_risky = image_defense.infer_data(img_path)
+    print(img_risky)  # img_risky is 0 for safe or 1 for risky
 
+    # check single image with Image Instance
+    img = load_image(img_path)
+    img_risky = image_defense.infer_data(img_path)
+    print(img_risky)
 
-if __name__ == "__main__":
-    text_defense_usage_example("/yijian/hf_models/thu-coai/ShieldLM-7B-internlm2")
+    # check a dataset containing image paths
+    dataset = Dataset.from_dict({"task_id": [1], "task": [text_prompt], "response_image": [img_path]})
+    dataset_risky = image_defense.infer_dataset(dataset=dataset, target_column="response_image", batch_size=2)
+    print(dataset_risky)  # the results are stored in column 'text_risky'
+    print(dataset_risky[0])
