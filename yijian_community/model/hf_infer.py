@@ -16,7 +16,6 @@
 
 import os
 from datetime import datetime
-from operator import imod
 
 import torch
 from datasets import Dataset
@@ -213,7 +212,6 @@ class HFTxt2ImgInfer(Infer):
         )
 
         if memory_reduced:
-            self.infer.enable_sequential_cpu_offload()
             self.infer.enable_model_cpu_offload()
             self.infer.enable_xformers_memory_efficient_attention()
         else:
