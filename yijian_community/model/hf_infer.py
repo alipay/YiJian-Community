@@ -22,9 +22,9 @@ from datasets import Dataset
 from diffusers import DiffusionPipeline
 from numpy import dtype
 from PIL import Image
+from tqdm import tqdm
 from transformers import pipeline
 from vllm import LLM, SamplingParams
-from tqdm import tqdm
 
 from yijian_community.data import save_image
 from yijian_community.model.base_infer import Infer
@@ -52,7 +52,9 @@ class HFTxt2TxtInfer(Infer):
         """
         super().__init__(model_path)
         try:
-            self.infer = pipeline("text-generation", model=model_path, device_map=DEVICE_MAP, **kwargs)
+            self.infer = pipeline(
+                "text-generation", model=model_path, device_map=DEVICE_MAP, **kwargs
+            )
         except Exception as e:
             console.log(e)
             console.log("reloading model ...")
@@ -148,7 +150,9 @@ class VLLMTxt2TxtInfer(Infer):
             max_tokens (_type_, optional): maximum number of tokens to generate. Defaults to MAX_NEW_TOKENS.
         """
         super().__init__(model_path)
-        self.sampling_params = SamplingParams(temperature=temperature, top_p=top_p, max_tokens=max_tokens)
+        self.sampling_params = SamplingParams(
+            temperature=temperature, top_p=top_p, max_tokens=max_tokens
+        )
         self.infer = LLM(model=model_path, **kwargs)
 
     def infer_data(self, data: str) -> str:
@@ -253,13 +257,20 @@ class HFTxt2ImgInfer(Infer):
         """
         image_save_path = os.path.join(
             os.getcwd(),
-            "txt2img_" + self.model_path.split("/")[-1] + "_" + datetime.now().strftime("%Y%m%d_%H%M%S"),
+            "txt2img_"
+            + self.model_path.split("/")[-1]
+            + "_"
+            + datetime.now().strftime("%Y%m%d_%H%M%S"),
         )
         os.makedirs(image_save_path, exist_ok=True)
 
         response_images = []
         for data in tqdm(dataset.iter(batch_size=batch_size)):
-            images = self.infer(data[target_column], generator=self.generator, **kwargs).images
-            response_images.extend(save_image(image_save_path, data[target_column], images))
+            images = self.infer(
+                data[target_column], generator=self.generator, **kwargs
+            ).images
+            response_images.extend(
+                save_image(image_save_path, data[target_column], images)
+            )
             torch.cuda.empty_cache()
         return dataset.add_column("response_image", response_images)
