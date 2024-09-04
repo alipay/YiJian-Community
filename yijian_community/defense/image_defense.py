@@ -22,7 +22,7 @@ from datasets import Dataset
 from lmdeploy import pipeline, TurbomindEngineConfig
 from lmdeploy.vl import load_image
 from yijian_community.model.base_infer import Infer
-from yijian_community.utils.constants import DEVICE_MAP, BATCH_SIZE
+from yijian_community.utils.constants import BATCH_SIZE
 
 
 class InternVL2ImageDefense(Infer):
