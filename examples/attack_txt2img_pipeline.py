@@ -43,6 +43,12 @@ class Txt2ImgAttackPipeline:
 
     def attack_data(self, data: str, lang: str = "zh") -> Tuple[int, Image.Image, int]:
         text_defense_res = self.text_defense.infer_data(data, lang=lang)
+        if lang == "zh":
+            img = self.txt2img_zh.infer_data(data, guidance_scale=5.0, num_inference_steps=50)
+        elif lang == "en":
+            img = self.txt2img_en.infer_data(data, guidance_scale=0.0, num_inference_steps=5, max_sequence_length=256)
+        else:
+            raise ValueError(f"Unsupported lang! lang can be 'zh' or 'en', but {lang} found!")
 
     def attack_dataset(
         self, dataset: Dataset, target_column: str = "prompt_zh", lang: str = "zh", batch_size: int = 100

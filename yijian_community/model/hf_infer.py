@@ -53,9 +53,7 @@ class HFTxt2TxtInfer(Infer):
         """
         super().__init__(model_path)
         try:
-            self.infer = pipeline(
-                "text-generation", model=model_path, device_map=DEVICE_MAP, **kwargs
-            )
+            self.infer = pipeline("text-generation", model=model_path, device_map=DEVICE_MAP, **kwargs)
         except Exception as e:
             console.log(e)
             console.log("reloading model ...")
@@ -151,9 +149,7 @@ class VLLMTxt2TxtInfer(Infer):
             max_tokens (_type_, optional): maximum number of tokens to generate. Defaults to MAX_NEW_TOKENS.
         """
         super().__init__(model_path)
-        self.sampling_params = SamplingParams(
-            temperature=temperature, top_p=top_p, max_tokens=max_tokens
-        )
+        self.sampling_params = SamplingParams(temperature=temperature, top_p=top_p, max_tokens=max_tokens)
         self.infer = LLM(model=model_path, **kwargs)
 
     def infer_data(self, data: str) -> str:
@@ -199,6 +195,7 @@ class HFTxt2ImgInfer(Infer):
         pipeline: DiffusionPipeline = DiffusionPipeline,
         torch_dtype: dtype = TORCH_DTYPE,
         seed: int = SEED,
+        cuda_device="cuda:0",
         **kwargs,
     ):
         """initialization for model inference with diffusers.
@@ -218,16 +215,16 @@ class HFTxt2ImgInfer(Infer):
         except Exception as e:
             console.log(e)
             console.log("reloading model ...")
-            self.infer = DiffusionPipeline.from_pretrained(
+            self.infer = pipeline.from_pretrained(
                 model_path,
                 torch_dtype=torch_dtype,
                 **kwargs,
             )
             if torch.cuda.is_available():
-                self.infer = self.infer.to("cuda")
+                self.infer = self.infer.to(cuda_device)
 
         if torch.cuda.is_available():
-            self.generator = torch.Generator("cuda").manual_seed(seed)
+            self.generator = torch.Generator(cuda_device).manual_seed(seed)
         else:
             self.generator = torch.Generator().manual_seed(seed)
 
@@ -266,10 +263,7 @@ class HFTxt2ImgInfer(Infer):
         """
         image_save_path = os.path.join(
             os.getcwd(),
-            "txt2img_"
-            + self.model_path.split("/")[-1]
-            + "_"
-            + datetime.now().strftime("%Y%m%d_%H%M%S"),
+            "txt2img_" + self.model_path.split("/")[-1] + "_" + datetime.now().strftime("%Y%m%d_%H%M%S"),
         )
         os.makedirs(image_save_path, exist_ok=True)
 
