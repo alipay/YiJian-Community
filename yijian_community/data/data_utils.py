@@ -15,9 +15,9 @@
 
 
 import os
-import pandas as pd
 from typing import List
 
+import pandas as pd
 from datasets import Dataset, load_dataset
 from PIL import Image
 

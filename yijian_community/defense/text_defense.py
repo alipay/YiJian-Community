@@ -15,12 +15,13 @@
 
 
 from typing import List
-from datasets import Dataset
-import torch
-from yijian_community.model.base_infer import Infer
-from transformers import AutoTokenizer, AutoModelForCausalLM
 
-from yijian_community.utils.constants import DEVICE_MAP, BATCH_SIZE
+import torch
+from datasets import Dataset
+from transformers import AutoModelForCausalLM, AutoTokenizer
+
+from yijian_community.model.base_infer import Infer
+from yijian_community.utils.constants import BATCH_SIZE, DEVICE_MAP
 
 
 class ThuCoaiShieldLM(Infer):
@@ -28,7 +29,9 @@ class ThuCoaiShieldLM(Infer):
 
     def __init__(self, model_path: str, model_base: str = "internlm"):
         super().__init__(model_path)
-        self.tokenizer = AutoTokenizer.from_pretrained(model_path, padding_side="left", trust_remote_code=True)
+        self.tokenizer = AutoTokenizer.from_pretrained(
+            model_path, padding_side="left", trust_remote_code=True
+        )
         self.infer = AutoModelForCausalLM.from_pretrained(
             model_path,
             load_in_8bit=False,
@@ -74,7 +77,9 @@ class ThuCoaiShieldLM(Infer):
         datas = [{"query": "", "response": text} for text in dataset[target_column]]
         res = self._generate(datas, lang, batch_size=batch_size)
         torch.cuda.empty_cache()
-        return dataset.add_column("text_risky", [self._extract_label(r["output"], lang) for r in res])
+        return dataset.add_column(
+            "text_risky", [self._extract_label(r["output"], lang) for r in res]
+        )
 
     def _create_ipt(self, query, response, lang, rules=None):
         def add_model_prompt(ipt, model_base):
@@ -118,9 +123,12 @@ class ThuCoaiShieldLM(Infer):
             # result
             for i in range(0, len(datas), batch_size):
                 input_text = [
-                    self._create_ipt(data['query'], data['response'], lang, rules) for data in datas[i : i + batch_size]
+                    self._create_ipt(data['query'], data['response'], lang, rules)
+                    for data in datas[i : i + batch_size]
                 ]
-                inputs = self.tokenizer(input_text, return_tensors="pt", truncation=True, padding=True)
+                inputs = self.tokenizer(
+                    input_text, return_tensors="pt", truncation=True, padding=True
+                )
                 generation_output = self.infer.generate(
                     input_ids=inputs["input_ids"].to(self.device),
                     attention_mask=inputs['attention_mask'].to(self.device),
@@ -132,7 +140,9 @@ class ThuCoaiShieldLM(Infer):
                 )
                 generation_output = generation_output.sequences
                 generation_output = generation_output[:, inputs['input_ids'].size(1) :]
-                outputs = self.tokenizer.batch_decode(generation_output, skip_special_tokens=True)
+                outputs = self.tokenizer.batch_decode(
+                    generation_output, skip_special_tokens=True
+                )
 
                 for j, output in enumerate(outputs):
                     datas[i + j]['output'] = output

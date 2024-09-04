@@ -16,12 +16,13 @@
 # This is specially provided for Global AI Offensive and Defensive Challenge Track 1：Vaccination for Text-to-Image Generative Models (https://tianchi.aliyun.com/competition/entrance/532268/information?lang=en-us)
 
 import torch
-from diffusers import KolorsPipeline, FluxPipeline
 from datasets import Dataset
+from diffusers import FluxPipeline, KolorsPipeline
 from lmdeploy.vl import load_image
+
 from yijian_community.data import load_data, save_data
+from yijian_community.defense import InternVL2ImageDefense, ThuCoaiShieldLM
 from yijian_community.model import HFTxt2ImgInfer
-from yijian_community.defense import ThuCoaiShieldLM, InternVL2ImageDefense
 
 
 def text_defense_usage_example(text_defense_model="thu-coai/ShieldLM-7B-internlm2"):
@@ -36,24 +37,37 @@ def text_defense_usage_example(text_defense_model="thu-coai/ShieldLM-7B-internlm
 
     # check a dataset containing text prompts
     dataset = Dataset.from_dict({"task_id": [1], "task": [text_prompt]})
-    dataset_risky = text_defense.infer_dataset(dataset=dataset, target_column="task", batch_size=2, lang="en")
+    dataset_risky = text_defense.infer_dataset(
+        dataset=dataset, target_column="task", batch_size=2, lang="en"
+    )
     print(dataset_risky)  # the results are stored in column 'text_risky'
     print(dataset_risky[0])
 
 
 def txt2img_zh_usage_example(txt2img_zh_model="Kwai-Kolors/Kolors-diffusers"):
     # if you don't have enough GPU power, set memory_reduced to True
-    txt2img_zh = HFTxt2ImgInfer(model_path=txt2img_zh_model, pipe=KolorsPipeline, memory_reduced=False, variant="fp16")
+    txt2img_zh = HFTxt2ImgInfer(
+        model_path=txt2img_zh_model,
+        pipe=KolorsPipeline,
+        memory_reduced=False,
+        variant="fp16",
+    )
 
     # generate one image
     text_prompt = "今天天气很好。"
-    img = txt2img_zh.infer_data(data=text_prompt, guidance_scale=5.0, num_inference_steps=50)
+    img = txt2img_zh.infer_data(
+        data=text_prompt, guidance_scale=5.0, num_inference_steps=50
+    )
     img.show()
 
     # generate multiple images and save them on the disk
     dataset = Dataset.from_dict({"task_id": [1], "task": [text_prompt]})
     dataset_img = txt2img_zh.infer_dataset(
-        dataset=dataset, target_column="task", batch_size=2, guidance_scale=5.0, num_inference_steps=50
+        dataset=dataset,
+        target_column="task",
+        batch_size=2,
+        guidance_scale=5.0,
+        num_inference_steps=50,
     )
     print(dataset_img)  # the path to saved images are stored in column 'response_image'
     print(dataset_img[0])
@@ -62,12 +76,20 @@ def txt2img_zh_usage_example(txt2img_zh_model="Kwai-Kolors/Kolors-diffusers"):
 def txt2img_en_usage_example(txt2img_en_model="black-forest-labs/FLUX.1-schnell"):
     # if you don't have enough GPU power, set memory_reduced to True
     txt2img_en = HFTxt2ImgInfer(
-        model_path=txt2img_en_model, pipe=FluxPipeline, memory_reduced=False, torch_dtype=torch.bfloat16
+        model_path=txt2img_en_model,
+        pipe=FluxPipeline,
+        memory_reduced=False,
+        torch_dtype=torch.bfloat16,
     )
 
     # generate one image
     text_prompt = "This Sunday will be sunny."
-    img = txt2img_en.infer_data(data=text_prompt, guidance_scale=0.0, num_inference_steps=5, max_sequence_length=256)
+    img = txt2img_en.infer_data(
+        data=text_prompt,
+        guidance_scale=0.0,
+        num_inference_steps=5,
+        max_sequence_length=256,
+    )
     img.show()
 
     # generate multiple images and save them on the disk
@@ -99,7 +121,11 @@ def image_defense_usage_example(image_defense_model="OpenGVLab/InternVL2-2B"):
     print(img_risky)
 
     # check a dataset containing image paths
-    dataset = Dataset.from_dict({"task_id": [1], "task": [text_prompt], "response_image": [img_path]})
-    dataset_risky = image_defense.infer_dataset(dataset=dataset, target_column="response_image", batch_size=2)
+    dataset = Dataset.from_dict(
+        {"task_id": [1], "task": [text_prompt], "response_image": [img_path]}
+    )
+    dataset_risky = image_defense.infer_dataset(
+        dataset=dataset, target_column="response_image", batch_size=2
+    )
     print(dataset_risky)  # the results are stored in column 'text_risky'
     print(dataset_risky[0])
