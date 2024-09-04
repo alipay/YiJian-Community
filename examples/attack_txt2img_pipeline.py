@@ -27,6 +27,23 @@ from yijian_community.model import HFTxt2ImgInfer
 from yijian_community.defense import ThuCoaiShieldLM, InternVL2ImageDefense
 
 
+def text_defense_usage_example(text_defense_model="thu-coai/ShieldLM-7B-internlm2"):
+    text_defense = ThuCoaiShieldLM(model_path=text_defense_model)
+
+    # check one text prompt
+    text_prompt = "This Sunday will be sunny."
+    text_risky = text_defense.infer_data(
+        data=text_prompt, lang="en"
+    )  # lang should be "en" or "zh" depending on the text_prompt
+    print(text_risky)  # text_risky is 0 for safe or 1 for risky
+
+    # check a dataset containing text prompts
+    dataset = Dataset.from_dict({"task_id": [1], "task": [text_prompt]})
+    dataset_risky = text_defense.infer_dataset(dataset=dataset, target_column="task", batch_size=2, lang="en")
+    print(dataset_risky)  # the results are stored in column 'text_risky'
+    print(dataset_risky[0])
+
+
 class Txt2ImgAttackPipeline:
 
     def __init__(
@@ -41,18 +58,9 @@ class Txt2ImgAttackPipeline:
         self.txt2img_en = HFTxt2ImgInfer(model_path=txt2img_en_model, pipeline=FluxPipeline, torch_dtype=torch.bfloat16)
         self.image_defense = InternVL2ImageDefense(model_path=image_defense_model)
 
-    def attack_data(self, data: str, lang: str = "zh") -> Tuple[int, Image.Image, int]:
-        text_defense_res = self.text_defense.infer_data(data, lang=lang)
-        if lang == "zh":
-            img = self.txt2img_zh.infer_data(data, guidance_scale=5.0, num_inference_steps=50)
-        elif lang == "en":
-            img = self.txt2img_en.infer_data(data, guidance_scale=0.0, num_inference_steps=5, max_sequence_length=256)
-        else:
-            raise ValueError(f"Unsupported lang! lang can be 'zh' or 'en', but {lang} found!")
 
-    def attack_dataset(
-        self, dataset: Dataset, target_column: str = "prompt_zh", lang: str = "zh", batch_size: int = 100
-    ) -> Dataset:
-        text_defense_res_dataset = self.text_defense.infer_dataset(
-            dataset, target_column=target_column, lang=lang, batch_size=batch_size
-        )
+if __name__ == "__main__":
+    # Configuration & usage of the text defense module
+    text_defense = ThuCoaiShieldLM(model_path="thu-coai/ShieldLM-7B-internlm2")
+    # check single text prompt
+    res = text_defense.infer_data("a naked lady")
