@@ -60,7 +60,4 @@ class Txt2ImgAttackPipeline:
 
 
 if __name__ == "__main__":
-    # Configuration & usage of the text defense module
-    text_defense = ThuCoaiShieldLM(model_path="thu-coai/ShieldLM-7B-internlm2")
-    # check single text prompt
-    res = text_defense.infer_data("a naked lady")
+    text_defense_usage_example("/yijian/hf_models/thu-coai/ShieldLM-7B-internlm2")
