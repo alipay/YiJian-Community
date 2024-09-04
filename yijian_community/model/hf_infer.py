@@ -213,7 +213,6 @@ class HFTxt2ImgInfer(Infer):
 
         if memory_reduced:
             self.infer.enable_model_cpu_offload()
-            self.infer.enable_xformers_memory_efficient_attention()
         else:
             self.infer = self.infer.to("cuda")
 

@@ -62,6 +62,31 @@ def txt2img_zh_usage_example(txt2img_zh_model="Kwai-Kolors/Kolors-diffusers"):
     print(dataset_img[0])
 
 
+def txt2img_en_usage_example(txt2img_en_model="black-forest-labs/FLUX.1-schnell"):
+    # if you don't have enough GPU power, set memory_reduced to True
+    txt2img_en = HFTxt2ImgInfer(
+        model_path=txt2img_en_model, pipe=FluxPipeline, memory_reduced=False, torch_dtype=torch.bfloat16
+    )
+
+    # generate one image
+    text_prompt = "This Sunday will be sunny."
+    img = txt2img_en.infer_data(data=text_prompt, guidance_scale=0.0, num_inference_steps=5, max_sequence_length=256)
+    img.show()
+
+    # generate multiple images and save them on the disk
+    dataset = Dataset.from_dict({"task_id": [1], "task": [text_prompt]})
+    dataset_img = txt2img_en.infer_dataset(
+        dataset=dataset,
+        target_column="task",
+        batch_size=2,
+        guidance_scale=0.0,
+        num_inference_steps=5,
+        max_sequence_length=256,
+    )
+    print(dataset_img)  # the path to saved images are stored in column 'response_image'
+    print(dataset_img[0])
+
+
 class Txt2ImgAttackPipeline:
 
     def __init__(
