@@ -226,7 +226,7 @@ class HFTxt2ImgInfer(Infer):
         if torch.cuda.is_available():
             self.generator = torch.Generator(cuda_device).manual_seed(seed)
         else:
-            self.generator = torch.Generator().manual_seed(seed)
+            self.generator = torch.Generator("cpu").manual_seed(seed)
 
     def infer_data(
         self,
