@@ -28,9 +28,7 @@ class ThuCoaiShieldLM(Infer):
 
     def __init__(self, model_path: str, model_base: str = "internlm"):
         super().__init__(model_path)
-        self.tokenizer = AutoTokenizer.from_pretrained(
-            model_path, padding_side="left", trust_remote_code=True
-        )
+        self.tokenizer = AutoTokenizer.from_pretrained(model_path, padding_side="left", trust_remote_code=True)
         self.infer = AutoModelForCausalLM.from_pretrained(
             model_path,
             load_in_8bit=False,
@@ -63,6 +61,7 @@ class ThuCoaiShieldLM(Infer):
 
     def infer_data(self, data: str, lang: str = "zh"):
         res = self._generate([{"query": "", "response": data}], lang)
+        torch.cuda.empty_cache()
         return self._extract_label(res[0]["output"], lang=lang)
 
     def infer_dataset(
@@ -74,9 +73,8 @@ class ThuCoaiShieldLM(Infer):
     ) -> List:
         datas = [{"query": "", "response": text} for text in dataset[target_column]]
         res = self._generate(datas, lang, batch_size=batch_size)
-        return dataset.add_column(
-            "text_rejection", [self._extract_label(r["output"], lang) for r in res]
-        )
+        torch.cuda.empty_cache()
+        return dataset.add_column("text_rejection", [self._extract_label(r["output"], lang) for r in res])
 
     def _create_ipt(self, query, response, lang, rules=None):
         def add_model_prompt(ipt, model_base):
@@ -120,12 +118,9 @@ class ThuCoaiShieldLM(Infer):
             # result
             for i in range(0, len(datas), batch_size):
                 input_text = [
-                    self._create_ipt(data['query'], data['response'], lang, rules)
-                    for data in datas[i : i + batch_size]
+                    self._create_ipt(data['query'], data['response'], lang, rules) for data in datas[i : i + batch_size]
                 ]
-                inputs = self.tokenizer(
-                    input_text, return_tensors="pt", truncation=True, padding=True
-                )
+                inputs = self.tokenizer(input_text, return_tensors="pt", truncation=True, padding=True)
                 generation_output = self.infer.generate(
                     input_ids=inputs["input_ids"].to(self.device),
                     attention_mask=inputs['attention_mask'].to(self.device),

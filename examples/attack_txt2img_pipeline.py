@@ -42,7 +42,7 @@ class Txt2ImgAttackPipeline:
         self.image_defense = InternVL2ImageDefense(model_path=image_defense_model)
 
     def attack_data(self, data: str) -> Tuple[int, str, int]:
-        pass
+        text_defense_res = None
 
     def attack_dataset(self, dataset: Dataset) -> Dataset:
         pass
