@@ -71,18 +71,14 @@ class NaiveTextSimilarityTagger(Tagger):
                         risky_embeddings.append(item["embedding"])
                     else:
                         risky_embeddings.append(
-                            self.embedding_model.encode(
-                                item["text"], normalize_embeddings=True
-                            )
+                            self.embedding_model.encode(item["text"], normalize_embeddings=True)
                         )
                 else:
                     if preset_embeddings:
                         safe_embeddings.append(item["embedding"])
                     else:
                         safe_embeddings.append(
-                            self.embedding_model.encode(
-                                item["text"], normalize_embeddings=True
-                            )
+                            self.embedding_model.encode(item["text"], normalize_embeddings=True)
                         )
 
             if not risky_embeddings and not safe_embeddings:
