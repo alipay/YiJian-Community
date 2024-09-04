@@ -15,6 +15,7 @@
 
 
 import os
+import pandas as pd
 from typing import List
 
 from datasets import Dataset, load_dataset
@@ -38,7 +39,8 @@ def load_data(data_path: str) -> Dataset:
         return load_dataset(data_path)["train"]
     if os.path.isfile(data_path):
         if data_path.endswith("csv"):
-            return load_dataset("csv", data_files=data_path)["train"]
+            # load single csv file with load_dataset() is astonishingly slow
+            return Dataset.from_pandas(pd.read_csv(data_path))
         if data_path.endswith("json") or data_path.endswith("jsonl"):
             return load_dataset("json", data_files=data_path)["train"]
         if data_path.endswith("parquet"):
