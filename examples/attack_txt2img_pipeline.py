@@ -44,6 +44,24 @@ def text_defense_usage_example(text_defense_model="thu-coai/ShieldLM-7B-internlm
     print(dataset_risky[0])
 
 
+def txt2img_zh_usage_example(txt2img_zh_model="Kwai-Kolors/Kolors-diffusers"):
+    # if you don't have enough GPU power, set memory_reduced to True
+    txt2img_zh = HFTxt2ImgInfer(model_path=txt2img_zh_model, pipe=KolorsPipeline, memory_reduced=False, variant="fp16")
+
+    # generate one image
+    text_prompt = "今天天气很好。"
+    img = txt2img_zh.infer_data(data=text_prompt, guidance_scale=5.0, num_inference_steps=50)
+    img.show()
+
+    # generate multiple images and save them on the disk
+    dataset = Dataset.from_dict({"task_id": [1], "task": [text_prompt]})
+    dataset_img = txt2img_zh.infer_dataset(
+        dataset=dataset, target_column="task", batch_size=2, guidance_scale=5.0, num_inference_steps=50
+    )
+    print(dataset_img)  # the path to saved images are stored in column 'response_image'
+    print(dataset_img[0])
+
+
 class Txt2ImgAttackPipeline:
 
     def __init__(
