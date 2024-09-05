@@ -30,7 +30,7 @@ def long_description():
 
 setup(
     name="yijian-community",
-    version="0.1.0",
+    version="0.1.1",
     license="Apache 2.0",
     description="YiJian-Community",
     long_description=long_description(),
