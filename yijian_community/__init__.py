@@ -48,3 +48,6 @@ from yijian_community.model import (
     VLLMTxt2TxtInfer,
 )
 from yijian_community.technique import BasePromptAttack, TextPromptAttack
+
+
+__version__ = "0.1.1"
