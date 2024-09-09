@@ -49,7 +49,8 @@ from yijian_community.model import (
 )
 from yijian_community.technique import BasePromptAttack, TextPromptAttack
 
-# from yijian_community.defense import ThuCoaiShieldLM, InternVL2ImageDefense
-from .defense import ThuCoaiShieldLM, InternVL2ImageDefense
+from yijian_community.defense import ThuCoaiShieldLM, InternVL2ImageDefense
+
+# from .defense import ThuCoaiShieldLM, InternVL2ImageDefense
 
 __version__ = "0.1.1"
