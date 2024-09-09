@@ -132,8 +132,8 @@ pip install .
 
 ## 重要事项
 
-### 🗓 2024年7月
-- 蚁鉴社区版开源！
+- 2024年9月，支持[全球AI攻防挑战赛——赛道一：大模型生图安全疫苗注入](https://tianchi.aliyun.com/competition/entrance/532268)，详见[attack_txt2img_pipeline.py](./examples/attack_txt2img_pipeline.py)！
+- 2024年7月，蚁鉴社区版开源！
 
 ## 贡献
 大模型发展势不可挡，大模型安全必不可少，我们期待更多人一起加入，共建蚁鉴开源生态，为大模型和人工智能保驾护航。

@@ -129,8 +129,9 @@ For more examples, please refer to the **examples** folder.
 For more comprehensive and accurate or customized evaluations, please apply to use [YiJian-Professional](https://acta.alipay.com/detect/security).
 
 ## Important Notices
-### 🗓 July 2024
-- YiJian-Community is open-sourced!
+
+- September 2024, support for the [Global AI Offensive and Defensive Challenge — Track 1: Vaccination for Text-to-Image Generative Models](https://tianchi.aliyun.com/competition/entrance/532268?lang=en-us), see [attack_txt2img_pipeline.py](./examples/attack_txt2img_pipeline.py) for details!
+- July 2024, YiJian-Community is open-sourced!
 
 ## Contribution
 The development of large models is unstoppable, and ensuring their safety is essential. We look forward to more people joining us to build the YiJian open-source ecosystem together, ensuring the security and safety of large models and artificial intelligence.
