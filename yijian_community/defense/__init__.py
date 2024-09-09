@@ -13,5 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from yijian_community.defense.image_defense import InternVL2ImageDefense
-from yijian_community.defense.text_defense import ThuCoaiShieldLM
+# from yijian_community.defense.image_defense import InternVL2ImageDefense
+# from yijian_community.defense.text_defense import ThuCoaiShieldLM
+from .image_defense import InternVL2ImageDefense
+from .text_defense import ThuCoaiShieldLM
