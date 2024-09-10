@@ -15,7 +15,7 @@
 
 
 from .data import load_data, save_data
-from .defense import ThuCoaiShieldLM, InternVL2ImageDefense
+from .defense import ThuCoaiShieldLM, InternVL2ImageDefenseHF, InternVL2ImageDefenseLmdeploy
 from .evaluator import (
     Bert,
     Bleu,
