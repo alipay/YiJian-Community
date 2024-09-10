@@ -51,4 +51,4 @@ from .model import (
 from .technique import BasePromptAttack, TextPromptAttack
 
 
-__version__ = "0.1.1"
+__version__ = "0.1.2"
