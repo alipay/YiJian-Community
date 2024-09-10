@@ -14,8 +14,9 @@
 # limitations under the License.
 
 
-from yijian_community.data import load_data, save_data, save_image
-from yijian_community.evaluator import (
+from .data import load_data, save_data
+from .defense import ThuCoaiShieldLM, InternVL2ImageDefense
+from .evaluator import (
     Bert,
     Bleu,
     Chrf,
@@ -32,25 +33,22 @@ from yijian_community.evaluator import (
     recall,
     safety_score,
 )
-from yijian_community.model import (
+from .model import (
+    Infer,
+    HFTxt2TxtInfer,
+    HFTxt2ImgInfer,
+    VLLMTxt2TxtInfer,
     AnthropicTxt2TxtInfer,
     BaichuanTxt2TxtInfer,
     CohereTxt2TxtInfer,
-    HFTxt2ImgInfer,
-    HFTxt2TxtInfer,
-    Infer,
     MidJourneyTxt2ImgInfer,
     MoonshotTxt2TxtInfer,
     OpenAITxt2ImgInfer,
     OpenAITxt2TxtInfer,
     StabilityAITxt2ImgInfer,
     TongyiQwenTxt2TxtInfer,
-    VLLMTxt2TxtInfer,
 )
-from yijian_community.technique import BasePromptAttack, TextPromptAttack
+from .technique import BasePromptAttack, TextPromptAttack
 
-from yijian_community.defense import ThuCoaiShieldLM, InternVL2ImageDefense
-
-# from .defense import ThuCoaiShieldLM, InternVL2ImageDefense
 
 __version__ = "0.1.1"
