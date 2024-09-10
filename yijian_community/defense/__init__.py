@@ -15,4 +15,4 @@
 
 
 from .text_defense import ThuCoaiShieldLM
-from .image_defense import InternVL2ImageDefense
+from .image_defense import InternVL2ImageDefenseHF, InternVL2ImageDefenseLmdeploy

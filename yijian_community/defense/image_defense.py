@@ -28,6 +28,8 @@ from transformers import AutoModel, AutoTokenizer
 
 from yijian_community.model.base_infer import Infer
 from yijian_community.utils.constants import BATCH_SIZE, DEVICE_MAP
+from lmdeploy import pipeline, TurbomindEngineConfig
+from lmdeploy.vl import load_image
 
 
 image_defense_prompt = (
@@ -38,7 +40,7 @@ IMAGENET_MEAN = (0.485, 0.456, 0.406)
 IMAGENET_STD = (0.229, 0.224, 0.225)
 
 
-class InternVL2ImageDefense(Infer):
+class InternVL2ImageDefenseHF(Infer):
     # code adapted from https://huggingface.co/OpenGVLab/InternVL2-2B#inference-with-transformers
 
     def __init__(self, model_path: str, defense_prompt: str = image_defense_prompt, device_map: str = DEVICE_MAP):
@@ -183,38 +185,38 @@ class InternVL2ImageDefense(Infer):
         return pixel_values
 
 
-# class InternVL2ImageDefense(Infer):
+class InternVL2ImageDefenseLmdeploy(Infer):
 
-#     def __init__(self, model_path: str, defense_prompt=image_defense_prompt):
-#         super().__init__(model_path)
-#         self.infer = pipeline(model_path, backend_config=TurbomindEngineConfig(session_len=8192))
-#         self.defense_prompt = defense_prompt
+    def __init__(self, model_path: str, defense_prompt=image_defense_prompt):
+        super().__init__(model_path)
+        self.infer = pipeline(model_path, backend_config=TurbomindEngineConfig(session_len=8192))
+        self.defense_prompt = defense_prompt
 
-#     def infer_data(self, data: Union[str, Image.Image], **kwargs):
-#         if isinstance(data, str):
-#             img = load_image(data)
-#         elif isinstance(data, Image.Image):
-#             img = data
-#         else:
-#             raise TypeError(f"Unsupported data type, should be str or Image, but {type(data)} found!")
-#         pred = self.infer((self.defense_prompt, img), **kwargs).text
-#         if pred.strip() == '0':
-#             return 0
-#         else:
-#             return 1
+    def infer_data(self, data: Union[str, Image.Image], **kwargs):
+        if isinstance(data, str):
+            img = load_image(data)
+        elif isinstance(data, Image.Image):
+            img = data
+        else:
+            raise TypeError(f"Unsupported data type, should be str or Image, but {type(data)} found!")
+        pred = self.infer((self.defense_prompt, img), **kwargs).text
+        if pred.strip() == '0':
+            return 0
+        else:
+            return 1
 
-#     def infer_dataset(
-#         self,
-#         dataset: Dataset,
-#         image_column: str = "image_zh",
-#         response_column: str = "image_risk_zh",
-#         batch_size=BATCH_SIZE,
-#         **kwargs,
-#     ) -> Dataset:
-#         preds_all = []
-#         for data in tqdm(dataset.iter(batch_size=batch_size)):
-#             prompts = [(self.defense_prompt, Image.open(img_path)) for img_path in data[image_column]]
-#             preds = self.infer(prompts, **kwargs)
-#             preds_all.extend([0 if pred.text.strip() == '0' else 1 for pred in preds])
-#             torch.cuda.empty_cache()
-#         return dataset.add_column(response_column, preds_all)
+    def infer_dataset(
+        self,
+        dataset: Dataset,
+        image_column: str = "image_zh",
+        response_column: str = "image_risk_zh",
+        batch_size=BATCH_SIZE,
+        **kwargs,
+    ) -> Dataset:
+        preds_all = []
+        for data in tqdm(dataset.iter(batch_size=batch_size)):
+            prompts = [(self.defense_prompt, Image.open(img_path)) for img_path in data[image_column]]
+            preds = self.infer(prompts, **kwargs)
+            preds_all.extend([0 if pred.text.strip() == '0' else 1 for pred in preds])
+            torch.cuda.empty_cache()
+        return dataset.add_column(response_column, preds_all)
