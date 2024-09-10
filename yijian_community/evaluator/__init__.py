@@ -14,7 +14,7 @@
 # limitations under the License.
 
 
-from yijian_community.evaluator.metrics import (
+from .metrics import (
     Bert,
     Bleu,
     Chrf,
@@ -29,4 +29,4 @@ from yijian_community.evaluator.metrics import (
     recall,
     safety_score,
 )
-from yijian_community.evaluator.tagger import NaiveTextSimilarityTagger, Tagger
+from .tagger import Tagger, NaiveTextSimilarityTagger
