@@ -52,9 +52,7 @@ class HFTxt2TxtInfer(Infer):
         """
         super().__init__(model_path)
         try:
-            self.infer = pipeline(
-                "text-generation", model=model_path, device_map=DEVICE_MAP, **kwargs
-            )
+            self.infer = pipeline("text-generation", model=model_path, device_map=DEVICE_MAP, **kwargs)
         except Exception as e:
             console.log(e)
             console.log("reloading model ...")
@@ -150,9 +148,7 @@ class VLLMTxt2TxtInfer(Infer):
             max_tokens (_type_, optional): maximum number of tokens to generate. Defaults to MAX_NEW_TOKENS.
         """
         super().__init__(model_path)
-        self.sampling_params = SamplingParams(
-            temperature=temperature, top_p=top_p, max_tokens=max_tokens
-        )
+        self.sampling_params = SamplingParams(temperature=temperature, top_p=top_p, max_tokens=max_tokens)
         self.infer = LLM(model=model_path, **kwargs)
 
     def infer_data(self, data: str) -> str:
@@ -198,15 +194,10 @@ class HFTxt2ImgInfer(Infer):
         pipe: DiffusionPipeline = DiffusionPipeline,
         torch_dtype: dtype = TORCH_DTYPE,
         seed: int = SEED,
-        memory_reduced: bool = True,
+        cuda_device: str = "cuda:0",
         **kwargs,
     ):
-        """initialization for model inference with diffusers.
-
-        Args:
-            model_path (str): path to the target model.
-            torch_dtype (dtype, optional): model's dtype. Defaults to TORCH_DTYPE.
-        """
+        """initialization for model inference with diffusers."""
         super().__init__(model_path)
 
         self.infer = pipe.from_pretrained(
@@ -215,10 +206,8 @@ class HFTxt2ImgInfer(Infer):
             **kwargs,
         )
 
-        if memory_reduced:
-            self.infer.enable_model_cpu_offload()
-        else:
-            self.infer = self.infer.to("cuda")
+        if cuda_device:
+            self.infer = self.infer.to(cuda_device)
 
         self.generator = torch.Generator(self.infer.device).manual_seed(seed)
 
@@ -242,7 +231,8 @@ class HFTxt2ImgInfer(Infer):
     def infer_dataset(
         self,
         dataset: Dataset,
-        target_column: str = "prompt_text",
+        prompt_column: str = "prompt_zh",
+        image_column: str = "image_zh",
         batch_size: int = BATCH_SIZE,
         **kwargs,
     ) -> Dataset:
@@ -257,20 +247,13 @@ class HFTxt2ImgInfer(Infer):
         """
         image_save_path = os.path.join(
             os.getcwd(),
-            "txt2img_"
-            + self.model_path.split("/")[-1]
-            + "_"
-            + datetime.now().strftime("%Y%m%d_%H%M%S"),
+            "txt2img_" + self.model_path.split("/")[-1] + "_" + datetime.now().strftime("%Y%m%d_%H%M%S"),
         )
         os.makedirs(image_save_path, exist_ok=True)
 
         response_images = []
         for data in tqdm(dataset.iter(batch_size=batch_size)):
-            images = self.infer(
-                data[target_column], generator=self.generator, **kwargs
-            ).images
-            response_images.extend(
-                save_image(image_save_path, data[target_column], images)
-            )
+            images = self.infer(data[prompt_column], generator=self.generator, **kwargs).images
+            response_images.extend(save_image(image_save_path, data[prompt_column], images))
             torch.cuda.empty_cache()
-        return dataset.add_column("response_image", response_images)
+        return dataset.add_column(image_column, response_images)

@@ -55,7 +55,7 @@ class InternVL2ImageDefense(Infer):
         self,
         dataset: Dataset,
         image_column: str = "image_zh",
-        response_column: str = "image_risky_zh",
+        response_column: str = "image_risk_zh",
         batch_size=BATCH_SIZE,
         **kwargs,
     ) -> Dataset:
