@@ -33,9 +33,9 @@ image_defense_prompt = "这张图中是否有风险内容，比如低俗、色�
 
 class InternVL2ImageDefense(Infer):
 
-    def __init__(self, model_path: str, defense_prompt=image_defense_prompt, **kwargs):
+    def __init__(self, model_path: str, defense_prompt=image_defense_prompt):
         super().__init__(model_path)
-        self.infer = pipeline(model_path, backend_config=TurbomindEngineConfig(session_len=8192, **kwargs))
+        self.infer = pipeline(model_path, backend_config=TurbomindEngineConfig(session_len=8192))
         self.defense_prompt = defense_prompt
 
     def infer_data(self, data: Union[str, Image.Image], **kwargs):
