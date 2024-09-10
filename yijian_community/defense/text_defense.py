@@ -27,16 +27,14 @@ from yijian_community.utils.constants import BATCH_SIZE, DEVICE_MAP
 class ThuCoaiShieldLM(Infer):
     # code adapted from [thu-coai/ShieldLM](https://github.com/thu-coai/ShieldLM)
 
-    def __init__(self, model_path: str, model_base: str = "internlm"):
+    def __init__(self, model_path: str, model_base: str = "internlm", device_map: str = DEVICE_MAP):
         super().__init__(model_path)
-        self.tokenizer = AutoTokenizer.from_pretrained(
-            model_path, padding_side="left", trust_remote_code=True
-        )
+        self.tokenizer = AutoTokenizer.from_pretrained(model_path, padding_side="left", trust_remote_code=True)
         self.infer = AutoModelForCausalLM.from_pretrained(
             model_path,
             load_in_8bit=False,
             torch_dtype=torch.float16,
-            device_map=DEVICE_MAP,
+            device_map=device_map,
             trust_remote_code=True,
         )
         self.infer.eval()
@@ -47,7 +45,10 @@ class ThuCoaiShieldLM(Infer):
         if not self.tokenizer.pad_token:
             self.tokenizer.pad_token = self.tokenizer.eos_token
         if torch.cuda.is_available():
-            self.device = torch.device(0)
+            if "cuda" in device_map:
+                self.device = torch.device(device_map)
+            else:
+                self.device = torch.device(0)
         else:
             self.device = torch.device('cpu')
 
@@ -70,16 +71,15 @@ class ThuCoaiShieldLM(Infer):
     def infer_dataset(
         self,
         dataset: Dataset,
-        target_column: str = "prompt_text",
+        prompt_column: str = "prompt_zh",
+        response_column: str = "prompt_risk_zh",
         lang: str = "zh",
         batch_size: int = BATCH_SIZE,
     ) -> List:
-        datas = [{"query": "", "response": text} for text in dataset[target_column]]
+        datas = [{"query": "", "response": text} for text in dataset[prompt_column]]
         res = self._generate(datas, lang, batch_size=batch_size)
         torch.cuda.empty_cache()
-        return dataset.add_column(
-            "text_risky", [self._extract_label(r["output"], lang) for r in res]
-        )
+        return dataset.add_column(response_column, [self._extract_label(r["output"], lang) for r in res])
 
     def _create_ipt(self, query, response, lang, rules=None):
         def add_model_prompt(ipt, model_base):
@@ -123,12 +123,9 @@ class ThuCoaiShieldLM(Infer):
             # result
             for i in range(0, len(datas), batch_size):
                 input_text = [
-                    self._create_ipt(data['query'], data['response'], lang, rules)
-                    for data in datas[i : i + batch_size]
+                    self._create_ipt(data['query'], data['response'], lang, rules) for data in datas[i : i + batch_size]
                 ]
-                inputs = self.tokenizer(
-                    input_text, return_tensors="pt", truncation=True, padding=True
-                )
+                inputs = self.tokenizer(input_text, return_tensors="pt", truncation=True, padding=True)
                 generation_output = self.infer.generate(
                     input_ids=inputs["input_ids"].to(self.device),
                     attention_mask=inputs['attention_mask'].to(self.device),
@@ -140,9 +137,7 @@ class ThuCoaiShieldLM(Infer):
                 )
                 generation_output = generation_output.sequences
                 generation_output = generation_output[:, inputs['input_ids'].size(1) :]
-                outputs = self.tokenizer.batch_decode(
-                    generation_output, skip_special_tokens=True
-                )
+                outputs = self.tokenizer.batch_decode(generation_output, skip_special_tokens=True)
 
                 for j, output in enumerate(outputs):
                     datas[i + j]['output'] = output
