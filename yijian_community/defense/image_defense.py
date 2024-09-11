@@ -63,7 +63,7 @@ class InternVL2ImageDefenseHF(Infer):
             self.device = torch.device('cpu')
 
         if self.device:
-            self.infer.to(self.device)
+            self.model.to(self.device)
 
     def infer_data(self, data: Union[str, Image.Image], **kwargs):
         pixel_values = self._load_image(data).to(torch.bfloat16).to(self.device)
