@@ -43,27 +43,29 @@ IMAGENET_STD = (0.229, 0.224, 0.225)
 class InternVL2ImageDefenseHF(Infer):
     # code adapted from https://huggingface.co/OpenGVLab/InternVL2-2B#inference-with-transformers
 
-    def __init__(self, model_path: str, defense_prompt: str = image_defense_prompt, cuda_device: str = None):
+    def __init__(self, model_path: str, defense_prompt: str = image_defense_prompt, cuda_device: str = ""):
         self.defense_prompt = defense_prompt
         self.tokenizer = AutoTokenizer.from_pretrained(model_path, trust_remote_code=True, use_fast=False)
+
+        device_map = DEVICE_MAP if not cuda_device else cuda_device
+
         self.model = AutoModel.from_pretrained(
             model_path,
             torch_dtype=torch.bfloat16,
             low_cpu_mem_usage=True,
             trust_remote_code=True,
-            device_map=DEVICE_MAP,
+            device_map=device_map,
         )
         self.model.eval()
 
         self.device = None
         if torch.cuda.is_available():
             if cuda_device:
-                self.device = torch.device(int(cuda_device[-1]))
+                self.device = torch.device(int(cuda_device.split(":")[-1].strip()))
+            else:
+                self.device = torch.device(0)
         else:
             self.device = torch.device('cpu')
-
-        if self.device:
-            self.model.to(self.device)
 
     def infer_data(self, data: Union[str, Image.Image], **kwargs):
         pixel_values = self._load_image(data).to(torch.bfloat16).to(self.device)

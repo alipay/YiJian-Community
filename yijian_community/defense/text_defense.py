@@ -27,7 +27,7 @@ from yijian_community.utils.constants import BATCH_SIZE, DEVICE_MAP
 class ThuCoaiShieldLM(Infer):
     # code adapted from [thu-coai/ShieldLM](https://github.com/thu-coai/ShieldLM)
 
-    def __init__(self, model_path: str, model_base: str = "internlm", cuda_device: str = None):
+    def __init__(self, model_path: str, model_base: str = "internlm", cuda_device: str = ""):
         super().__init__(model_path)
         self.tokenizer = AutoTokenizer.from_pretrained(model_path, padding_side="left", trust_remote_code=True)
 
