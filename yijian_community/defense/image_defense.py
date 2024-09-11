@@ -58,7 +58,7 @@ class InternVL2ImageDefenseHF(Infer):
         self.device = None
         if torch.cuda.is_available():
             if cuda_device:
-                self.device = torch.device(cuda_device)
+                self.device = torch.device(int(cuda_device[-1]))
         else:
             self.device = torch.device('cpu')
 

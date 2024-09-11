@@ -30,14 +30,14 @@ class ThuCoaiShieldLM(Infer):
     def __init__(self, model_path: str, model_base: str = "internlm", cuda_device: str = None):
         super().__init__(model_path)
         self.tokenizer = AutoTokenizer.from_pretrained(model_path, padding_side="left", trust_remote_code=True)
-        self.infer = AutoModelForCausalLM.from_pretrained(
+        self.model = AutoModelForCausalLM.from_pretrained(
             model_path,
             load_in_8bit=False,
             torch_dtype=torch.float16,
             device_map=DEVICE_MAP,
             trust_remote_code=True,
         )
-        self.infer.eval()
+        self.model.eval()
         self.model_base = model_base
 
         if not self.tokenizer.eos_token:
@@ -48,12 +48,12 @@ class ThuCoaiShieldLM(Infer):
         self.device = None
         if torch.cuda.is_available():
             if cuda_device:
-                self.device = torch.device(cuda_device)
+                self.device = torch.device(int(cuda_device[-1]))
         else:
             self.device = torch.device('cpu')
 
         if self.device:
-            self.infer.to(self.device)
+            self.model.to(self.device)
 
         self.generation_config = dict(
             temperature=1.0,
@@ -129,7 +129,7 @@ class ThuCoaiShieldLM(Infer):
                     self._create_ipt(data['query'], data['response'], lang, rules) for data in datas[i : i + batch_size]
                 ]
                 inputs = self.tokenizer(input_text, return_tensors="pt", truncation=True, padding=True)
-                generation_output = self.infer.generate(
+                generation_output = self.model.generate(
                     input_ids=inputs["input_ids"].to(self.device),
                     attention_mask=inputs['attention_mask'].to(self.device),
                     eos_token_id=self.tokenizer.eos_token_id,
