@@ -37,7 +37,6 @@ class ThuCoaiShieldLM(Infer):
             device_map=DEVICE_MAP,
             trust_remote_code=True,
         )
-        self.model.eval()
         self.model_base = model_base
 
         if not self.tokenizer.eos_token:
@@ -54,6 +53,8 @@ class ThuCoaiShieldLM(Infer):
 
         if self.device:
             self.model.to(self.device)
+
+        self.model.eval()
 
         self.generation_config = dict(
             temperature=1.0,
