@@ -34,7 +34,7 @@ class ThuCoaiShieldLM(Infer):
             model_path,
             load_in_8bit=False,
             torch_dtype=torch.float16,
-            device_map="minimal",
+            device_map="cuda:1",
             trust_remote_code=True,
         )
         self.model_base = model_base
