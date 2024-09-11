@@ -45,7 +45,7 @@ class ThuCoaiShieldLM(Infer):
         if not self.tokenizer.pad_token:
             self.tokenizer.pad_token = self.tokenizer.eos_token
 
-        self.device == None
+        self.device = None
         if torch.cuda.is_available():
             if not cuda_device:
                 self.device = torch.device(cuda_device)
