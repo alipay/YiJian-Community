@@ -27,14 +27,17 @@ from yijian_community.utils.constants import BATCH_SIZE, DEVICE_MAP
 class ThuCoaiShieldLM(Infer):
     # code adapted from [thu-coai/ShieldLM](https://github.com/thu-coai/ShieldLM)
 
-    def __init__(self, model_path: str, model_base: str = "internlm"):
+    def __init__(self, model_path: str, model_base: str = "internlm", cuda_device: str = None):
         super().__init__(model_path)
         self.tokenizer = AutoTokenizer.from_pretrained(model_path, padding_side="left", trust_remote_code=True)
+
+        device_map = DEVICE_MAP if not cuda_device else cuda_device
+
         self.model = AutoModelForCausalLM.from_pretrained(
             model_path,
             load_in_8bit=False,
             torch_dtype=torch.float16,
-            device_map="cuda:1",
+            device_map=device_map,
             trust_remote_code=True,
         )
         self.model_base = model_base
@@ -46,7 +49,10 @@ class ThuCoaiShieldLM(Infer):
             self.tokenizer.pad_token = self.tokenizer.eos_token
 
         if torch.cuda.is_available():
-            self.device = torch.device(0)
+            if cuda_device:
+                self.device = torch.device(int(cuda_device.split(":")[-1].strip()))
+            else:
+                self.device = torch.device(0)
         else:
             self.device = torch.device('cpu')
 
