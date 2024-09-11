@@ -27,14 +27,14 @@ from yijian_community.utils.constants import BATCH_SIZE, DEVICE_MAP
 class ThuCoaiShieldLM(Infer):
     # code adapted from [thu-coai/ShieldLM](https://github.com/thu-coai/ShieldLM)
 
-    def __init__(self, model_path: str, model_base: str = "internlm", device_map: str = DEVICE_MAP):
+    def __init__(self, model_path: str, model_base: str = "internlm", cuda_device: str = None):
         super().__init__(model_path)
         self.tokenizer = AutoTokenizer.from_pretrained(model_path, padding_side="left", trust_remote_code=True)
         self.infer = AutoModelForCausalLM.from_pretrained(
             model_path,
             load_in_8bit=False,
             torch_dtype=torch.float16,
-            device_map=device_map,
+            device_map=DEVICE_MAP,
             trust_remote_code=True,
         )
         self.infer.eval()
@@ -44,13 +44,16 @@ class ThuCoaiShieldLM(Infer):
             self.tokenizer.eos_token = '<|endoftext|>'
         if not self.tokenizer.pad_token:
             self.tokenizer.pad_token = self.tokenizer.eos_token
+
+        self.device == None
         if torch.cuda.is_available():
-            if "cuda" in device_map:
-                self.device = torch.device(device_map)
-            else:
-                self.device = torch.device(0)
+            if not cuda_device:
+                self.device = torch.device(cuda_device)
         else:
             self.device = torch.device('cpu')
+
+        if self.device:
+            self.infer.to(self.device)
 
         self.generation_config = dict(
             temperature=1.0,
