@@ -98,7 +98,7 @@ class InternVL2ImageDefenseHF(Infer):
                 generation_config=generation_config,
             )
 
-            preds_all.extend([0 if pred.text.strip() == '0' else 1 for pred in preds])
+            preds_all.extend([0 if pred.strip() == '0' else 1 for pred in preds])
             torch.cuda.empty_cache()
         return dataset.add_column(response_column, preds_all)
 
