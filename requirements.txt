@@ -3,7 +3,7 @@ datasets==2.18.0
 diffusers==0.27.2
 jieba==0.42.1
 lmdeploy==0.5.3
-numpy==2.1.1
+numpy==1.26.4
 pandas==2.2.2
 Pillow==10.4.0
 pytest==8.1.1
@@ -13,7 +13,7 @@ sacrebleu==2.4.2
 scikit_learn==1.5.1
 sentence_transformers==3.0.1
 setuptools==68.2.2
-torch==2.3.1
+torch==2.3.0
 tqdm==4.66.2
 transformers==4.41.2
 vllm==0.5.0.post1
