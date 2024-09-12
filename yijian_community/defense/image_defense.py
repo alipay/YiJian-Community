@@ -58,17 +58,8 @@ class InternVL2ImageDefense(Infer):
         )
         self.model.eval()
 
-        self.device = None
-        if torch.cuda.is_available():
-            if cuda_device:
-                self.device = torch.device(int(cuda_device.split(":")[-1].strip()))
-            else:
-                self.device = torch.device(0)
-        else:
-            self.device = torch.device('cpu')
-
     def infer_data(self, data: Union[str, Image.Image], **kwargs):
-        pixel_values = self._load_image(data).to(torch.bfloat16).to(self.device)
+        pixel_values = self._load_image(data).to(torch.bfloat16).to(self.model.device)
         generation_config = dict(max_new_tokens=128, do_sample=True)
         pred = self.model.chat(self.tokenizer, pixel_values, self.defense_prompt, generation_config)
         torch.cuda.empty_cache()
@@ -89,7 +80,7 @@ class InternVL2ImageDefense(Infer):
         preds_all = []
         for data in tqdm(dataset.iter(batch_size=batch_size)):
             pixel_values = [
-                self._load_image(img_path).to(torch.bfloat16).to(self.device) for img_path in data[image_column]
+                self._load_image(img_path).to(torch.bfloat16).to(self.model.device) for img_path in data[image_column]
             ]
             num_patches_list = [pixel_value.size(0) for pixel_value in pixel_values]
             batch_pixel_values = torch.cat(pixel_values, dim=0)
