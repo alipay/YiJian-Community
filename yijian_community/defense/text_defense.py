@@ -30,7 +30,7 @@ class ThuCoaiShieldLM(Infer):
     def __init__(self, model_path: str, model_base: str = "internlm", cuda_device: str = ""):
         super().__init__(model_path)
         self.tokenizer = AutoTokenizer.from_pretrained(
-            model_path, max_length=1024, padding_side="left", trust_remote_code=True
+            model_path, padding_side="left", trust_remote_code=True, truncation=True, max_length=1024
         )
 
         device_map = DEVICE_MAP if not cuda_device else cuda_device
