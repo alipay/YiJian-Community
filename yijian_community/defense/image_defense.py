@@ -87,7 +87,7 @@ class InternVL2ImageDefense(Infer):
             questions = [self.defense_prompt] * len(num_patches_list)
             preds = self.model.batch_chat(
                 self.tokenizer,
-                batch_pixel_values,
+                batch_pixel_values.to(self.model.device),
                 num_patches_list=num_patches_list,
                 questions=questions,
                 generation_config=generation_config,
