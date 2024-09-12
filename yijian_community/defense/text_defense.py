@@ -48,14 +48,6 @@ class ThuCoaiShieldLM(Infer):
         if not self.tokenizer.pad_token:
             self.tokenizer.pad_token = self.tokenizer.eos_token
 
-        if torch.cuda.is_available():
-            if cuda_device:
-                self.device = torch.device(int(cuda_device.split(":")[-1].strip()))
-            else:
-                self.device = torch.device(0)
-        else:
-            self.device = torch.device('cpu')
-
         self.generation_config = dict(
             temperature=1.0,
             top_k=0,
@@ -131,8 +123,8 @@ class ThuCoaiShieldLM(Infer):
                 ]
                 inputs = self.tokenizer(input_text, return_tensors="pt", truncation=True, padding=True)
                 generation_output = self.model.generate(
-                    input_ids=inputs["input_ids"].to(self.device),
-                    attention_mask=inputs['attention_mask'].to(self.device),
+                    input_ids=inputs["input_ids"].to(self.model.device),
+                    attention_mask=inputs['attention_mask'].to(self.model.device),
                     eos_token_id=self.tokenizer.eos_token_id,
                     pad_token_id=self.tokenizer.pad_token_id,
                     return_dict_in_generate=True,
