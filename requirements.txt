@@ -1,6 +1,6 @@
 bert_score==0.3.13
 datasets==2.18.0
-diffusers==0.27.2
+git+https://github.com/huggingface/diffusers.git
 jieba==0.42.1
 lmdeploy==0.5.3
 numpy==1.26.4

@@ -20,6 +20,7 @@ from setuptools import find_packages, setup
 def read_requirements():
     with open("./requirements.txt") as file:
         requirements = file.read().splitlines()
+        requirements = [r for r in requirements if not "+" in r]
     return requirements
 
 
