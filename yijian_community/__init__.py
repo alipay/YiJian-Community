@@ -15,7 +15,7 @@
 
 
 from .data import load_data, save_data
-from .defense import ThuCoaiShieldLM, InternVL2ImageDefense
+from .defense import InternVL2ImageDefense, ThuCoaiShieldLM
 from .evaluator import (
     Bert,
     Bleu,
@@ -34,21 +34,20 @@ from .evaluator import (
     safety_score,
 )
 from .model import (
-    Infer,
-    HFTxt2TxtInfer,
-    HFTxt2ImgInfer,
-    VLLMTxt2TxtInfer,
     AnthropicTxt2TxtInfer,
     BaichuanTxt2TxtInfer,
     CohereTxt2TxtInfer,
+    HFTxt2ImgInfer,
+    HFTxt2TxtInfer,
+    Infer,
     MidJourneyTxt2ImgInfer,
     MoonshotTxt2TxtInfer,
     OpenAITxt2ImgInfer,
     OpenAITxt2TxtInfer,
     StabilityAITxt2ImgInfer,
     TongyiQwenTxt2TxtInfer,
+    VLLMTxt2TxtInfer,
 )
 from .technique import BasePromptAttack, TextPromptAttack
-
 
 __version__ = "0.1.2"

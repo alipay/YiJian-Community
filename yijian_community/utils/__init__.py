@@ -14,7 +14,6 @@
 # limitations under the License.
 
 
-from .util_func import console
 from .constants import (
     BATCH_SIZE,
     DEVICE_MAP,
@@ -27,3 +26,4 @@ from .constants import (
     TOP_P,
     TORCH_DTYPE,
 )
+from .util_func import console
