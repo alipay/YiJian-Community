@@ -29,9 +29,7 @@ class ThuCoaiShieldLM(Infer):
 
     def __init__(self, model_path: str, model_base: str = "internlm", cuda_device: str = ""):
         super().__init__(model_path)
-        self.tokenizer = AutoTokenizer.from_pretrained(
-            model_path, padding_side="left", trust_remote_code=True, truncation=True, max_length=1024
-        )
+        self.tokenizer = AutoTokenizer.from_pretrained(model_path, padding_side="left", trust_remote_code=True)
 
         device_map = DEVICE_MAP if not cuda_device else cuda_device
 
@@ -123,7 +121,7 @@ class ThuCoaiShieldLM(Infer):
                 input_text = [
                     self._create_ipt(data['query'], data['response'], lang, rules) for data in datas[i : i + batch_size]
                 ]
-                inputs = self.tokenizer(input_text, return_tensors="pt", truncation=True, padding=True)
+                inputs = self.tokenizer(input_text, return_tensors="pt", truncation=True, max_length=1024, padding=True)
                 generation_output = self.model.generate(
                     input_ids=inputs["input_ids"].to(self.model.device),
                     attention_mask=inputs['attention_mask'].to(self.model.device),
