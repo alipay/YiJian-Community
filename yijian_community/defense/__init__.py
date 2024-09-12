@@ -14,5 +14,5 @@
 # limitations under the License.
 
 
-from .text_defense import ThuCoaiShieldLM
 from .image_defense import InternVL2ImageDefense
+from .text_defense import ThuCoaiShieldLM

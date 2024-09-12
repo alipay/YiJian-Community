@@ -29,4 +29,4 @@ from .metrics import (
     recall,
     safety_score,
 )
-from .tagger import Tagger, NaiveTextSimilarityTagger
+from .tagger import NaiveTextSimilarityTagger, Tagger
