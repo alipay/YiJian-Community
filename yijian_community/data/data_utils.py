@@ -88,7 +88,7 @@ def save_image(
     """
     img_save_paths = []
     for prompt_text, image in zip(prompt_texts, images):
-        img_save_path = os.path.join(save_path, prompt_text + ".jpg")
+        img_save_path = os.path.join(save_path, prompt_text[:50] + ".jpg")
         image.save(img_save_path)
         img_save_paths.append(img_save_path)
     return img_save_paths
