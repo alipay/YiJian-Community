@@ -6,7 +6,10 @@
 <div align="center">
 
 [**中文**](README_zh.md)
+
 </div>
+
+<font color=red size=4>The support for the [Global AI Offensive and Defensive Challenge — Track 1: Vaccination for Text-to-Image Generative Models](https://tianchi.aliyun.com/competition/entrance/532268?lang=en-us) will be ready in just a few days.</font>
 
 ## What is YiJian?
 ### YiJian-Professional
