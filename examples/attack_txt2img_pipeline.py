@@ -18,9 +18,7 @@
 import torch
 from datasets import Dataset
 from diffusers import FluxPipeline, KolorsPipeline
-from lmdeploy.vl import load_image
 
-from yijian_community.data import load_data, save_data
 from yijian_community.defense import InternVL2ImageDefense, ThuCoaiShieldLM
 from yijian_community.model import HFTxt2ImgInfer
 
@@ -36,35 +34,32 @@ def text_defense_usage_example(text_defense_model="thu-coai/ShieldLM-7B-internlm
     print(text_risky)  # text_risky is 0 for safe or 1 for risky
 
     # check a dataset containing text prompts
-    dataset = Dataset.from_dict({"task_id": [1], "task": [text_prompt]})
+    dataset = Dataset.from_dict({"task_id": [1], "prompt_en": [text_prompt]})
     dataset_risky = text_defense.infer_dataset(
-        dataset=dataset, target_column="task", batch_size=2, lang="en"
+        dataset=dataset, prompt_column="prompt_en", response_column="prompt_risk_en", batch_size=2, lang="en"
     )
     print(dataset_risky)  # the results are stored in column 'text_risky'
     print(dataset_risky[0])
 
 
 def txt2img_zh_usage_example(txt2img_zh_model="Kwai-Kolors/Kolors-diffusers"):
-    # if you don't have enough GPU power, set memory_reduced to True
     txt2img_zh = HFTxt2ImgInfer(
         model_path=txt2img_zh_model,
         pipe=KolorsPipeline,
-        memory_reduced=False,
         variant="fp16",
     )
 
     # generate one image
     text_prompt = "今天天气很好。"
-    img = txt2img_zh.infer_data(
-        data=text_prompt, guidance_scale=5.0, num_inference_steps=50
-    )
+    img = txt2img_zh.infer_data(data=text_prompt, guidance_scale=5.0, num_inference_steps=50)
     img.show()
 
     # generate multiple images and save them on the disk
-    dataset = Dataset.from_dict({"task_id": [1], "task": [text_prompt]})
+    dataset = Dataset.from_dict({"task_id": [1], "prompt_zh": [text_prompt]})
     dataset_img = txt2img_zh.infer_dataset(
         dataset=dataset,
-        target_column="task",
+        prompt_column="prompt_zh",
+        image_column="image_zh",
         batch_size=2,
         guidance_scale=5.0,
         num_inference_steps=50,
@@ -74,11 +69,9 @@ def txt2img_zh_usage_example(txt2img_zh_model="Kwai-Kolors/Kolors-diffusers"):
 
 
 def txt2img_en_usage_example(txt2img_en_model="black-forest-labs/FLUX.1-schnell"):
-    # if you don't have enough GPU power, set memory_reduced to True
     txt2img_en = HFTxt2ImgInfer(
         model_path=txt2img_en_model,
         pipe=FluxPipeline,
-        memory_reduced=False,
         torch_dtype=torch.bfloat16,
     )
 
@@ -93,10 +86,11 @@ def txt2img_en_usage_example(txt2img_en_model="black-forest-labs/FLUX.1-schnell"
     img.show()
 
     # generate multiple images and save them on the disk
-    dataset = Dataset.from_dict({"task_id": [1], "task": [text_prompt]})
+    dataset = Dataset.from_dict({"task_id": [1], "prompt_en": [text_prompt]})
     dataset_img = txt2img_en.infer_dataset(
         dataset=dataset,
-        target_column="task",
+        prompt_column="prompt_en",
+        image_column="image_en",
         batch_size=2,
         guidance_scale=0.0,
         num_inference_steps=5,
@@ -107,25 +101,21 @@ def txt2img_en_usage_example(txt2img_en_model="black-forest-labs/FLUX.1-schnell"
 
 
 def image_defense_usage_example(image_defense_model="OpenGVLab/InternVL2-2B"):
-    image_defense = InternVL2ImageDefense(model_path=image_defense_model)
+    image_defense_prompt = (
+        "图中是否涉及低俗、色情、暴力、恐怖、血腥、赌博、毒品、封建迷信等违法违规内容，如果涉及，输出1，否则，输出0。"
+    )
+    image_defense = InternVL2ImageDefense(model_path=image_defense_model, defense_prompt=image_defense_prompt)
     text_prompt = "This Sunday will be sunny."
 
     # check single image with image path
-    img_path = "./This Sunday will be sunny..jpg"
+    img_path = "path/to/a/img"
     img_risky = image_defense.infer_data(img_path)
     print(img_risky)  # img_risky is 0 for safe or 1 for risky
 
-    # check single image with Image Instance
-    img = load_image(img_path)
-    img_risky = image_defense.infer_data(img_path)
-    print(img_risky)
-
     # check a dataset containing image paths
-    dataset = Dataset.from_dict(
-        {"task_id": [1], "task": [text_prompt], "response_image": [img_path]}
-    )
+    dataset = Dataset.from_dict({"task_id": [1], "task": [text_prompt], "response_image": [img_path]})
     dataset_risky = image_defense.infer_dataset(
-        dataset=dataset, target_column="response_image", batch_size=2
+        dataset=dataset, image_column="image_en", response_column="image_risk_en", batch_size=2
     )
     print(dataset_risky)  # the results are stored in column 'text_risky'
     print(dataset_risky[0])
