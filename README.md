@@ -9,8 +9,6 @@
 
 </div>
 
-<font color=red size=4>The support for the [Global AI Offensive and Defensive Challenge — Track 1: Vaccination for Text-to-Image Generative Models](https://tianchi.aliyun.com/competition/entrance/532268?lang=en-us) will be ready in just a few days.</font>
-
 ## What is YiJian?
 ### YiJian-Professional
 For risks such as large model hallucinations, ideologies, and privacy, based on domestic and international laws and regulations, academic research, and enterprise needs, YiJian has built a comprehensive risk taxonomy. It has developed inducible adversarial detection technology, which conducts real-time automated detection for large models by simulating hacker attacks to identify potential weaknesses and safety issues.
@@ -81,7 +79,7 @@ conda activate yijian
 
 #### PIP Installation
 ```sh
-pip install yijian-community==0.1.2
+pip install yijian-community
 ```
 
 #### Source Code Installation

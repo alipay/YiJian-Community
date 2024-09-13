@@ -8,3 +8,7 @@ rouge_metric
 sentence_transformers
 pytest
 diffusers
+rich
+einops
+accelerate
+timm

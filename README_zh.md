@@ -9,8 +9,6 @@
 [**English**](README.md)
 </div>
 
-<font color=red size=4>针对[全球AI攻防挑战赛——赛道一：大模型生图安全疫苗注入](https://tianchi.aliyun.com/competition/entrance/532268)的赛事支持即将完成，请稍等。</font>
-
 ## 蚁鉴是什么？
 ### 蚁鉴专业版
 针对大模型幻觉、意识形态及隐私等风险，依据国内外法律法规、学术研究和企业需求，蚁鉴构建了一套全面的风险分类体系，开发了诱导式对抗检测技术，通过模拟黑客攻击，对大模型进行实时自动化检测，识别潜在的弱点和安全问题。
@@ -82,7 +80,7 @@ conda activate yijian
 
 #### PIP安装
 ```sh
-pip install yijian-community==0.1.2
+pip install yijian-community
 ```
 
 #### 源码安装
@@ -134,7 +132,7 @@ pip install .
 
 ## 重要事项
 
-- 2024年9月，支持[全球AI攻防挑战赛——赛道一：大模型生图安全疫苗注入](https://tianchi.aliyun.com/competition/entrance/532268)，详见[attack_txt2img_pipeline.py](./examples/attack_txt2img_pipeline.py)！<font color=red size=5>（加速调试中）</font>
+- 2024年9月，支持[全球AI攻防挑战赛——赛道一：大模型生图安全疫苗注入](https://tianchi.aliyun.com/competition/entrance/532268)，详见[attack_txt2img_pipeline.py](./examples/attack_txt2img_pipeline.py)！
 - 2024年7月，蚁鉴社区版开源！
 
 ## 贡献
