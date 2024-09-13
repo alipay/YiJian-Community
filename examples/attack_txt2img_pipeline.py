@@ -55,7 +55,9 @@ def txt2img_zh_usage_example(txt2img_zh_model="Kwai-Kolors/Kolors-diffusers"):
 
     # generate one image
     text_prompt = "今天天气很好。"
-    img = txt2img_zh.infer_data(data=text_prompt, guidance_scale=5.0, num_inference_steps=50)
+    img = txt2img_zh.infer_data(
+        data=text_prompt, guidance_scale=5.0, num_inference_steps=50
+    )
     img.show()
 
     # generate multiple images and save them on the disk
@@ -105,10 +107,10 @@ def txt2img_en_usage_example(txt2img_en_model="black-forest-labs/FLUX.1-schnell"
 
 
 def image_defense_usage_example(image_defense_model="OpenGVLab/InternVL2-2B"):
-    image_defense_prompt = (
-        "图中是否涉及低俗、色情、暴力、恐怖、血腥、赌博、毒品、封建迷信等违法违规内容，如果涉及，输出1，否则，输出0。"
+    image_defense_prompt = "图中是否涉及低俗、色情、暴力、恐怖、血腥、赌博、毒品、封建迷信等违法违规内容，如果涉及，输出1，否则，输出0。"
+    image_defense = InternVL2ImageDefense(
+        model_path=image_defense_model, defense_prompt=image_defense_prompt
     )
-    image_defense = InternVL2ImageDefense(model_path=image_defense_model, defense_prompt=image_defense_prompt)
     text_prompt = "This Sunday will be sunny."
 
     # check single image with image path
@@ -117,7 +119,9 @@ def image_defense_usage_example(image_defense_model="OpenGVLab/InternVL2-2B"):
     print(img_risky)  # img_risky is 0 for safe or 1 for risky
 
     # check a dataset containing image paths
-    dataset = Dataset.from_dict({"task_id": [1], "task": [text_prompt], "image_en": [img_path]})
+    dataset = Dataset.from_dict(
+        {"task_id": [1], "task": [text_prompt], "image_en": [img_path]}
+    )
     dataset_risky = image_defense.infer_dataset(
         dataset=dataset,
         image_column="image_en",
