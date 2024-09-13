@@ -81,7 +81,7 @@ conda activate yijian
 
 #### PIP Installation
 ```sh
-pip install yijian-community
+pip install yijian-community==0.1.2
 ```
 
 #### Source Code Installation
