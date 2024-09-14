@@ -1,5 +1,5 @@
 torch==2.3.1
-vllm
+vllm==0.5.3
 torchvision
 jieba
 sacrebleu
