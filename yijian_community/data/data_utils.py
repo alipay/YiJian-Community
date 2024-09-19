@@ -16,6 +16,7 @@
 
 import os
 from typing import List
+import hashlib
 
 import pandas as pd
 from datasets import Dataset, load_dataset
@@ -88,7 +89,7 @@ def save_image(
     """
     img_save_paths = []
     for prompt_text, image in zip(prompt_texts, images):
-        img_save_path = os.path.join(save_path, prompt_text[:50] + ".jpg")
+        img_save_path = os.path.join(save_path, hashlib.md5(prompt_text.encode("utf8")).hexdigest() + ".jpg")
         image.save(img_save_path)
         img_save_paths.append(img_save_path)
     return img_save_paths
